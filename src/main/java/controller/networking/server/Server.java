@@ -5,6 +5,7 @@ import controller.networking.data.Message;
 import controller.networking.data.Status;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -37,27 +38,40 @@ public class Server implements Runnable {
     public void run()
     {
         try {
+            Gson gson = new Gson();
             System.out.println("Listening on port:" + server.getLocalPort());
-
-            while (true)
+            /*
+                Current setup below will only allow for one connection at a time, consider
+                new approach to listening. Maybe create a new thread upon accepting a
+                connection?
+             */
+            while (!Thread.interrupted())
             {
                 Socket conn = server.accept(); // This will block thread - e.g waits for connection
+                DataOutputStream out = new DataOutputStream(conn.getOutputStream());
 
                 String data = read(conn);
+                Status status = new Status();
                 if(data == null) {
-                    // Todo: empty message status
+                    status.setStatus(204); // Received but empty
+                    String response = gson.toJson(status);
+                    out.writeUTF(response);
+                    out.flush();
+                    out.close();
                 } else {
                     Message x = decodeMessage(data); // Todo: pass this to chatManager
-                    // Todo: success status
+                    // Possible along conn.getRemoteSocketAddress(); to be used as identifier?
+                    // or x.Nick
+
+                    status.setStatus(200); // Received but empty
+                    String response = gson.toJson(status);
+                    out.writeUTF(response);
+                    out.flush();
+                    out.close();
                     System.out.println(x.getData());
                 }
 
                 conn.close();
-
-                // If this thread is interrupted then we close the server
-                if(Thread.interrupted()) {
-                    break; // Stops "server" loop
-                }
             }
         } catch (Exception e) {
 
