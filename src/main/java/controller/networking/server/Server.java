@@ -47,6 +47,10 @@ public class Server implements Runnable {
             while (!Thread.interrupted())
             {
                 Socket conn = server.accept(); // This will block thread - e.g waits for connection
+                // If we want to guarantee multiple connections simultaneously we can run the rest of the code
+                // in a new thread
+
+
                 DataOutputStream out = new DataOutputStream(conn.getOutputStream());
 
                 String data = read(conn);
