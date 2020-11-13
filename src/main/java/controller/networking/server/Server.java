@@ -38,8 +38,12 @@ public class Server implements Runnable {
     {
         try {
             System.out.println("Listening on port:" + server.getLocalPort());
-
-            while (true)
+            /*
+                Current setup below will only allow for one connection at a time, consider
+                new approach to listening. Maybe create a new thread upon accepting a
+                connection?
+             */
+            while (!Thread.interrupted())
             {
                 Socket conn = server.accept(); // This will block thread - e.g waits for connection
 
@@ -53,11 +57,6 @@ public class Server implements Runnable {
                 }
 
                 conn.close();
-
-                // If this thread is interrupted then we close the server
-                if(Thread.interrupted()) {
-                    break; // Stops "server" loop
-                }
             }
         } catch (Exception e) {
 
