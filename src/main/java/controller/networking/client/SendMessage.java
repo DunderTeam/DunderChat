@@ -11,7 +11,7 @@ import java.net.Socket;
 public class SendMessage implements Runnable {
     SendMessage(String i, int p, Message m) {
         ip = i; port = p; msg = m;
-        // Todo: Add timestamp to message
+        m.setTimestamp(java.time.Clock.systemUTC().instant().toString());
     }
 
     private Message msg;
