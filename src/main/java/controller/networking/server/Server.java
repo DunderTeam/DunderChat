@@ -38,8 +38,6 @@ public class Server implements Runnable {
     public void run()
     {
         try {
-            String response;
-
             System.out.println("Listening on port:" + server.getLocalPort());
             /*
                 Current setup below will only allow for one connection at a time, consider
@@ -53,17 +51,14 @@ public class Server implements Runnable {
 
                 String data = read(conn);
                 if(data == null) {
-                    response = encodeStatus(204); // Received but empty
-                    out.writeUTF(response);
+                    out.writeUTF(encodeStatus(204)); // Received but empty
                     out.flush();
                     out.close();
                 } else {
                     Message x = decodeMessage(data); // Todo: pass this to chatManager
                     // Possible along conn.getRemoteSocketAddress(); to be used as identifier?
                     // or x.Nick
-
-                    response = encodeStatus(200); // Received but empty
-                    out.writeUTF(response);
+                    out.writeUTF(encodeStatus(200)); // Received but empty
                     out.flush();
                     out.close();
                     System.out.println(x.getData());
