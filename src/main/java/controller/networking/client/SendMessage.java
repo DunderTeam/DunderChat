@@ -7,7 +7,6 @@ import controller.networking.data.Status;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
-import java.sql.Timestamp;
 
 public class SendMessage implements Runnable {
     SendMessage(String i, int p, Message m) {
