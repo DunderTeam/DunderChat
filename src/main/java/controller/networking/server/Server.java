@@ -52,18 +52,15 @@ public class Server implements Runnable {
                 String data = read(conn);
                 if(data == null) {
                     out.writeUTF(encodeStatus(204)); // Received but empty
-                    out.flush();
-                    out.close();
                 } else {
                     Message x = decodeMessage(data); // Todo: pass this to chatManager
                     // Possible along conn.getRemoteSocketAddress(); to be used as identifier?
                     // or x.Nick
                     out.writeUTF(encodeStatus(200)); // Received but empty
-                    out.flush();
-                    out.close();
-                    System.out.println(x.getData());
                 }
 
+                out.flush();
+                out.close();
                 conn.close();
             }
         } catch (Exception e) {
