@@ -2,6 +2,7 @@ package controller.networking.server;
 
 import com.google.gson.Gson;
 import controller.networking.data.Message;
+import controller.networking.data.Status;
 
 import java.io.DataInputStream;
 import java.net.ServerSocket;
@@ -46,11 +47,10 @@ public class Server implements Runnable {
                 if(data == null) {
                     // Todo: empty message status
                 } else {
-                    decodeMessage(data); // Todo: pass this to chatManager
+                    Message x = decodeMessage(data); // Todo: pass this to chatManager
                     // Todo: success status
+                    System.out.println(x.getData());
                 }
-
-
 
                 conn.close();
 
@@ -71,7 +71,10 @@ public class Server implements Runnable {
 
     private String returnStatus(int status) {
         Gson gson = new Gson();
-        return gson.toJson(status);
+        Status st = new Status();
+        st.setStatus(status);
+
+        return gson.toJson(st);
     }
 
     // Read data from a connection

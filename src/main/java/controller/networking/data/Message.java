@@ -9,7 +9,7 @@ public class Message {
         return name;
     }
 
-    public int getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
@@ -21,11 +21,11 @@ public class Message {
         this.name = name;
     }
 
-    public void setTimestamp(int timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
     private String data;
     private String name;
-    private int timestamp;
+    private String timestamp;
 }
