@@ -1,5 +1,7 @@
 package controller.networking.data;
 
+import java.time.Instant;
+
 public class Message {
     public String getData() {
         return data;

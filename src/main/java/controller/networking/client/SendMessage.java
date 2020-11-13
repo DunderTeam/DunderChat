@@ -7,11 +7,12 @@ import controller.networking.data.Status;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
+import java.sql.Timestamp;
 
 public class SendMessage implements Runnable {
     SendMessage(String i, int p, Message m) {
         ip = i; port = p; msg = m;
-        // Todo: Add timestamp to message
+        m.setTimestamp(java.time.Clock.systemUTC().instant().toString());
     }
 
     private Message msg;
