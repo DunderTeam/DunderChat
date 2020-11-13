@@ -17,9 +17,8 @@ public class SendMessage implements Runnable {
         m.setTimestamp(java.time.Clock.systemUTC().instant().toString());
     }
 
-    private Message msg;
-    private String ip; private int port;
-    private Socket conn;
+    private final Message msg;
+    private final String ip; private final int port;
 
 
     private String encodeMessage(Message msg) {
@@ -40,12 +39,12 @@ public class SendMessage implements Runnable {
                 retry();
             }
         } catch(Exception e) {
-            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
         }
     }
 
     private boolean send() throws IOException {
-        conn = new Socket(ip, port); // Opens Connection
+        Socket conn = new Socket(ip, port); // Opens Connection
 
         DataInputStream in = new DataInputStream(conn.getInputStream());
         DataOutputStream out = new DataOutputStream(conn.getOutputStream());
