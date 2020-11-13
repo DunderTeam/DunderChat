@@ -60,6 +60,9 @@ public class Server implements Runnable {
                     out.close();
                 } else {
                     Message x = decodeMessage(data); // Todo: pass this to chatManager
+                    // Possible along conn.getRemoteSocketAddress(); to be used as identifier?
+                    // or x.Nick
+
                     status.setStatus(200); // Received but empty
                     String response = gson.toJson(status);
                     out.writeUTF(response);
