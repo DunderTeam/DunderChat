@@ -1,4 +1,4 @@
-package controller.networking.client;
+package model.networking.client;
 
 // Stores data about a connection
 public class Connection {

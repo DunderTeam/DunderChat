@@ -1,8 +1,8 @@
-package controller.networking.client;
+package model.networking.client;
 
 import com.google.gson.Gson;
-import controller.networking.data.Message;
-import controller.networking.data.Status;
+import model.networking.data.Message;
+import model.networking.data.Status;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

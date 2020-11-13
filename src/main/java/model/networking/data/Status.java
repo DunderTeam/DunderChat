@@ -1,4 +1,4 @@
-package controller.networking.data;
+package model.networking.data;
 
 // Data structure for status messages
 public class Status {
