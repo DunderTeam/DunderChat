@@ -1,18 +1,21 @@
 import controller.networking.client.Connection;
+import controller.networking.client.ConnectionManager;
+import controller.networking.data.Message;
 import controller.networking.server.Server;
 
 public class Main {
     public static void main(String args[]) {
-        Thread server = new Thread(new Server());
+        Thread server = new Thread(new Server(25));
         server.start();
 
-        Thread client = new Thread(new Connection("localhost", 6666));
-        client.start();
-        client = new Thread(new Connection("localhost", 6666));
-        client.start();
+        ConnectionManager manager = new ConnectionManager();
+        manager.addConnection(new Connection("localhost", 25));
+        Message msg = new Message();
 
-        client = new Thread(new Connection("localhost", 6666));
-        client.start();
+        msg.setData("Hello World!");
+        msg.setName("John Wick");
+
+        manager.sendMessage(manager.connections.get(0), msg);
 
     }
 }

@@ -1,63 +1,91 @@
 package controller.networking.server;
 
+import com.google.gson.Gson;
+import controller.networking.data.Message;
+import controller.networking.data.Status;
+
 import java.io.DataInputStream;
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server implements Runnable{
-    private ServerSocket ss;
 
 
-    private Socket waitForConnection()
+public class Server implements Runnable {
+    private static ServerSocket server;
+
+    // Constructor to assign port and other values..
+    public Server(int port)
     {
         try {
-            return ss.accept();
-        } catch(Exception e) {
-            System.out.println("Error getting Socket");
-            return null;
+            server = new ServerSocket(port);
+        } catch (Exception e) {
+            System.out.println(e.getCause());
         }
     }
 
+    // If server is launched without port, it will attempt to find an available one
+    public Server()
+    {
+        try {
+            server = new ServerSocket(0);
+        } catch (Exception e) {
+            System.out.println(e.getCause());
+        }
+    }
 
+    // Function which runs when server thread is started.
     public void run()
     {
         try {
-            ss = new ServerSocket(0);
+            System.out.println("Listening on port:" + server.getLocalPort());
 
-            System.out.println("Listening on " + ":" + ss.getLocalPort());
-            int connections = 0;
-            while(true) {
-                Socket conn = waitForConnection();
-                System.out.println("New Connection made: "+conn.toString());
+            while (true)
+            {
+                Socket conn = server.accept(); // This will block thread - e.g waits for connection
 
                 String data = read(conn);
+                if(data == null) {
+                    // Todo: empty message status
+                } else {
+                    Message x = decodeMessage(data); // Todo: pass this to chatManager
+                    // Todo: success status
+                    System.out.println(x.getData());
+                }
 
-                // Exit loop if thread is interrupted
+                conn.close();
+
+                // If this thread is interrupted then we close the server
                 if(Thread.interrupted()) {
-                    break;
+                    break; // Stops "server" loop
                 }
             }
-        }
-        catch (Exception e) {
-            System.out.println(e.getCause());
+        } catch (Exception e) {
 
-            // TODO: Implement proper exception catch
         }
     }
 
+    private Message decodeMessage(String data) {
+        Gson gson = new Gson();
+        return gson.fromJson(data, Message.class);
+    }
+
+    private String returnStatus(int status) {
+        Gson gson = new Gson();
+        Status st = new Status();
+        st.setStatus(status);
+
+        return gson.toJson(st);
+    }
+
+    // Read data from a connection
     private String read(Socket x)
     {
         try {
-            DataInputStream d = new DataInputStream(x.getInputStream());
-            return d.readUTF();
-        } catch(IOException e) {
+            DataInputStream stream = new DataInputStream(x.getInputStream());
+            return stream.readUTF();
+        } catch (Exception e) {
+            System.out.println(e.getCause());
             return null;
         }
-    }
-
-    ServerSocket get()
-    {
-        return ss;
     }
 }
