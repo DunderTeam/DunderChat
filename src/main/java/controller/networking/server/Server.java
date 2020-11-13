@@ -23,9 +23,9 @@ public class Server implements Runnable{
     public void run()
     {
         try {
-            ss = new ServerSocket(6666);
+            ss = new ServerSocket(0);
 
-            System.out.println("Listening on localhost:6666");
+            System.out.println("Listening on " + ss. + ":" + ss.getLocalPort());
             int connections = 0;
             while(true) {
                 Socket conn = waitForConnection();
@@ -52,7 +52,7 @@ public class Server implements Runnable{
             DataInputStream d = new DataInputStream(x.getInputStream());
             return d.readUTF();
         } catch(IOException e) {
-
+            return null;
         }
     }
 
