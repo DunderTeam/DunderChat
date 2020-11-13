@@ -25,7 +25,7 @@ public class Server implements Runnable{
         try {
             ss = new ServerSocket(0);
 
-            System.out.println("Listening on " + ss. + ":" + ss.getLocalPort());
+            System.out.println("Listening on " + ":" + ss.getLocalPort());
             int connections = 0;
             while(true) {
                 Socket conn = waitForConnection();
