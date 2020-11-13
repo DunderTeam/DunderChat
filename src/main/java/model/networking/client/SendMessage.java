@@ -83,6 +83,7 @@ public class SendMessage implements Runnable {
                     break;
                 }
                 connectionAttempts--;
+                // todo: ran out of attempts handler?
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 break;
