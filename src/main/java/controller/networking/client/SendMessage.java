@@ -60,8 +60,6 @@ public class SendMessage implements Runnable {
             conn.close();
         } catch(Exception e) {
             System.out.println(e.getCause());
-
-            // TODO: Implement proper exception catch
         }
     }
 }
