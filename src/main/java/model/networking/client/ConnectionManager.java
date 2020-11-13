@@ -1,6 +1,6 @@
-package controller.networking.client;
+package model.networking.client;
 
-import controller.networking.data.Message;
+import model.networking.data.Message;
 
 import java.util.ArrayList;
 import java.util.List;

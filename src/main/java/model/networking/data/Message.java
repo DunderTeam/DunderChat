@@ -1,6 +1,4 @@
-package controller.networking.data;
-
-import java.time.Instant;
+package model.networking.data;
 
 public class Message {
     public String getData() {

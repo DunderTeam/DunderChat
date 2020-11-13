@@ -1,7 +1,7 @@
-import controller.networking.client.Connection;
-import controller.networking.client.ConnectionManager;
-import controller.networking.data.Message;
-import controller.networking.server.Server;
+import model.networking.client.Connection;
+import model.networking.client.ConnectionManager;
+import model.networking.data.Message;
+import model.networking.server.Server;
 
 public class Main {
     public static void main(String args[]) {
