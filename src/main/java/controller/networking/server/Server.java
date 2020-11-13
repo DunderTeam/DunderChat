@@ -54,7 +54,7 @@ public class Server implements Runnable {
                     out.writeUTF(encodeStatus(204)); // Received but empty
                 } else {
                     Message x = decodeMessage(data); // Todo: pass this to chatManager
-                    // Possible along conn.getRemoteSocketAddress(); to be used as identifier?
+                    // Possibly along conn.getRemoteSocketAddress(); to be used as identifier?
                     // or x.Nick
                     out.writeUTF(encodeStatus(200)); // Received but empty
                 }
