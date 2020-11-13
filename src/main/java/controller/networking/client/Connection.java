@@ -12,6 +12,8 @@ public class Connection implements Runnable {
         ip = i; port = p;
     }
 
+
+
     public void run() {
         try {
             conn = new Socket(ip, port);
