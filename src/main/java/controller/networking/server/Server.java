@@ -38,7 +38,8 @@ public class Server implements Runnable {
     public void run()
     {
         try {
-            Gson gson = new Gson();
+            String response;
+
             System.out.println("Listening on port:" + server.getLocalPort());
             /*
                 Current setup below will only allow for one connection at a time, consider
@@ -51,10 +52,8 @@ public class Server implements Runnable {
                 DataOutputStream out = new DataOutputStream(conn.getOutputStream());
 
                 String data = read(conn);
-                Status status = new Status();
                 if(data == null) {
-                    status.setStatus(204); // Received but empty
-                    String response = gson.toJson(status);
+                    response = encodeStatus(204); // Received but empty
                     out.writeUTF(response);
                     out.flush();
                     out.close();
@@ -63,8 +62,7 @@ public class Server implements Runnable {
                     // Possible along conn.getRemoteSocketAddress(); to be used as identifier?
                     // or x.Nick
 
-                    status.setStatus(200); // Received but empty
-                    String response = gson.toJson(status);
+                    response = encodeStatus(200); // Received but empty
                     out.writeUTF(response);
                     out.flush();
                     out.close();
@@ -83,7 +81,7 @@ public class Server implements Runnable {
         return gson.fromJson(data, Message.class);
     }
 
-    private String returnStatus(int status) {
+    private String encodeStatus(int status) {
         Gson gson = new Gson();
         Status st = new Status();
         st.setStatus(status);
