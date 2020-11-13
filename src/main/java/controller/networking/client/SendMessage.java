@@ -28,6 +28,8 @@ public class SendMessage implements Runnable {
         return gson.fromJson(data, Status.class);
     }
 
+    // This will run once this class is loaded into a new thread and is started in that thread.
+    // Thread x = new Thread(new SendMessage()); x.start();
     public void run() {
         try {
             conn = new Socket(ip, port); // Opens Connection

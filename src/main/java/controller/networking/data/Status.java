@@ -1,5 +1,6 @@
 package controller.networking.data;
 
+// Data structure for status messages
 public class Status {
     public int getStatus() {
         return status;
