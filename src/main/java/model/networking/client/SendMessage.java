@@ -53,13 +53,12 @@ public class SendMessage implements Runnable {
         out.flush();
 
         int status = decodeStatus(in.readUTF()).getStatus();
-
+        out.close();
+        conn.close();
         // Gets server response, do something based on result?:
         switch(status) {
             case 200:
                 // all good, message sent and received
-                out.close();
-                conn.close();
                 return true;
             case 204:
                 // empty message sent
@@ -67,8 +66,6 @@ public class SendMessage implements Runnable {
                 return false;
             default:
                 // Message not received, try resending
-                out.close();
-                conn.close();
                 return false;
         }
     }
