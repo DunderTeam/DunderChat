@@ -20,7 +20,7 @@ public class Server implements Runnable {
         try {
             server = new ServerSocket(port);
         } catch (Exception e) {
-            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -30,7 +30,7 @@ public class Server implements Runnable {
         try {
             server = new ServerSocket(0);
         } catch (Exception e) {
-            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -98,7 +98,7 @@ public class Server implements Runnable {
             DataInputStream stream = new DataInputStream(x.getInputStream());
             return stream.readUTF();
         } catch (Exception e) {
-            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
             return null;
         }
     }
