@@ -53,7 +53,7 @@ public class Server implements Runnable {
                 if(data == null) {
                     out.writeUTF(encodeStatus(204)); // Received but empty
                 } else {
-                    Message x = decodeMessage(data); // Todo: pass this to chatManager
+                    Message msg = decodeMessage(data); // Todo: pass this to chatManager
                     // Possibly along conn.getRemoteSocketAddress(); to be used as identifier?
                     // or x.Nick
                     out.writeUTF(encodeStatus(200)); // Received but empty
