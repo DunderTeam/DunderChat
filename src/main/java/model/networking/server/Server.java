@@ -60,6 +60,8 @@ public class Server implements Runnable {
                     Message msg = decodeMessage(data); // Todo: pass this to chatManager
                     // Possibly along conn.getRemoteSocketAddress(); to be used as identifier?
                     // or x.Nick
+                    System.out.println(msg.getData());
+                    System.out.print(" :" + msg.getName());
                     out.writeUTF(encodeStatus(200)); // Received but empty
                 }
 
