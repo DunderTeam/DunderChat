@@ -55,29 +55,4 @@ public class Server implements Runnable {
 
         }
     }
-
-    private Message decodeMessage(String data) {
-        Gson gson = new Gson();
-        return gson.fromJson(data, Message.class);
-    }
-
-    private String encodeStatus(int status) {
-        Gson gson = new Gson();
-        Status st = new Status();
-        st.setStatus(status);
-
-        return gson.toJson(st);
-    }
-
-    // Read data from a connection
-    private String read(Socket x)
-    {
-        try {
-            DataInputStream stream = new DataInputStream(x.getInputStream());
-            return stream.readUTF();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
-    }
 }
