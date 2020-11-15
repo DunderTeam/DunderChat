@@ -2,7 +2,6 @@ import model.networking.client.Connection;
 import model.networking.client.ConnectionManager;
 import model.networking.data.Message;
 import model.networking.server.Server;
-import model.networking.server.public_ip;
 
 
 /*

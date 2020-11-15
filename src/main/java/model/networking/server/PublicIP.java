@@ -10,20 +10,22 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class public_ip implements Runnable {
+public class PublicIP implements Runnable {
     private static final String GET_URL = "https://api.ipify.org/?format=json";
     private static IP ip;
 
     public static IP get() {
         if(ip == null) {
-            Thread get = new Thread(new public_ip());
+            Thread get = new Thread(new PublicIP());
         }
 
         return ip;
     }
 
-    private static public_ip singleton = new public_ip();
+    private static PublicIP singleton = new PublicIP();
 
+    /* This function remains public due to nature of Runnable ... */
+    /* Please avoid running this object in a new thread as it should handle this on its own. */
     public void run() {
         try {
             URL obj = new URL(GET_URL);
