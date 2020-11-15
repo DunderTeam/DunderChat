@@ -6,17 +6,19 @@ import model.networking.data.Status;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 public class SendMessage implements Runnable {
+    private int connectionAttempts = 5;
+
     SendMessage(String i, int p, Message m) {
         ip = i; port = p; msg = m;
         m.setTimestamp(java.time.Clock.systemUTC().instant().toString());
     }
 
-    private Message msg;
-    private String ip; private int port;
-    private Socket conn;
+    private final Message msg;
+    private final String ip; private final int port;
 
 
     private String encodeMessage(Message msg) {
@@ -33,34 +35,55 @@ public class SendMessage implements Runnable {
     // Thread x = new Thread(new SendMessage()); x.start();
     public void run() {
         try {
-            conn = new Socket(ip, port); // Opens Connection
-
-            DataInputStream in = new DataInputStream(conn.getInputStream());
-            DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-
-            out.writeUTF(encodeMessage(msg));
-            out.flush();
-
-            int status = decodeStatus(in.readUTF()).getStatus();
-
-            // Gets server response, do something based on result?:
-            switch(status) {
-                case 200:
-                    // all good, message sent and received
-                    break;
-                case 204:
-                    // empty message sent
-                    break;
-                default:
-                    // Message not received, try resending
-                    // Todo: implement resend/retry functionality
-                    break;
+            if(!send()) { // if failed to send, retry
+                retry();
             }
-
-            out.close();
-            conn.close();
         } catch(Exception e) {
-            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private boolean send() throws IOException {
+        Socket conn = new Socket(ip, port); // Opens Connection
+
+        DataInputStream in = new DataInputStream(conn.getInputStream());
+        DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+
+        out.writeUTF(encodeMessage(msg));
+        out.flush();
+
+        int status = decodeStatus(in.readUTF()).getStatus();
+        out.close();
+        conn.close();
+        // Gets server response, do something based on result?:
+        switch(status) {
+            case 200:
+                // all good, message sent and received
+                return true;
+            case 204:
+                // empty message sent
+                // Todo: implement message check
+                return false;
+            default:
+                // Message not received, try resending
+                return false;
+        }
+    }
+
+    private void retry() {
+        while(connectionAttempts > 0) {
+            try {
+                Thread.currentThread().wait(500);
+                System.out.println("Message failed to send, retrying...");
+                if(send()) { // If successful, then break loop
+                    break;
+                }
+                connectionAttempts--;
+                // todo: ran out of attempts handler?
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                break;
+            }
         }
     }
 }
