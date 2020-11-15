@@ -10,9 +10,16 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class public_ip {
+public class public_ip implements Runnable {
     private static final String GET_URL = "https://api.ipify.org/?format=json";
+    private static IP ip;
     public static IP get() {
+        Thread get = new Thread(new public_ip());
+
+        return ip;
+    }
+
+    public void run() {
         try {
             URL obj = new URL(GET_URL);
             HttpURLConnection httpURLConnection = (HttpURLConnection)obj.openConnection();
@@ -30,16 +37,14 @@ public class public_ip {
                 }
 
                 Gson gson = new Gson();
-                return gson.fromJson(response.toString(), IP.class);
+                ip = gson.fromJson(response.toString(), IP.class);
             } else {
-                return null;
+                ip = null;
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            return null;
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
     }
 }
