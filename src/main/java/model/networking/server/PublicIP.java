@@ -28,6 +28,9 @@ public class PublicIP implements Runnable {
     /* Please avoid running this object in a new thread as it should handle this on its own. */
     public void run() {
         try {
+            /*
+                Runs a get request to an API which pings back our public IP
+             */
             URL obj = new URL(GET_URL);
             HttpURLConnection httpURLConnection = (HttpURLConnection)obj.openConnection();
             httpURLConnection.setRequestMethod("GET");
