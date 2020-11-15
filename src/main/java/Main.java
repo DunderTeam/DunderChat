@@ -3,18 +3,37 @@ import model.networking.client.ConnectionManager;
 import model.networking.data.Message;
 import model.networking.server.Server;
 
+
+/*
+    Tasks:
+     - Start Server
+     - Start Application
+
+ */
 public class Main {
     public static void main(String args[]) {
+        /* This Starts our Server/Receiver */
         Thread server = new Thread(new Server(25));
         server.start();
+        /* Server */
 
-        ConnectionManager manager = new ConnectionManager();
+        /* Start Application */
+        ConnectionManager manager = new ConnectionManager(); // Consider making Singleton
+
+        /* Application */
+
+        /* Test Environment for running code snippets  */
+        // Add a new connection to our manager
         manager.addConnection(new Connection("localhost", 25));
         Message msg = new Message();
 
+        // Attach data to a new message
         msg.setData("Hello World!");
         msg.setName("John Wick");
 
-        manager.sendMessage(manager.connections.get(0), msg);
+        // Send a message via our manager to a specific client
+        manager.sendMessage(manager.connections.get(0), msg); // Sends message to own device. e.g localhost
+
+         /* Test Environment */
     }
 }
