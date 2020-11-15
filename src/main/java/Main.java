@@ -16,6 +16,5 @@ public class Main {
         msg.setName("John Wick");
 
         manager.sendMessage(manager.connections.get(0), msg);
-
     }
 }

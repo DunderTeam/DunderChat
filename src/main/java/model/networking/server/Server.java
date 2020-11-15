@@ -47,25 +47,9 @@ public class Server implements Runnable {
             while (!Thread.interrupted())
             {
                 Socket conn = server.accept(); // This will block thread - e.g waits for connection
-                // If we want to guarantee multiple connections simultaneously we can run the rest of the code
-                // in a new thread
-
-
-                DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-
-                String data = read(conn);
-                if(data == null) {
-                    out.writeUTF(encodeStatus(204)); // Received but empty
-                } else {
-                    Message msg = decodeMessage(data); // Todo: pass this to chatManager
-                    // Possibly along conn.getRemoteSocketAddress(); to be used as identifier?
-                    // or x.Nick
-                    out.writeUTF(encodeStatus(200)); // Received but empty
-                }
-
-                out.flush();
-                out.close();
-                conn.close();
+                // Runs data transfer in the background and waits for new connection
+                Thread connection_process = new Thread(new Receiver(conn));
+                connection_process.start();
             }
         } catch (Exception e) {
 
