@@ -36,7 +36,5 @@ public class Main {
         manager.sendMessage(manager.connections.get(0), msg); // Sends message to own device. e.g localhost
 
          /* Test Environment */
-
-        System.out.println(public_ip.get().ip);
     }
 }

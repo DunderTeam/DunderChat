@@ -13,11 +13,16 @@ import java.net.URL;
 public class public_ip implements Runnable {
     private static final String GET_URL = "https://api.ipify.org/?format=json";
     private static IP ip;
+
     public static IP get() {
-        Thread get = new Thread(new public_ip());
+        if(ip == null) {
+            Thread get = new Thread(new public_ip());
+        }
 
         return ip;
     }
+
+    private static public_ip singleton = new public_ip();
 
     public void run() {
         try {
