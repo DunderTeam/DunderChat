@@ -1,0 +1,30 @@
+JFDML JFormDesigner: "7.0.2.6.321" Java: "11.0.8" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {space :p:46:p, par t {comp BtnConnect:::::x, comp Label::t:::x, comp TxtFieldAddress::l:::x}, space :p:46:p}}"
+			"$verticalGroup": "par l {seq l {space :p:25:p, comp Label:::p::p, space :::p, comp TxtFieldAddress:::p::p, space :::p, comp BtnConnect:::p::p, space ::63:x}}"
+		} ) {
+			name: "this"
+			"defaultCloseOperation": 2
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "Label"
+				"text": "New Conversation"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "TxtFieldAddress"
+				"text": "Username/IP"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnConnect"
+				"text": "connect"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnConnectMouseClicked", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 200, 200 )
+		} )
+	}
+}
