@@ -4,7 +4,7 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq {space :::p, par l {comp WindowTitle::l:::x, seq t {comp BtnNew:::p:78:p, space :::p, comp BtnQuit:::p:86:p, space :0:0:x}, comp ListConversations::l:::x}, space :::p, par l {seq {comp TxtFieldMsg::::0:x, space :::p, comp BtnSend:::p::p}, comp ScrollPaneChatArea:::::x}, space :::p}}"
+			"$horizontalGroup": "par l {seq {space :::p, par l {seq {comp BtnNew:::p:78:p, space :::p, comp BtnQuit:::p:86:p}, par t:l::p {comp WindowTitle::l:::x, comp ListConversations::l::166:x}}, par l {seq {comp TxtFieldMsg::::197:x, space :::p, comp BtnSend:::p::p}, seq l {space :::p, comp ScrollPaneChatArea::::275:x}}, space :::p}}"
 			"$verticalGroup": "par l {seq l {space :::p, par l {seq {comp WindowTitle:::p:30:p, space :::p, comp ListConversations::::382:x}, comp ScrollPaneChatArea::::418:x}, space :::p, par b {comp BtnSend::b:p::p, comp BtnNew::b:p::p, comp BtnQuit::b:p::p, comp TxtFieldMsg::b:::p}, space :::p}}"
 		} ) {
 			name: "this"
@@ -18,6 +18,7 @@ new FormModel {
 					addElement( "Chat1" )
 					addElement( "Chat2" )
 				}
+				addEvent( new FormEvent( "javax.swing.event.ListSelectionListener", "valueChanged", "ListConversationsValueChanged", true ) )
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "WindowTitle"
@@ -36,6 +37,7 @@ new FormModel {
 					"wrapStyleWord": true
 					"editable": false
 					"text": "Welcome to ChatApp. Select a conversation from the list or start a new one to begin."
+					"preferredSize": new java.awt.Dimension( 1920, 100 )
 				} )
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {

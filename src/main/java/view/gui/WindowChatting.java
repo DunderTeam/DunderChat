@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.event.*;
 
 /**
  * @author Adrian Emil Chambe-Eng
@@ -43,13 +44,22 @@ public class WindowChatting extends JFrame {
         // TODO actually send message and not just display locally
         String sender = "You";
         String message = TxtFieldMsg.getText();
-        if (message.length() > 0) {
+        if (message.length() > 0 && conversationSelected) {
             TxtAreaChat.append(sender + ": " + message + "\n");
             TxtFieldMsg.setText("");
         }
     }
 
+    private void ListConversationsValueChanged(ListSelectionEvent e) {
+        if (ListConversations.getSelectedIndex() > -1) {
+            conversationSelected = true;
+        }
+
+        TxtAreaChat.setText("Currently chatting in conversation: " + ListConversations.getSelectedValue() + "\n");
+    }
+
     private void initComponents() {
+        conversationSelected = false;
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
         ListConversations = new JList<>();
@@ -79,6 +89,7 @@ public class WindowChatting extends JFrame {
             @Override
             public String getElementAt(int i) { return values[i]; }
         });
+        ListConversations.addListSelectionListener(e -> ListConversationsValueChanged(e));
 
         //---- WindowTitle ----
         WindowTitle.setText("Conversations");
@@ -96,6 +107,7 @@ public class WindowChatting extends JFrame {
             TxtAreaChat.setWrapStyleWord(true);
             TxtAreaChat.setEditable(false);
             TxtAreaChat.setText("Welcome to ChatApp. Select a conversation from the list or start a new one to begin.");
+            TxtAreaChat.setPreferredSize(new Dimension(1920, 100));
             ScrollPaneChatArea.setViewportView(TxtAreaChat);
         }
 
@@ -138,20 +150,21 @@ public class WindowChatting extends JFrame {
                 .addGroup(contentPaneLayout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(contentPaneLayout.createParallelGroup()
-                        .addComponent(WindowTitle, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
+                        .addGroup(contentPaneLayout.createSequentialGroup()
                             .addComponent(BtnNew, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(BtnQuit, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 0, Short.MAX_VALUE))
-                        .addComponent(ListConversations, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(BtnQuit, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE))
+                        .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(WindowTitle, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ListConversations, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)))
                     .addGroup(contentPaneLayout.createParallelGroup()
                         .addGroup(contentPaneLayout.createSequentialGroup()
-                            .addComponent(TxtFieldMsg, GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(TxtFieldMsg, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(BtnSend))
-                        .addComponent(ScrollPaneChatArea))
+                        .addGroup(contentPaneLayout.createSequentialGroup()
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(ScrollPaneChatArea, GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)))
                     .addContainerGap())
         );
         contentPaneLayout.setVerticalGroup(
@@ -177,6 +190,7 @@ public class WindowChatting extends JFrame {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
+    private boolean conversationSelected;
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - unknown
     private JList<String> ListConversations;
