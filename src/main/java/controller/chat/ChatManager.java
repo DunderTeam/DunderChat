@@ -9,9 +9,9 @@ import java.util.List;
 public class ChatManager {
 
 
-    List<Chat> chatList = new ArrayList<Chat>(); // lists of Chats
+    static List<Chat> chatList = new ArrayList<Chat>(); // lists of Chats
 
-    public void addMessage (java.net.SocketAddress so, Message ma){ // adds chat to list
+    public static void addMessage(java.net.SocketAddress so, Message ma){ // adds chat to list
         
         boolean check = chatExist(so,ma);
 
@@ -22,7 +22,7 @@ public class ChatManager {
 
     }
     
-    private boolean chatExist(java.net.SocketAddress so, Message ma){ // check if chat exists
+    private static boolean chatExist(java.net.SocketAddress so, Message ma){ // check if chat exists
 
         for (Chat ch: chatList) {
             if (ch.name == ma.getName() && ch.socket == so){ // check for name and socket connection

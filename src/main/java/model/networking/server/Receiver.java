@@ -2,6 +2,7 @@ package model.networking.server;
 
 import model.networking.data.Message;
 import model.networking.data.Status;
+import controller.chat.ChatManager;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -24,9 +25,8 @@ public class Receiver implements Runnable {
             if(data == null) {
                 dout.writeUTF(Status.encode(204)); // Received but empty
             } else {
-                Message msg = Message.decode(data); // Todo: pass this to chatManager
-                // Possibly along conn.getRemoteSocketAddress(); to be used as identifier?
-                // or x.Nick
+                Message msg = Message.decode(data);
+                ChatManager.addMessage(conn.getRemoteSocketAddress(),msg); // adds message to chat list
                 System.out.println(msg.getData());
                 dout.writeUTF(Status.encode(200)); // Received but empty
             }
