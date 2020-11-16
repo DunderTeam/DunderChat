@@ -7,13 +7,25 @@ import java.util.List;
 
 public class Chat {
 
-    List<Message> chat = new ArrayList<Message>(); // Creating list of all messages between two people
+    int value1;
+    Message value2;
 
-    public void addMessageToList (Message mes) { // Adds new message to list
-        chat.add(mes);
+    Chat (int nr, Message me){
+        value1 = nr;
+        value2 = me;
     }
 
-    public List<Message> getChat() { // returns list
+    List<Chat> chat = new ArrayList<Chat>(); // Creating list of all messages between two people
+
+    public void addMessageToList (int nr, Message me) { // Adds new message to list
+
+        Chat temp = new Chat(nr,me);
+        chat.add(temp);
+
+
+    }
+
+    public List<Chat> getChat() { // returns list
         return chat;
     }
 }
