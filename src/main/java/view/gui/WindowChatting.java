@@ -37,7 +37,7 @@ public class WindowChatting extends JFrame {
     // Opens a dialog box to connect to a new User/IP
     // TODO Fix this, currently opens an empty dialog box
     private void BtnNewMouseClicked(MouseEvent e) {
-        new view.gui.DialogConnect(this).setVisible(true);
+        // TODO open window to connect to a user and create a new conversation
     }
 
     private void ChatMsgSend() {
@@ -48,6 +48,11 @@ public class WindowChatting extends JFrame {
             TxtAreaChat.append(sender + ": " + message + "\n");
             TxtFieldMsg.setText("");
         }
+    }
+
+    // Adds a new conversation to the list on the left hand side
+    public void CreateNewConversation() {
+        // TODO implement this
     }
 
     private void ListConversationsValueChanged(ListSelectionEvent e) {
