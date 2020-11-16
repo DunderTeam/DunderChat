@@ -1,31 +1,27 @@
 package controller.chat;
 
-import controller.networking.data.Message;
+import model.networking.data.Message;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Chat {
 
-    int value1;
-    Message value2;
+    public static String name;
+    public static java.net.SocketAddress socket;
 
-    Chat (int nr, Message me){
-        value1 = nr;
-        value2 = me;
+    private List<Message> chat = new ArrayList<Message>(); // Creating list of all messages between two people
+
+    Chat (Message ma, java.net.SocketAddress so){
+        name = ma.getName();
+        socket = so;
     }
 
-    List<Chat> chat = new ArrayList<Chat>(); // Creating list of all messages between two people
-
-    public void addMessageToList (int nr, Message me) { // Adds new message to list
-
-        Chat temp = new Chat(nr,me);
-        chat.add(temp);
-
-
+    public void addMessageToList (Message me) { // Adds new message to list
+        chat.add(me);
     }
 
-    public List<Chat> getChat() { // returns list
+    public List<Message> getChat() { // returns list
         return chat;
     }
 }
