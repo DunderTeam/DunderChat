@@ -2,6 +2,7 @@ import model.networking.client.Connection;
 import model.networking.client.ConnectionManager;
 import model.networking.data.Message;
 import model.networking.server.Server;
+import view.gui.WindowLogin;
 
 
 /*
@@ -33,6 +34,9 @@ public class Main {
 
         // Send a message via our manager to a specific client
         manager.sendMessage(manager.connections.get(0), msg); // Sends message to own device. e.g localhost
+
+        // Start view (gui)
+        java.awt.EventQueue.invokeLater(() -> new WindowLogin().setVisible(true));
 
          /* Test Environment */
     }

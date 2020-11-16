@@ -1,0 +1,67 @@
+JFDML JFormDesigner: "7.0.2.6.321" Java: "11.0.8" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {space :::p, par l {comp WindowTitle::l:::x, seq t {comp BtnNew:::p:78:p, space :::p, comp BtnQuit:::p:86:p, space :0:0:x}, comp ListConversations::l:::x}, space :::p, par l {seq {comp TxtFieldMsg::::0:x, space :::p, comp BtnSend:::p::p}, comp ScrollPaneChatArea:::::x}, space :::p}}"
+			"$verticalGroup": "par l {seq l {space :::p, par l {seq {comp WindowTitle:::p:30:p, space :::p, comp ListConversations::::382:x}, comp ScrollPaneChatArea::::418:x}, space :::p, par b {comp BtnSend::b:p::p, comp BtnNew::b:p::p, comp BtnQuit::b:p::p, comp TxtFieldMsg::b:::p}, space :::p}}"
+		} ) {
+			name: "this"
+			"title": "ChatApp"
+			"defaultCloseOperation": 2
+			"minimumSize": new java.awt.Dimension( 600, 400 )
+			add( new FormComponent( "javax.swing.JList" ) {
+				name: "ListConversations"
+				"selectionMode": 0
+				"model": new javax.swing.DefaultListModel {
+					addElement( "Chat1" )
+					addElement( "Chat2" )
+				}
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "WindowTitle"
+				"text": "Conversations"
+				"minimumSize": new java.awt.Dimension( 60, 15 )
+				"maximumSize": new java.awt.Dimension( 60, 30 )
+				"preferredSize": new java.awt.Dimension( 60, 20 )
+				"horizontalAlignment": 0
+				"font": new java.awt.Font( ".AppleSystemUIFont", 1, 14 )
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "ScrollPaneChatArea"
+				add( new FormComponent( "javax.swing.JTextArea" ) {
+					name: "TxtAreaChat"
+					"lineWrap": true
+					"wrapStyleWord": true
+					"editable": false
+					"text": "Welcome to ChatApp. Select a conversation from the list or start a new one to begin."
+				} )
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "TxtFieldMsg"
+				"preferredSize": new java.awt.Dimension( 6000, 30 )
+				"toolTipText": "Chat here"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "TxtFieldMsgActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnSend"
+				"text": "send"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnSendMouseClicked", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnQuit"
+				"text": "quit"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnQuitMouseClicked", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnNew"
+				"text": "new"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnNewMouseClicked", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 50, 55 )
+			"size": new java.awt.Dimension( 465, 490 )
+		} )
+	}
+}
