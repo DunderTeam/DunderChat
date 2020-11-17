@@ -1,0 +1,93 @@
+JFDML JFormDesigner: "7.0.2.6.321" Java: "11.0.8" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {space :::p, par l {seq {comp BtnNew:::p:78:p, space :::p, comp BtnQuit:::p:86:p}, par t:l::p {comp WindowTitle::l:::x, comp ListConversations::l::166:x}}, par l {seq {comp TxtFieldMsg::::197:x, space :::p, comp BtnSend:::p::p}, seq l {space :::p, comp ScrollPaneChatArea::::275:x}}, space :::p}}"
+			"$verticalGroup": "par l {seq l {space :::p, par l {seq {comp WindowTitle:::p:30:p, space :::p, comp ListConversations::::382:x}, comp ScrollPaneChatArea::::418:x}, space :::p, par b {comp BtnSend::b:p::p, comp BtnNew::b:p::p, comp BtnQuit::b:p::p, comp TxtFieldMsg::b:::p}, space :::p}}"
+		} ) {
+			name: "this"
+			"title": "ChatApp"
+			"defaultCloseOperation": 2
+			"minimumSize": new java.awt.Dimension( 600, 400 )
+			add( new FormComponent( "javax.swing.JList" ) {
+				name: "ListConversations"
+				"selectionMode": 0
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+					"JavaCodeGenerator.customCreateCode": "new JList<>(conversations);"
+				}
+				addEvent( new FormEvent( "javax.swing.event.ListSelectionListener", "valueChanged", "ListConversationsValueChanged", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "WindowTitle"
+				"text": "Conversations"
+				"minimumSize": new java.awt.Dimension( 60, 15 )
+				"maximumSize": new java.awt.Dimension( 60, 30 )
+				"preferredSize": new java.awt.Dimension( 60, 20 )
+				"horizontalAlignment": 0
+				"font": new java.awt.Font( ".AppleSystemUIFont", 1, 14 )
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "ScrollPaneChatArea"
+				add( new FormComponent( "javax.swing.JTextArea" ) {
+					name: "TxtAreaChat"
+					"lineWrap": true
+					"wrapStyleWord": true
+					"editable": false
+					"text": "Welcome to ChatApp. Select a conversation from the list or start a new one to begin."
+					"preferredSize": new java.awt.Dimension( 1920, 100 )
+				} )
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "TxtFieldMsg"
+				"preferredSize": new java.awt.Dimension( 6000, 30 )
+				"toolTipText": "Chat here"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "TxtFieldMsgActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnSend"
+				"text": "send"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnSendMouseClicked", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnQuit"
+				"text": "quit"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnQuitMouseClicked", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnNew"
+				"text": "new"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnNewMouseClicked", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 50, 55 )
+			"size": new java.awt.Dimension( 465, 490 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {space :p:46:p, par t {comp BtnConnect:::::x, comp Label::t:::x, comp TxtFieldAddress::l:::x}, space :p:46:p}}"
+			"$verticalGroup": "par l {seq l {space :p:25:p, comp Label:::p::p, space :::p, comp TxtFieldAddress:::p::p, space :::p, comp BtnConnect:::p::p, space ::63:x}}"
+		} ) {
+			name: "connectionDialog"
+			"defaultCloseOperation": 2
+			"modal": true
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "Label"
+				"text": "New Conversation"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "TxtFieldAddress"
+				"text": "Username/IP"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnConnect"
+				"text": "connect"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnConnectMouseClicked", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"size": new java.awt.Dimension( 200, 200 )
+			"location": new java.awt.Point( 105, 570 )
+		} )
+	}
+}
