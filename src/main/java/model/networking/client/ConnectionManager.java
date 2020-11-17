@@ -1,5 +1,6 @@
 package model.networking.client;
 
+import model.networking.client.message.SendMessage;
 import model.networking.data.Message;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package model.networking.client;
+package model.networking.client.message;
 
 import com.google.gson.Gson;
 import model.networking.data.Message;

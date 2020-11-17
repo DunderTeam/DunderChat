@@ -1,4 +1,4 @@
-package model.networking.client;
+package model.networking.client.message;
 
 public class MessageFetch extends Thread {
     private MessageFetch() {
