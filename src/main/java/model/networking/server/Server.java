@@ -1,8 +1,12 @@
 package model.networking.server;
 
+import com.dosse.upnp.UPnP;
+import model.networking.data.IP;
+
 import java.net.ServerSocket;
 import java.net.Socket;
-
+import java.net.SocketPermission;
+import java.security.PermissionCollection;
 
 
 public class Server implements Runnable {
@@ -13,16 +17,17 @@ public class Server implements Runnable {
     {
         try {
             server = new ServerSocket(port);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    // If server is launched without port, it will attempt to find an available one
-    public Server()
-    {
-        try {
-            server = new ServerSocket(0);
+            if(UPnP.isUPnPAvailable()) {
+                if(UPnP.isMappedTCP(port)) {
+                    System.out.println("Already mapped");
+                } else {
+                    UPnP.openPortTCP(port);
+                    UPnP.openPortUDP(port); // Should not be needed
+                }
+            } else {
+                System.out.println("Port Forwarding Failed");
+                // TODO: Implement notification to user, that application is not working
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -32,7 +37,7 @@ public class Server implements Runnable {
     public void run()
     {
         try {
-            System.out.println("Listening on port:" + server.getLocalPort());
+            System.out.println("Listening on " + UPnP.getExternalIP() + ":" + server.getLocalPort());
             /*
                 Current setup below will only allow for one connection at a time, consider
                 new approach to listening. Maybe create a new thread upon accepting a
