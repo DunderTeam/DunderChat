@@ -11,22 +11,8 @@ public class Server implements Runnable {
     public Server(int port)
     {
         try {
-            UPnP.closePortTCP(port);
             server = new ServerSocket(port, 10, Inet4Address.getByName(UPnP.getLocalIP()));
-
-            SocketPermission sp = new SocketPermission("*:5555", "accept,connect,listen,resolve");
-
-            if(UPnP.isUPnPAvailable()) {
-                if(UPnP.isMappedTCP(port)) {
-                    System.out.println("Already mapped");
-                } else {
-                    UPnP.openPortTCP(port);
-                    UPnP.openPortUDP(port); // Should not be needed
-                }
-            } else {
-                System.out.println("Port Forwarding Failed");
-                // TODO: Implement notification to user, that application is not working
-            }
+            portForward(server.getLocalPort());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -50,6 +36,21 @@ public class Server implements Runnable {
             }
         } catch (Exception e) {
 
+        }
+    }
+
+    private void portForward(int port)
+    {
+        UPnP.closePortTCP(port);
+        if(UPnP.isUPnPAvailable()) {
+            if(UPnP.isMappedTCP(port)) {
+                System.out.println("Already mapped");
+            } else {
+                UPnP.openPortTCP(port);
+            }
+        } else {
+            System.out.println("Port Forwarding Failed");
+            // TODO: Implement notification to user, that application is not working
         }
     }
 }
