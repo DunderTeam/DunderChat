@@ -1,11 +1,5 @@
 package model.networking.server;
 
-import com.google.gson.Gson;
-import model.networking.data.Message;
-import model.networking.data.Status;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -47,53 +41,12 @@ public class Server implements Runnable {
             while (!Thread.interrupted())
             {
                 Socket conn = server.accept(); // This will block thread - e.g waits for connection
-                // If we want to guarantee multiple connections simultaneously we can run the rest of the code
-                // in a new thread
-
-
-                DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-
-                String data = read(conn);
-                if(data == null) {
-                    out.writeUTF(encodeStatus(204)); // Received but empty
-                } else {
-                    Message msg = decodeMessage(data); // Todo: pass this to chatManager
-                    // Possibly along conn.getRemoteSocketAddress(); to be used as identifier?
-                    // or x.Nick
-                    out.writeUTF(encodeStatus(200)); // Received but empty
-                }
-
-                out.flush();
-                out.close();
-                conn.close();
+                // Runs data transfer in the background and waits for new connection
+                Thread connection_process = new Thread(new Receiver(conn));
+                connection_process.start();
             }
         } catch (Exception e) {
 
-        }
-    }
-
-    private Message decodeMessage(String data) {
-        Gson gson = new Gson();
-        return gson.fromJson(data, Message.class);
-    }
-
-    private String encodeStatus(int status) {
-        Gson gson = new Gson();
-        Status st = new Status();
-        st.setStatus(status);
-
-        return gson.toJson(st);
-    }
-
-    // Read data from a connection
-    private String read(Socket x)
-    {
-        try {
-            DataInputStream stream = new DataInputStream(x.getInputStream());
-            return stream.readUTF();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return null;
         }
     }
 }

@@ -33,7 +33,6 @@ public class Main {
 
         // Send a message via our manager to a specific client
         manager.sendMessage(manager.connections.get(0), msg); // Sends message to own device. e.g localhost
-
          /* Test Environment */
     }
 }

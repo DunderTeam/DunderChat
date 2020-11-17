@@ -1,5 +1,7 @@
 package model.networking.data;
 
+import com.google.gson.Gson;
+
 public class Message {
     public String getData() {
         return data;
@@ -28,4 +30,14 @@ public class Message {
     private String data;
     private String name;
     private String timestamp;
+
+    public static Message decode(String data) {
+        Gson gson = new Gson();
+        return gson.fromJson(data, Message.class);
+    }
+
+    public static String encode(Message data) {
+        Gson gson = new Gson();
+        return gson.toJson(data);
+    }
 }

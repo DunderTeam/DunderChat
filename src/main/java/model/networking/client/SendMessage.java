@@ -53,6 +53,7 @@ public class SendMessage implements Runnable {
         out.flush();
 
         int status = decodeStatus(in.readUTF()).getStatus();
+
         out.close();
         conn.close();
         // Gets server response, do something based on result?:
