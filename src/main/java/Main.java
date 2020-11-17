@@ -1,9 +1,21 @@
+
 import com.dosse.upnp.UPnP;
 import model.networking.client.Connection;
 import model.networking.client.ConnectionManager;
 import model.networking.data.Message;
 import model.networking.server.Server;
 import view.gui.WindowLogin;
+
+import com.mongodb.ClientSessionOptions;
+import com.mongodb.ServerAddress;
+import com.mongodb.TransactionOptions;
+import com.mongodb.client.*;
+import com.mongodb.session.ServerSession;
+import model.database.DB;
+import org.bson.BsonDocument;
+import org.bson.BsonTimestamp;
+import org.bson.Document;
+
 
 
 /*
@@ -13,9 +25,17 @@ import view.gui.WindowLogin;
 
  */
 public class Main {
-    public static void main(String args[]) {
+
+    public static void main(String[] args) {
+
+        // get user collection from mongodb
+        MongoCollection<Document> userCollection = DB.getUserCollection();
+
         /* This Starts our Server/Receiver */
         Thread server = new Thread(new Server(5555));
+
+        /*
+        Thread server = new Thread(new Server(25));
         server.start();
         /* Server */
 
@@ -38,6 +58,7 @@ public class Main {
         msg.setData("Hello World!");
         msg.setName("John Wick");
 
+
         // Send a message via our manager to a specific client
         manager.sendMessage(manager.connections.get(0), msg); // Sends message to own device. e.g localhost
         manager.sendMessage(manager.connections.get(1), msg); // Sends message to own device. e.g localhost
@@ -47,5 +68,28 @@ public class Main {
         //java.awt.EventQueue.invokeLater(() -> new WindowLogin().setVisible(true));
 
          /* Test Environment */
+
+        manager.sendMessage(manager.connections.get(0), msg);
+
+
+        // variables used for testing input to database before buttons are added/simulating registering new users
+        String username = "bruker1";
+        String ip = "123";
+        String password = "123456";
+        String newPassword = "password";
+
+        // add new user to data base
+        //DB.addUser(userCollection, username, ip, password);
+
+        // login
+        DB.login(userCollection, username, password);
+
+        // delete user
+        //DB.deleteUser(userCollection, username, password);
+
+        // change password
+        //DB.changePassword(userCollection, username, password, newPassword);
+
+
     }
 }
