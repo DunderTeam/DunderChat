@@ -21,6 +21,14 @@ public class ChatManager {
         }
 
     }
+
+    public static void newChat (java.net.SocketAddress so, Message ma){
+        boolean check = chatExist(so,ma);
+
+        if (!check){
+            chatList.add(new Chat(ma,so)); // Ads new chat
+        }
+    }
     
     private static boolean chatExist(java.net.SocketAddress so, Message ma){ // check if chat exists
 
