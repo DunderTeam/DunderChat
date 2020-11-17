@@ -1,12 +1,7 @@
 package model.networking.server;
 
 import com.dosse.upnp.UPnP;
-import model.networking.data.IP;
-
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketPermission;
-import java.security.PermissionCollection;
+import java.net.*;
 
 
 public class Server implements Runnable {
@@ -16,7 +11,8 @@ public class Server implements Runnable {
     public Server(int port)
     {
         try {
-            server = new ServerSocket(port);
+            UPnP.closePortTCP(port);
+            server = new ServerSocket(port, 10, Inet4Address.getByName(UPnP.getLocalIP()));
 
             SocketPermission sp = new SocketPermission("*:5555", "accept,connect,listen,resolve");
 
@@ -48,10 +44,10 @@ public class Server implements Runnable {
              */
             while (!Thread.interrupted())
             {
-                Socket conn = server.accept(); // This will block thread - e.g waits for connection
+                Socket clientConnection = server.accept(); // This will block thread - e.g waits for connection
                 // Runs data transfer in the background and waits for new connection
-                Thread connection_process = new Thread(new Receiver(conn));
-                connection_process.start();
+                ServerWorker worker = new ServerWorker(clientConnection);
+                worker.start();
             }
         } catch (Exception e) {
 
