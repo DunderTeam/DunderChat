@@ -17,6 +17,9 @@ public class Server implements Runnable {
     {
         try {
             server = new ServerSocket(port);
+
+            SocketPermission sp = new SocketPermission("*:5555", "accept,connect,listen,resolve");
+
             if(UPnP.isUPnPAvailable()) {
                 if(UPnP.isMappedTCP(port)) {
                     System.out.println("Already mapped");
