@@ -17,7 +17,7 @@ public class ChatManager {
 
         if (!check){
             chatList.add(new Chat(ma,so)); // Ads new chat
-            chatList.get(chatList.size()).addMessageToList(ma); // ads new message to chat
+            chatList.get(chatList.size()-1).addMessageToList(ma); // ads new message to chat
         }
 
     }
