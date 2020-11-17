@@ -14,9 +14,9 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JList" ) {
 				name: "ListConversations"
 				"selectionMode": 0
-				"model": new javax.swing.DefaultListModel {
-					addElement( "Chat1" )
-					addElement( "Chat2" )
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+					"JavaCodeGenerator.customCreateCode": "new JList<>(conversations);"
 				}
 				addEvent( new FormEvent( "javax.swing.event.ListSelectionListener", "valueChanged", "ListConversationsValueChanged", true ) )
 			} )
@@ -64,6 +64,30 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 50, 55 )
 			"size": new java.awt.Dimension( 465, 490 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq {space :p:46:p, par t {comp BtnConnect:::::x, comp Label::t:::x, comp TxtFieldAddress::l:::x}, space :p:46:p}}"
+			"$verticalGroup": "par l {seq l {space :p:25:p, comp Label:::p::p, space :::p, comp TxtFieldAddress:::p::p, space :::p, comp BtnConnect:::p::p, space ::63:x}}"
+		} ) {
+			name: "connectionDialog"
+			"defaultCloseOperation": 2
+			"modal": true
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "Label"
+				"text": "New Conversation"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "TxtFieldAddress"
+				"text": "Username/IP"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnConnect"
+				"text": "connect"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnConnectMouseClicked", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"size": new java.awt.Dimension( 200, 200 )
+			"location": new java.awt.Point( 105, 570 )
 		} )
 	}
 }

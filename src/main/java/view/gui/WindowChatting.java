@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Vector;
 import javax.swing.event.*;
 
 /**
@@ -38,6 +39,11 @@ public class WindowChatting extends JFrame {
     // TODO Fix this, currently opens an empty dialog box
     private void BtnNewMouseClicked(MouseEvent e) {
         // TODO open window to connect to a user and create a new conversation
+        connectionDialog.setVisible(true); // here the modal dialog takes over
+
+        // Gets the text in the user/ip TxtField
+        String user = TxtFieldAddress.getText();
+        CreateNewConversation(new Conversation(user, ""));
     }
 
     private void ChatMsgSend() {
@@ -51,7 +57,10 @@ public class WindowChatting extends JFrame {
     }
 
     // Adds a new conversation to the list on the left hand side
-    public void CreateNewConversation() {
+    public void CreateNewConversation(Conversation newConversation) {
+        conversations.add(newConversation.getName());
+        System.out.println(conversations);
+        ListConversations.updateUI();
         // TODO implement this
     }
 
@@ -63,11 +72,20 @@ public class WindowChatting extends JFrame {
         TxtAreaChat.setText("Currently chatting in conversation: " + ListConversations.getSelectedValue() + "\n");
     }
 
+    private void BtnConnectMouseClicked(MouseEvent e) {
+        connectionDialog.dispose();
+    }
+
+    private void createUIComponents() {
+        // TODO: add custom component creation code here
+    }
+
     private void initComponents() {
+        conversations = new Vector<>();
         conversationSelected = false;
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
-        ListConversations = new JList<>();
+        ListConversations = new JList<>(conversations);
         WindowTitle = new JLabel();
         ScrollPaneChatArea = new JScrollPane();
         TxtAreaChat = new JTextArea();
@@ -75,6 +93,10 @@ public class WindowChatting extends JFrame {
         BtnSend = new JButton();
         BtnQuit = new JButton();
         BtnNew = new JButton();
+        connectionDialog = new JDialog();
+        Label = new JLabel();
+        TxtFieldAddress = new JTextField();
+        BtnConnect = new JButton();
 
         //======== this ========
         setTitle("ChatApp");
@@ -84,16 +106,6 @@ public class WindowChatting extends JFrame {
 
         //---- ListConversations ----
         ListConversations.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        ListConversations.setModel(new AbstractListModel<String>() {
-            String[] values = {
-                "Chat1",
-                "Chat2"
-            };
-            @Override
-            public int getSize() { return values.length; }
-            @Override
-            public String getElementAt(int i) { return values[i]; }
-        });
         ListConversations.addListSelectionListener(e -> ListConversationsValueChanged(e));
 
         //---- WindowTitle ----
@@ -192,10 +204,59 @@ public class WindowChatting extends JFrame {
         );
         pack();
         setLocationRelativeTo(getOwner());
+
+        //======== connectionDialog ========
+        {
+            connectionDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            connectionDialog.setModal(true);
+            Container connectionDialogContentPane = connectionDialog.getContentPane();
+
+            //---- Label ----
+            Label.setText("New Conversation");
+
+            //---- TxtFieldAddress ----
+            TxtFieldAddress.setText("Username/IP");
+
+            //---- BtnConnect ----
+            BtnConnect.setText("connect");
+            BtnConnect.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    BtnConnectMouseClicked(e);
+                }
+            });
+
+            GroupLayout connectionDialogContentPaneLayout = new GroupLayout(connectionDialogContentPane);
+            connectionDialogContentPane.setLayout(connectionDialogContentPaneLayout);
+            connectionDialogContentPaneLayout.setHorizontalGroup(
+                connectionDialogContentPaneLayout.createParallelGroup()
+                    .addGroup(connectionDialogContentPaneLayout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addGroup(connectionDialogContentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                            .addComponent(BtnConnect, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Label, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(TxtFieldAddress, GroupLayout.Alignment.LEADING))
+                        .addGap(46, 46, 46))
+            );
+            connectionDialogContentPaneLayout.setVerticalGroup(
+                connectionDialogContentPaneLayout.createParallelGroup()
+                    .addGroup(connectionDialogContentPaneLayout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(Label)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(TxtFieldAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BtnConnect)
+                        .addContainerGap(63, Short.MAX_VALUE))
+            );
+            connectionDialog.pack();
+            connectionDialog.setLocationRelativeTo(connectionDialog.getOwner());
+        }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
     private boolean conversationSelected;
+    private Vector<String> conversations;
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - unknown
     private JList<String> ListConversations;
@@ -206,5 +267,9 @@ public class WindowChatting extends JFrame {
     private JButton BtnSend;
     private JButton BtnQuit;
     private JButton BtnNew;
+    private JDialog connectionDialog;
+    private JLabel Label;
+    private JTextField TxtFieldAddress;
+    private JButton BtnConnect;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

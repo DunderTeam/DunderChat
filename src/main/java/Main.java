@@ -25,7 +25,7 @@ public class Main {
 
         /* Test Environment for running code snippets  */
         // Add a new connection to our manager
-        manager.addConnection(new Connection("localhost", 25));
+        manager.addConnection(new Connection("192.168.0.103", 5555));
         Message msg = new Message();
 
         // Attach data to a new message
