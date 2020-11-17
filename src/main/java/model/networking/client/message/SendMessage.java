@@ -13,7 +13,7 @@ public class SendMessage implements Runnable {
     // Todo: Implement strategy pattern for sending message
     private int connectionAttempts = 5;
 
-    SendMessage(String i, int p, Message m) {
+    public SendMessage(String i, int p, Message m) {
         ip = i; port = p; msg = m;
         m.setTimestamp(java.time.Clock.systemUTC().instant().toString());
     }
