@@ -39,10 +39,6 @@ public class Main {
 
         // change password
         //DB.changePassword(userCollection, username, password, newPassword);
-
-
-
-
-
+        
     }
 }
