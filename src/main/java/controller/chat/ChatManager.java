@@ -12,13 +12,16 @@ public class ChatManager {
     static List<Chat> chatList = new ArrayList<Chat>(); // lists of Chats
 
     //Adds a message to a given chat (by name and address)
-    public static void addMessage(String chatName, String chatAddress, Message msg){
-        getChatById(chatName, chatAddress).addMessageToList(msg);
+    public static void addMessage(String chatName, String chatAddress, Message msg) {
+        if (chatExists(chatName, chatAddress)) {
+            getChatById(chatName, chatAddress).addMessageToList(msg);
+            System.out.println("Added message " + msg.getData() + " to chat: " + chatName);
+        }
     }
 
     //Adds a new chat to the list, with given name, address and port
     public static void addChat (String name, String address, int port) {
-        if (!chatExists(name , address)){
+        if (!chatExists(name, address)){
             chatList.add(new Chat(name, address, port)); // Ads new chat
         }
         System.out.println(chatList);
@@ -37,7 +40,7 @@ public class ChatManager {
     }
 
     //Checks if chat with name and address already exists
-    private static boolean chatExists(String name, String address){
+    public static boolean chatExists(String name, String address){
         for (Chat ch: chatList) {
             //If there already exists a chat with this name and address, return true
             if (ch.getName() == name && ch.getAddress() == address){
