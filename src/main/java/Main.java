@@ -31,7 +31,6 @@ public class Main {
         manager.addConnection(new Connection("84.211.225.160", 5555)); // Public
         manager.addConnection(new Connection("192.168.0.2", 5555)); // External
         manager.addConnection(new Connection(UPnP.getLocalIP(), 5555));
-        System.out.println(UPnP.getLocalIP());
 
         Message msg = new Message();
         Message msg1 = new Message();

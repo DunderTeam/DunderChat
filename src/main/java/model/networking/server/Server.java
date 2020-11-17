@@ -22,7 +22,7 @@ public class Server implements Runnable {
     public void run()
     {
         try {
-            System.out.println("Listening on " + UPnP.getExternalIP() + ":" + server.getLocalPort());
+            System.out.printf("Listening on %s:%d...", UPnP.getExternalIP(), server.getLocalPort());
             /*
                 Current setup below will only allow for one connection at a time, consider
                 new approach to listening. Maybe create a new thread upon accepting a

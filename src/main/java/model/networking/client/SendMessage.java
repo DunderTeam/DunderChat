@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class SendMessage implements Runnable {
+    // Todo: Implement strategy pattern for sending message
     private int connectionAttempts = 5;
 
     SendMessage(String i, int p, Message m) {
