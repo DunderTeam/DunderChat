@@ -14,10 +14,16 @@ public class ChatManager {
     public static void addMessage(java.net.SocketAddress so, Message ma){ // adds chat to list
         
         boolean check = chatExist(so,ma);
+        int nr = getListNumber(so,ma);
 
         if (!check){
             chatList.add(new Chat(ma,so)); // Ads new chat
             chatList.get(chatList.size()-1).addMessageToList(ma); // ads new message to chat
+        }
+        else {
+            if (nr >= 0){ // check that slot in list is a valid number
+                chatList.get(nr).addMessageToList(ma); // adds new message
+            }
         }
 
     }
@@ -28,6 +34,17 @@ public class ChatManager {
         if (!check){
             chatList.add(new Chat(ma,so)); // Ads new chat
         }
+    }
+
+    private static int getListNumber(java.net.SocketAddress so, Message ma){ // gets number where the current chat is placed
+        int nr = -1;
+        for (int i = 0; i < chatList.size(); i++){
+            if(chatList.get(i).name == ma.getName() && chatList.get(i).socket == so){
+                nr = i;
+            }
+        }
+
+        return nr;
     }
     
     private static boolean chatExist(java.net.SocketAddress so, Message ma){ // check if chat exists
