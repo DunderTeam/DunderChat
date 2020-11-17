@@ -38,7 +38,7 @@ public class ChatManager {
         return chatList;
     }
 
-    public List<Message> getChatById(Message ma, java.net.SocketAddress so){ // Gets chat from list of chats by id
+    public static List<Message> getChatById(Message ma, java.net.SocketAddress so){ // Gets chat from list of chats by id
         List<Message> temp = null;
         for (Chat ch: chatList){
             temp = ch.getChat(); // returns list of messages

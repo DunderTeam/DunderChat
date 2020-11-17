@@ -8,6 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
 
 public class Receiver implements Runnable {
     private static Socket conn;
@@ -28,6 +29,16 @@ public class Receiver implements Runnable {
                 Message msg = Message.decode(data);
                 ChatManager.addMessage(conn.getRemoteSocketAddress(),msg); // adds message to chat list
                 System.out.println(msg.getData());
+
+                /*
+                List<Message> temp = ChatManager.getChatById(msg,conn.getRemoteSocketAddress()); // test to see that the list works
+                for (Message me : temp){
+                    System.out.println(me.getName());
+                    System.out.println(me.getData());
+                }
+
+                 */
+
                 dout.writeUTF(Status.encode(200)); // Received but empty
             }
 
