@@ -27,9 +27,19 @@ public class Message {
         this.timestamp = timestamp;
     }
 
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+
     private String data;
     private String name;
     private String timestamp;
+    private String destination;
 
     public static Message decode(String data) {
         Gson gson = new Gson();
