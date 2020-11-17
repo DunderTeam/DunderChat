@@ -38,10 +38,14 @@ public class ServerWorker extends Thread {
         } else {
             Message msg = Message.decode(dataInput);
 
-            ChatManager.addMessage(clientSocket.getRemoteSocketAddress(),msg); // adds message to chat list
+            //If the chat doesn't exist, add it
+            if (!ChatManager.chatExists(msg.getName(), clientSocket.getRemoteSocketAddress().toString())) {
+                ChatManager.addChat(msg.getName(), clientSocket.getRemoteSocketAddress().toString(), clientSocket.getPort());
+            }
+
+            ChatManager.addMessage(msg.getName(), clientSocket.getRemoteSocketAddress().toString(), msg);
 
             debug(msg.getData());
-
             dataOutput.writeUTF(Status.encode(200)); // Received but empty
 
             dataOutput.flush();

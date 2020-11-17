@@ -46,8 +46,7 @@ public class Server implements Runnable {
             {
                 Socket clientConnection = server.accept(); // This will block thread - e.g waits for connection
                 // Runs data transfer in the background and waits for new connection
-                ServerWorker worker = new ServerWorker(clientConnection);
-                worker.start();
+                new ServerWorker(clientConnection).start();
             }
         } catch (Exception e) {
 
