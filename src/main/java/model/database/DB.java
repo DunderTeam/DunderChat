@@ -63,12 +63,41 @@ public class DB {
         MongoCursor<Document> cursor = findIterable.cursor();
         if (cursor.hasNext()){
             // if login is successful
-            //System.out.println(cursor.next());
-            System.out.println("Logged in as " + username);
+            String name = getUsername(userCollection, username, password);
+            String ip = getIP(userCollection, username, password);
+            System.out.println("Logged in as " + name + ". IP: " + ip);
         } else {
             // if login failed
             System.out.println("Login Failed");
         }
+    }
+
+    // method to return the username from the database as a string
+    public static String getUsername(MongoCollection<Document> userCollection, String username, String password) {
+        // encrypt the password using simple hash
+        String encryptedPassword = Encryption.encryptPassword(password);
+        // make query to find the user
+        Document query = new Document("username", username).append("password", encryptedPassword);
+        FindIterable<Document> findIterable = userCollection.find(query);
+        MongoCursor<Document> cursor = findIterable.cursor();
+        if (cursor.hasNext()){
+            // if it finds the correct user returns the username as a string
+            return cursor.next().get("username").toString();
+        } else return null;
+    }
+
+    // method to return the ip from the database as a string
+    public static String getIP(MongoCollection<Document> userCollection, String username, String password) {
+        // encrypt the password using simple hash
+        String encryptedPassword = Encryption.encryptPassword(password);
+        // make query to find the user
+        Document query = new Document("username", username).append("password", encryptedPassword);
+        FindIterable<Document> findIterable = userCollection.find(query);
+        MongoCursor<Document> cursor = findIterable.cursor();
+        if (cursor.hasNext()){
+            // if it finds the correct user returns the ip as a string
+            return cursor.next().get("ip").toString();
+        } else return null;
     }
 
     public static void deleteUser(MongoCollection<Document> userCollection, String username, String password) {
