@@ -26,7 +26,7 @@ public class Main {
         // Add a new connection to our manager
         manager.addConnection(new Connection("localhost", 25));
         Message msg = new Message();
-
+     
         // Attach data to a new message
         msg.setData("Hello World!");
         msg.setName("John Wick");
