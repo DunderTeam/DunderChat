@@ -6,22 +6,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Chat {
+    public Chat (String name, String address, int port){
+        this.name = name;
+        this.address = address;
+        this.port = port;
+    }
 
-    public static String name;
-    public static java.net.SocketAddress socket;
+    public String getName() {
+        return this.name;
+    }
 
-    private List<Message> chat = new ArrayList<Message>(); // Creating list of all messages between two people
+    public String getAddress() {
+        return this.address;
+    }
 
-    Chat (Message ma, java.net.SocketAddress so){
-        name = ma.getName();
-        socket = so;
+    public int getPort() {
+        return this.port;
     }
 
     public void addMessageToList (Message me) { // Adds new message to list
-        chat.add(me);
+        listMessages.add(me);
     }
 
-    public List<Message> getChat() { // returns list
-        return chat;
+    public List<Message> getListMessages() { // returns list
+        return listMessages;
     }
+
+    private String name;
+    private String address;
+    private int port;
+
+    private List<Message> listMessages = new ArrayList<Message>(); // Creating list of all messages between two people
 }

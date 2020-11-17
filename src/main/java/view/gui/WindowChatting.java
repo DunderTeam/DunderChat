@@ -4,12 +4,18 @@
 
 package view.gui;
 
+import controller.chat.Chat;
+import controller.chat.ChatManager;
+import model.networking.data.Message;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Vector;
+import java.util.List;
 import javax.swing.event.*;
 
 /**
@@ -23,6 +29,7 @@ public class WindowChatting extends JFrame {
     // Calls ChatMsgSend() when the user presses enter in the chat field
     private void TxtFieldMsgActionPerformed(ActionEvent e) {
         ChatMsgSend();
+        TxtFieldMsg.setText("");
     }
 
     // Calls ChatMsgSend() if the user clicks the send button
@@ -38,30 +45,41 @@ public class WindowChatting extends JFrame {
     // Opens a dialog box to connect to a new User/IP
     // TODO Fix this, currently opens an empty dialog box
     private void BtnNewMouseClicked(MouseEvent e) {
-        // TODO open window to connect to a user and create a new conversation
         connectionDialog.setVisible(true); // here the modal dialog takes over
+        connectNewChat();
+        TxtFieldAddress.setText("");
+    }
 
+    private void connectNewChat() {
         // Gets the text in the user/ip TxtField
         String user = TxtFieldAddress.getText();
-        CreateNewConversation(new Conversation(user, ""));
+        //TODO connect to user and get actual address
+        String address = "";
+        ChatManager.addChat(user, address, 5555);
+        chats.add(ChatManager.getChatById(user, address));
+        addConversationToList(user);
     }
 
     private void ChatMsgSend() {
         // TODO actually send message and not just display locally
         String sender = "You";
         String message = TxtFieldMsg.getText();
-        if (message.length() > 0 && conversationSelected) {
-            TxtAreaChat.append(sender + ": " + message + "\n");
-            TxtFieldMsg.setText("");
-        }
+        String address = chats.get(ListConversations.getSelectedIndex()).getAddress();
+
+        Message msg = new Message();
+        msg.setName(sender);
+        msg.setData(message);
+
+        Chat currentChat = chats.get(ListConversations.getSelectedIndex());
+        ChatManager.addMessage(currentChat.getName(), currentChat.getAddress(), msg);
+
+        TxtAreaChat.append(sender + ": " + message + "\n");
     }
 
-    // Adds a new conversation to the list on the left hand side
-    public void CreateNewConversation(Conversation newConversation) {
-        conversations.add(newConversation.getName());
-        System.out.println(conversations);
+    //Adds a new conversation to the list on the left
+    public void addConversationToList(String name) {
+        conversations.add(name);
         ListConversations.updateUI();
-        // TODO implement this
     }
 
     private void ListConversationsValueChanged(ListSelectionEvent e) {
@@ -70,9 +88,21 @@ public class WindowChatting extends JFrame {
         }
 
         TxtAreaChat.setText("Currently chatting in conversation: " + ListConversations.getSelectedValue() + "\n");
+
+        List<Message> messageHistory =  chats.get(ListConversations.getSelectedIndex()).getListMessages();
+        for (int i = 0; i < messageHistory.toArray().length; i ++) {
+            String tempSender = messageHistory.get(i).getName();
+            String tempContent = messageHistory.get(i).getData();
+
+            TxtAreaChat.append(tempSender + ": " + tempContent + "\n");
+        }
     }
 
     private void BtnConnectMouseClicked(MouseEvent e) {
+        connectionDialog.dispose();
+    }
+
+    private void TxtFieldAddressActionPerformed(ActionEvent e) {
         connectionDialog.dispose();
     }
 
@@ -82,10 +112,11 @@ public class WindowChatting extends JFrame {
 
     private void initComponents() {
         conversations = new Vector<>();
+        chats = new ArrayList<>();
         conversationSelected = false;
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
-        ListConversations = new JList<>(conversations);
+        ListConversations = new JList(conversations);
         WindowTitle = new JLabel();
         ScrollPaneChatArea = new JScrollPane();
         TxtAreaChat = new JTextArea();
@@ -216,6 +247,7 @@ public class WindowChatting extends JFrame {
 
             //---- TxtFieldAddress ----
             TxtFieldAddress.setText("Username/IP");
+            TxtFieldAddress.addActionListener(e -> TxtFieldAddressActionPerformed(e));
 
             //---- BtnConnect ----
             BtnConnect.setText("connect");
@@ -257,6 +289,7 @@ public class WindowChatting extends JFrame {
 
     private boolean conversationSelected;
     private Vector<String> conversations;
+    private List<Chat> chats;
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - unknown
     private JList<String> ListConversations;
