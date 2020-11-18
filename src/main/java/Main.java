@@ -53,7 +53,6 @@ public class Main {
             if(Session.isLoggedIn()) {
                 //DB.deleteUser(userCollection, username, password);
                 //Session.logOff(username);
-
             }
 
             // change password
