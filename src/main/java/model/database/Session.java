@@ -1,126 +1,82 @@
 package model.database;
 
-import com.mongodb.ClientSessionOptions;
-import com.mongodb.ServerAddress;
-import com.mongodb.TransactionOptions;
-import com.mongodb.client.ClientSession;
-import com.mongodb.client.TransactionBody;
-import com.mongodb.session.ServerSession;
-import org.bson.BsonDocument;
-import org.bson.BsonTimestamp;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import org.bson.Document;
+
+import javax.swing.*;
 
 public class Session {
 
-    ClientSession session = new ClientSession() {
-        @Override
-        public ServerAddress getPinnedServerAddress() {
-            return null;
-        }
+    static MongoCollection<Document> sessionCollection;
+    private static boolean loggedIn = false;
 
-        @Override
-        public void setPinnedServerAddress(ServerAddress serverAddress) {
+    public Session() {
 
-        }
+    }
 
-        @Override
-        public boolean hasActiveTransaction() {
-            return false;
-        }
+    // initiate a new session
+    public static void sessionInit(String username, String IP) {
+        setCollection();
+        addSession(username, IP);
+        startSessionTimer(username);
+    }
 
-        @Override
-        public boolean notifyMessageSent() {
-            return false;
-        }
+    // set the mongoDB collection
+    public static void setCollection() {
+        sessionCollection = DB.getSessionCollection();
+    }
 
-        @Override
-        public TransactionOptions getTransactionOptions() {
-            return null;
-        }
+    // add new session to database
+    public static void addSession(String name, String ip) {
+        Document doc = new Document("username", name).append("ip", ip);
+        sessionCollection.insertOne(doc);
+        loggedIn = true;
+        System.out.println("Session initiated");
+    }
 
-        @Override
-        public void startTransaction() {
+    // start a timer for the session
+    public static void startSessionTimer(String username) {
+        int time = 10; // time in seconds
+        Timer timer = new Timer(time*1000, arg0 -> {
+            // code executed
+            endSession(username);
+            System.out.println("Session ended");
+        });
+        timer.setRepeats(false); // Only execute once
+        timer.start(); // start timer
+    }
 
-        }
+    // log out / delete session
+    public static void endSession(String username){
+        // find user with the given username and password
+        Document query = new Document("username", username);
+        // delete user from database
+        sessionCollection.deleteOne(query);
+        loggedIn = false;
 
-        @Override
-        public void startTransaction(TransactionOptions transactionOptions) {
+    }
 
-        }
+    // method to return the username from the database as a string
+    public static String getSessionId(String username) {
+        // make query to find the user
+        Document query = new Document("username", username);
+        FindIterable<Document> findIterable = sessionCollection.find(query);
+        MongoCursor<Document> cursor = findIterable.cursor();
+        if (cursor.hasNext()){
+            // if it finds the correct user returns the session id as a string
+            return cursor.next().get("_id").toString();
+        } else return null;
+    }
 
-        @Override
-        public void commitTransaction() {
+    // method to check if a user is currently logged in
+    public static boolean isLoggedIn() {
+        return loggedIn;
+    }
 
-        }
-
-        @Override
-        public void abortTransaction() {
-
-        }
-
-        @Override
-        public <T> T withTransaction(TransactionBody<T> transactionBody) {
-            return null;
-        }
-
-        @Override
-        public <T> T withTransaction(TransactionBody<T> transactionBody, TransactionOptions transactionOptions) {
-            return null;
-        }
-
-        @Override
-        public BsonDocument getRecoveryToken() {
-            return null;
-        }
-
-        @Override
-        public void setRecoveryToken(BsonDocument bsonDocument) {
-
-        }
-
-        @Override
-        public ClientSessionOptions getOptions() {
-            return null;
-        }
-
-        @Override
-        public boolean isCausallyConsistent() {
-            return true;
-        }
-
-        @Override
-        public Object getOriginator() {
-            return null;
-        }
-
-        @Override
-        public ServerSession getServerSession() {
-            return null;
-        }
-
-        @Override
-        public BsonTimestamp getOperationTime() {
-            return null;
-        }
-
-        @Override
-        public void advanceOperationTime(BsonTimestamp bsonTimestamp) {
-
-        }
-
-        @Override
-        public void advanceClusterTime(BsonDocument bsonDocument) {
-
-        }
-
-        @Override
-        public BsonDocument getClusterTime() {
-            return null;
-        }
-
-        @Override
-        public void close() {
-
-        }
-    };
-
+    public static void restart(String username, String ipAddress) {
+        endSession(username);
+        sessionInit(username, ipAddress);
+    }
 }
