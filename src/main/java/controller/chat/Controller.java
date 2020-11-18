@@ -4,33 +4,39 @@ import com.mongodb.client.MongoCollection;
 import model.networking.data.Message;
 import model.database.DB;
 import org.bson.Document;
+import model.database.Session;
 
-public class Controller {
+public class Controller { // The controller of all functions
 
     MongoCollection<Document> Doc = DB.getUserCollection();
 
-    public static void SendMessage(String sen, String mes, String add, String cName){ //ChatMsgSend
+    public static void SendMessage(String sen, String mes, String Ip, String ChatName, String Name){ //ChatMsgSend
 
         Message msg = new Message(); // create ned message
         msg.setName(sen);
         msg.setData(mes);
 
-        ChatManager.addMessage(cName, add, msg); // add new message to list
+        ChatManager.addMessage(ChatName, Ip, msg); // add new message to list
 
+        UpdateSession(Name,Ip); // Still active
     }
 
-    public void CreateNewChat(String user, String address ){ // connectNEwChat
+    public static void CreateNewChat(String user, String address, String Name, String Ip ){ // connectNEwChat
         ChatManager.addChat(user, address, 5555);
+
+        UpdateSession(Name,Ip); // Still active
     }
 
-    public void Login(String Name, String Password){ // login user
-
+    public  void Login(String Name, String Password , String Ip){ // login user
 
         DB.login(Doc, Name, Password); // log user inn to database
+
+        Session.sessionInit(Name, Ip); // Start session
     }
 
-    public void LogOut() { // log out user
+    public void LogOut(String Name) { // log out user
 
+        Session.endSession(Name); // Still active
     }
 
     public void RegisterUser(String Name, String Password, String Ip ){ // register new user for app
@@ -39,21 +45,29 @@ public class Controller {
 
     }
 
-    public void ChangeName() { // Change name on user
+    public void ChangeName(String OldName, String NewName, String Password, String Ip ) { // Change name on user
 
+        DB.changeUsername(Doc, OldName, Password, NewName); // change name on user
+
+        UpdateSession(NewName,Ip); // Still active
     }
 
-    public void ChangePassword(String Name, String OldPassword, String NewPassword){ // Change password on user
+    public void ChangePassword(String Name, String OldPassword, String NewPassword, String Ip){ // Change password on user
 
         DB.changePassword(Doc, Name, OldPassword, NewPassword); // Change password on user
+
+        UpdateSession(Name,Ip); // Still active
     }
 
     public void DeleteUser(String Name, String Password){ // Delete current user
 
+        Session.endSession(Name); //  End Session
         DB.deleteUser(Doc, Name, Password); // Delete user from database
     }
 
-
+    public static void UpdateSession(String Name, String Ip){ // Update Session to say your still active
+        Session.restart(Name, Ip); // restart Session timer
+    }
 
 
 }
