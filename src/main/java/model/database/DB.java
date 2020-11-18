@@ -35,8 +35,14 @@ public class DB {
         return mongoClient.getDatabase("App").getCollection("users");
     }
 
+    public static MongoCollection<Document> getSessionCollection() {
+        MongoClient mongoClient = connect();
+
+        return mongoClient.getDatabase("App").getCollection("sessions");
+    }
+
     // adding a new user to database
-    public static void addUser(MongoCollection<Document> userCollection, String name, String ip, String password) {
+    public static boolean addUser(MongoCollection<Document> userCollection, String name, String ip, String password) {
         // encrypt the password using simple hash
         String encryptedPassword = Encryption.encryptPassword(password);
         // check if user with given name exists
@@ -45,16 +51,17 @@ public class DB {
         MongoCursor<Document> cursor = findIterable.cursor();
         if (cursor.hasNext()){
             // if username is taken
-            System.out.println("Username already exists");
+            return false;
         } else {
             // add user to the user collection
             Document doc = new Document("username", name).append("ip", ip).append("password", encryptedPassword);
             userCollection.insertOne(doc);
+            return true;
         }
     }
 
     // method to log in
-    public static void login(MongoCollection<Document> userCollection, String username, String password) {
+    public static boolean login(MongoCollection<Document> userCollection, String username, String password) {
         // encrypt the password using simple hash
         String encryptedPassword = Encryption.encryptPassword(password);
         // check if there is a user with the given username and password
@@ -66,9 +73,10 @@ public class DB {
             String name = getUsername(userCollection, username, password);
             String ip = getIP(userCollection, username, password);
             System.out.println("Logged in as " + name + ". IP: " + ip);
+            return true;
         } else {
             // if login failed
-            System.out.println("Login Failed");
+            return false;
         }
     }
 
@@ -100,6 +108,7 @@ public class DB {
         } else return null;
     }
 
+    // delete a user from database
     public static void deleteUser(MongoCollection<Document> userCollection, String username, String password) {
         // encrypt the password using simple hash
         String encryptedPassword = Encryption.encryptPassword(password);
@@ -110,6 +119,7 @@ public class DB {
         System.out.println(username + " has been deleted");
     }
 
+    // change password for a user
     public static void changePassword(MongoCollection<Document> userCollection, String username, String password, String newPassword) {
         // encrypt the password using simple hash
         String encryptedPassword = Encryption.encryptPassword(password);
@@ -118,6 +128,16 @@ public class DB {
         Document query = new Document("username", username).append("password", encryptedPassword);
         userCollection.findOneAndUpdate(query, Updates.set("password", encryptedNewPassword));
         System.out.println("Changed password for " + username);
+    }
+
+    // change username for a user
+    public static void changeUsername(MongoCollection<Document> userCollection, String username, String password, String newUsername) {
+        // encrypt the password using simple hash
+        String encryptedPassword = Encryption.encryptPassword(password);
+        // change password
+        Document query = new Document("username", username).append("password", encryptedPassword);
+        userCollection.findOneAndUpdate(query, Updates.set("username", newUsername));
+        System.out.println("Changed username from " + username + " to " + newUsername);
     }
 
 }
