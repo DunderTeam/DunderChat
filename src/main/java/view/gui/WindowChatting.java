@@ -132,10 +132,12 @@ public class WindowChatting extends JFrame {
 
     private void SettingsProfileChangeUsrActionPerformed(ActionEvent e) {
         // TODO add your code here
+        changeUsrDialog.setVisible(true);
     }
 
     private void SettingsProfileChangePwdActionPerformed(ActionEvent e) {
         // TODO add your code here
+        changePasswordDialog.setVisible(true);
     }
 
     private void SettingsProfileDeleteUsrActionPerformed(ActionEvent e) {
@@ -144,10 +146,12 @@ public class WindowChatting extends JFrame {
 
     private void BtnConfirmNewUsrActionPerformed(ActionEvent e) {
         // TODO add your code here
+        changeUsrDialog.dispose();
     }
 
     private void BtnConfirmChangePwdActionPerformed(ActionEvent e) {
         // TODO add your code here
+        changePasswordDialog.dispose();
     }
 
     private void initComponents() {
