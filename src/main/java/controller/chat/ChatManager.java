@@ -48,7 +48,7 @@ public class ChatManager {
         for (Chat ch: chatList) {
             System.out.println(ch.getName() + " vs " + name + "| " + ch.getAddress() + " vs " + address);
             //If there already exists a chat with this name and address, return true
-            if (ch.getName().equals(name) && ch.getAddress().equals(address)){
+            if (ch.getName() == name && ch.getAddress() == address){
                 return true;
             }
         }

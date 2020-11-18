@@ -22,8 +22,9 @@ import javax.swing.event.*;
  * @author Adrian Emil Chambe-Eng
  */
 public class WindowChatting extends JFrame {
-    public WindowChatting() {
+    public WindowChatting(String username) {
         initComponents();
+        setLoggedInUsrName(username);
         getConversations();
     }
 
@@ -69,6 +70,10 @@ public class WindowChatting extends JFrame {
         }
     }
 
+    public void setLoggedInUsrName (String usr) {
+        WindowTitle.setText(usr);
+    }
+
     // Calls ChatMsgSend() when the user presses enter in the chat field
     private void TxtFieldMsgActionPerformed(ActionEvent e) {
         ChatMsgSend();
@@ -89,10 +94,6 @@ public class WindowChatting extends JFrame {
 
     // Executed when the user clicks on a conversation from the list
     private void ListConversationsValueChanged(ListSelectionEvent e) {
-        if (ListConversations.getSelectedIndex() > -1) {
-            conversationSelected = true;
-        }
-
         TxtAreaChat.setText("Currently chatting in conversation: " + ListConversations.getSelectedValue() + "\n");
 
         List<Message> messageHistory =  chats.get(ListConversations.getSelectedIndex()).getListMessages();
@@ -123,7 +124,8 @@ public class WindowChatting extends JFrame {
 
     private void SettingLogoutActionPerformed(ActionEvent e) {
         System.out.println("Logging out...");
-        //TODO tell controller to log us out
+        new WindowLogin().setVisible(true);
+        dispose();
     }
 
     private void SettingQuitActionPerformed(ActionEvent e) {
@@ -131,33 +133,32 @@ public class WindowChatting extends JFrame {
     }
 
     private void SettingsProfileChangeUsrActionPerformed(ActionEvent e) {
-        // TODO add your code here
         changeUsrDialog.setVisible(true);
     }
 
     private void SettingsProfileChangePwdActionPerformed(ActionEvent e) {
-        // TODO add your code here
         changePasswordDialog.setVisible(true);
     }
 
     private void SettingsProfileDeleteUsrActionPerformed(ActionEvent e) {
-        // TODO add your code here
+        //TODO delete user
     }
 
     private void BtnConfirmNewUsrActionPerformed(ActionEvent e) {
-        // TODO add your code here
         changeUsrDialog.dispose();
     }
 
     private void BtnConfirmChangePwdActionPerformed(ActionEvent e) {
-        // TODO add your code here
         changePasswordDialog.dispose();
+    }
+
+    private void thisMouseClicked(MouseEvent e) {
+        System.out.println("Click");
     }
 
     private void initComponents() {
         conversations = new Vector<>();
         chats = new ArrayList<>();
-        conversationSelected = false;
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
         MenuBar = new JMenuBar();
@@ -192,8 +193,14 @@ public class WindowChatting extends JFrame {
 
         //======== this ========
         setTitle("ChatApp");
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(300, 400));
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                thisMouseClicked(e);
+            }
+        });
         Container contentPane = getContentPane();
 
         //======== MenuBar ========
@@ -243,7 +250,7 @@ public class WindowChatting extends JFrame {
         ListConversations.addListSelectionListener(e -> ListConversationsValueChanged(e));
 
         //---- WindowTitle ----
-        WindowTitle.setText("Conversations");
+        WindowTitle.setText("Username");
         WindowTitle.setMinimumSize(new Dimension(60, 15));
         WindowTitle.setMaximumSize(new Dimension(60, 30));
         WindowTitle.setPreferredSize(new Dimension(60, 20));
@@ -466,7 +473,6 @@ public class WindowChatting extends JFrame {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    private boolean conversationSelected;
     private Vector<String> conversations;
     private List<Chat> chats;
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
