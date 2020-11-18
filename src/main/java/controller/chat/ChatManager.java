@@ -16,22 +16,26 @@ public class ChatManager {
         if (chatExists(chatName, chatAddress)) {
             getChatById(chatName, chatAddress).addMessageToList(msg);
             System.out.println("Added message " + msg.getData() + " to chat: " + chatName);
+        } else if (!chatExists(chatName, chatAddress)) {
+
+        } else {
+            System.out.println("Couldn't add message to chat with name " + chatName + " and address " + chatAddress);
         }
     }
 
     //Adds a new chat to the list, with given name, address and port
     public static void addChat (String name, String address, int port) {
         if (!chatExists(name, address)){
-            chatList.add(new Chat(name, address, port)); // Ads new chat
+            chatList.add(new Chat(name, address, port)); // Adds new chat
+            System.out.println("New chat with name " + name + " and address " + address);
         }
-        System.out.println(chatList);
     }
 
     //Returns the index of a chat, identified by name and address
     private static int getChatIndex(String name, String address){ // gets number where the current chat is placed
         int index = -1;
         for (int i = 0; i < chatList.size(); i++){
-            if(chatList.get(i).getName() == name && chatList.get(i).getAddress() == address){
+            if(chatList.get(i).getName().equals(name) && chatList.get(i).getAddress().equals(address)){
                 index = i;
             }
         }
@@ -42,17 +46,17 @@ public class ChatManager {
     //Checks if chat with name and address already exists
     public static boolean chatExists(String name, String address){
         for (Chat ch: chatList) {
+            System.out.println(ch.getName() + " vs " + name + "| " + ch.getAddress() + " vs " + address);
             //If there already exists a chat with this name and address, return true
-            if (ch.getName() == name && ch.getAddress() == address){
+            if (ch.getName().equals(name) && ch.getAddress().equals(address)){
                 return true;
             }
         }
-        
         return false;
     }
 
     //Returns the chatList
-    public List<Chat> getChatList() { // returns list of chats
+    public static List<Chat> getChatList() { // returns list of chats
         return chatList;
     }
 
@@ -64,7 +68,7 @@ public class ChatManager {
     //Returns a given chat by their id (name and address)
     public static Chat getChatById(String name, String address) {
         for (int i = 0; i < chatList.size(); i++) {
-            if (chatList.get(i).getName() == name && chatList.get(i).getAddress() == address) {
+            if (chatList.get(i).getName().equals(name) && chatList.get(i).getAddress().equals(address)) {
                 return chatList.get(i);
             }
         }
@@ -72,14 +76,14 @@ public class ChatManager {
     }
 
     //Removes a given chat by index in the list
-    public void deleteChatByIndex(int index) {
+    public static void deleteChatByIndex(int index) {
         chatList.remove(index);
     }
 
     //Removes a given chat by id (name and address)
-    public void deleteChatById(String name, String address){
+    public static void deleteChatById(String name, String address){
         for (int i = 0; i < chatList.size(); i++){
-            if (chatList.get(i).getName() == name && chatList.get(i).getAddress() == address ){
+            if (chatList.get(i).getName().equals(name) && chatList.get(i).getAddress().equals(address)){
                 chatList.remove(i);
             }
         }

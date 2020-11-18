@@ -4,13 +4,13 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq {space :::p, par l {seq {comp BtnNew:::p:78:p, space :::p, comp BtnQuit:::p:86:p}, par t:l::p {comp WindowTitle::l:::x, comp ListConversations::l::166:x}}, par l {seq {comp TxtFieldMsg::::197:x, space :::p, comp BtnSend:::p::p}, seq l {space :::p, comp ScrollPaneChatArea::::275:x}}, space :::p}}"
-			"$verticalGroup": "par l {seq l {space :::p, par l {seq {comp WindowTitle:::p:30:p, space :::p, comp ListConversations::::382:x}, comp ScrollPaneChatArea::::418:x}, space :::p, par b {comp BtnSend::b:p::p, comp BtnNew::b:p::p, comp BtnQuit::b:p::p, comp TxtFieldMsg::b:::p}, space :::p}}"
+			"$horizontalGroup": "par l {seq {space :::p, par l:::p {seq {comp BtnNew:::p::p, space :::p, comp TxtFieldMsg::::0:x, space :::p, comp BtnSend:::p::p}, seq t {par t {comp WindowTitle:::p:166:p, comp ListConversations:::p:166:p}, space :::p, comp ScrollPaneChatArea::::279:x}}, space :::p}}"
+			"$verticalGroup": "par l {seq l {space :::p, par l {seq {comp WindowTitle:::p:30:p, space :::p, comp ListConversations::::360:x}, comp ScrollPaneChatArea::::396:x}, space :::p, par b {comp BtnNew::b:p::p, comp BtnSend::b:p::p, comp TxtFieldMsg::b:::p}, space :::p}}"
 		} ) {
 			name: "this"
 			"title": "ChatApp"
 			"defaultCloseOperation": 2
-			"minimumSize": new java.awt.Dimension( 600, 400 )
+			"minimumSize": new java.awt.Dimension( 300, 400 )
 			add( new FormComponent( "javax.swing.JList" ) {
 				name: "ListConversations"
 				"selectionMode": 0
@@ -31,13 +31,14 @@ new FormModel {
 			} )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "ScrollPaneChatArea"
+				"preferredSize": new java.awt.Dimension( 1920, 55 )
 				add( new FormComponent( "javax.swing.JTextArea" ) {
 					name: "TxtAreaChat"
 					"lineWrap": true
 					"wrapStyleWord": true
 					"editable": false
 					"text": "Welcome to ChatApp. Select a conversation from the list or start a new one to begin."
-					"preferredSize": new java.awt.Dimension( 1920, 100 )
+					"preferredSize": sfield com.jformdesigner.model.FormObject NULL_VALUE
 				} )
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
@@ -52,17 +53,48 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnSendMouseClicked", true ) )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "BtnQuit"
-				"text": "quit"
-				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnQuitMouseClicked", true ) )
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "BtnNew"
 				"text": "new"
 				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnNewMouseClicked", true ) )
 			} )
+			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
+				name: "MenuBar"
+				add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+					name: "SettingsMenu"
+					"text": "Settings"
+					add( new FormContainer( "javax.swing.JMenu", new FormLayoutManager( class javax.swing.JMenu ) ) {
+						name: "SettingProfile"
+						"text": "Profile Settings"
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "SettingsProfileChangeUsr"
+							"text": "Change Username"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "SettingsProfileChangeUsrActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "SettingsProfileChangePwd"
+							"text": "Change Password"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "SettingsProfileChangePwdActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "SettingsProfileDeleteUsr"
+							"text": "Delete User"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "SettingsProfileDeleteUsrActionPerformed", true ) )
+						} )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "SettingLogout"
+						"text": "Log Out"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "SettingLogoutActionPerformed", true ) )
+					} )
+					add( new FormComponent( "javax.swing.JMenuItem" ) {
+						name: "SettingQuit"
+						"text": "Quit"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "SettingQuitActionPerformed", true ) )
+					} )
+				} )
+			}
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 50, 55 )
+			"location": new java.awt.Point( 10, 10 )
 			"size": new java.awt.Dimension( 465, 490 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -87,7 +119,56 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"size": new java.awt.Dimension( 200, 200 )
-			"location": new java.awt.Point( 105, 570 )
+			"location": new java.awt.Point( 485, 10 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :p:38:p, par l:::p {comp LabelNewUsr:::::x, comp TxtFieldNewUsr::l:::x, comp BtnConfirmNewUsr::l:::x}, space ::37:x}}"
+			"$verticalGroup": "par l {seq l {space :p:25:p, comp LabelNewUsr:::p::p, space :::p, comp TxtFieldNewUsr:::p::p, space :::p, comp BtnConfirmNewUsr:::p::p, space ::63:x}}"
+		} ) {
+			name: "changeUsrDialog"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "LabelNewUsr"
+				"text": "Enter New Username"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "TxtFieldNewUsr"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnConfirmNewUsr"
+				"text": "confirm"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "BtnConfirmNewUsrActionPerformed", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 485, 220 )
+			"size": new java.awt.Dimension( 200, 200 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :p:40:p, par l {comp BtnConfirmChangePwd:::::x, comp PwdFieldChangePwdNew::t:::x, seq {par l {par l:::p {comp LabelChangePwdOld:::::x, comp PwdFieldChangePwdOld::l:::x}, comp LalebChangePwdNew::l:p::p}, space :0:0:x}}, space :p:46:p}}"
+			"$verticalGroup": "par l {seq l {space :p:25:p, comp LabelChangePwdOld:::p::p, space :::p, comp PwdFieldChangePwdOld:::p::p, space :::p, comp LalebChangePwdNew:::p::p, space :::p, comp PwdFieldChangePwdNew:::p::p, space :::p, comp BtnConfirmChangePwd:::p::p, space ::15:x}}"
+		} ) {
+			name: "changePasswordDialog"
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "LabelChangePwdOld"
+				"text": "Enter old password"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnConfirmChangePwd"
+				"text": "confirm"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "BtnConfirmChangePwdActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JPasswordField" ) {
+				name: "PwdFieldChangePwdOld"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "LalebChangePwdNew"
+				"text": "Enter new pasword"
+			} )
+			add( new FormComponent( "javax.swing.JPasswordField" ) {
+				name: "PwdFieldChangePwdNew"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 485, 430 )
+			"size": new java.awt.Dimension( 200, 210 )
 		} )
 	}
 }

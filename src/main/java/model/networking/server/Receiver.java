@@ -27,15 +27,17 @@ public class Receiver implements Runnable {
                 dout.writeUTF(Status.encode(204)); // Received but empty
             } else {
                 Message msg = Message.decode(data);
-                //If the chat doesn't exist, add it
-                if (!ChatManager.chatExists(msg.getName(), conn.getRemoteSocketAddress().toString())) {
-                    ChatManager.addChat(msg.getName(), conn.getRemoteSocketAddress().toString(), conn.getPort());
-                }
-                System.out.println(ChatManager.chatExists(msg.getName(), conn.getRemoteSocketAddress().toString()));
-                //Add the message to the correct chat
-                ChatManager.addMessage(msg.getName(), conn.getRemoteSocketAddress().toString(), msg);
+                String address = conn.getInetAddress().toString().substring(1);
+                int port = conn.getPort();
 
-                System.out.println(msg.getData());
+                //If the chat doesn't exist, create a new chat
+                if (!ChatManager.chatExists(msg.getName(), address)) {
+                    ChatManager.addChat(msg.getName(), address, port);
+                }
+                //Add the message to the correct chat
+                if (!ChatManager.chatExists(msg.getName(), address)) {
+                ChatManager.addMessage(msg.getName(), address, msg);
+                }
 
                 /*
                 List<Message> temp = ChatManager.getChatById(msg,conn.getRemoteSocketAddress()); // test to see that the list works
