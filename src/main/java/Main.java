@@ -62,7 +62,10 @@ public class Main {
         msg.setName("John Wick");
 
         msg1.setData("Message 1");
+        msg1.setName("Sender 1");
+
         msg2.setData("Message 2");
+        msg2.setName("Sender 2");
 
 
         // Send a message via our manager to a specific client
