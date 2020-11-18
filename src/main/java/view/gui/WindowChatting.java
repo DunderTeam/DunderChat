@@ -116,7 +116,7 @@ public class WindowChatting extends JFrame {
         conversationSelected = false;
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
-        ListConversations = new JList(conversations);
+        ListConversations = new JList<>(conversations);
         WindowTitle = new JLabel();
         ScrollPaneChatArea = new JScrollPane();
         TxtAreaChat = new JTextArea();
@@ -247,7 +247,6 @@ public class WindowChatting extends JFrame {
 
             //---- TxtFieldAddress ----
             TxtFieldAddress.setText("Username/IP");
-            TxtFieldAddress.addActionListener(e -> TxtFieldAddressActionPerformed(e));
 
             //---- BtnConnect ----
             BtnConnect.setText("connect");
