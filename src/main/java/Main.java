@@ -71,7 +71,7 @@ public class Main {
         //manager.sendMessage(manager.connections.get(2), msg2); // Sends message to own device. e.g localhost
 
         // Start view (gui)
-        //java.awt.EventQueue.invokeLater(() -> new WindowLogin().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new WindowLogin().setVisible(true));
 
          /* Test Environment */
 
