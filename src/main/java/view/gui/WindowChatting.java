@@ -135,15 +135,17 @@ public class WindowChatting extends JFrame {
     }
 
     //Deletes the currently logged in user from the database and calls logOut
-    private void deleteUser(String usr) {
+    private void deleteUser(String Name) {
         //TODO call controller and delete user, currently only logs out
+        String Password = "";
         System.out.println("Deleting user...");
-        logOut();
+        Controller.DeleteUser(Name, Password); // Delete user from database
+        logOut(Name);
     }
 
     //Logs out of the chat client and opens a new WindowLogin
-    private void logOut() {
-        //TODO call controller and logout that way
+    private void logOut(String Name) {
+        Controller.LogOut(Name); // Logout of database
         System.out.println("Logging out...");
         new WindowLogin().setVisible(true);
         dispose();
@@ -207,7 +209,7 @@ public class WindowChatting extends JFrame {
 
     //Calls logOut when the user clicks the Log Out option in the settings menu
     private void SettingLogoutActionPerformed(ActionEvent e) {
-        logOut();
+        logOut(loggedInUser);
     }
 
     //Call shutDown when the user clicks the Quit option in the settings menu
