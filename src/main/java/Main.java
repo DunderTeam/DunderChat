@@ -83,7 +83,7 @@ public class Main {
 
         manager.sendMessage(manager.connections.get(0), msg);
 
-       // DBTest.testDB(userCollection);
+        //DBTest.testDB(userCollection);
 
 
     }

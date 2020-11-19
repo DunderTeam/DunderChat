@@ -98,18 +98,20 @@ public class DB {
             // if login is successful
             try {
                 String name = getUsername(userCollection, username, password);
-                // String ip = getIP(userCollection, username, password);
-                // System.out.println("Logged in as " + name + ". IP: " + ip);
-                WindowLogin.setLoggedInUserName(name); // log user in on gui
+                String ip = getIP(userCollection, username, password);
+                System.out.println("Logged in as " + name + ". IP: " + ip);
+                Session.sessionInit(name, ip);
+                WindowLogin.setLoggedInUserName(name);
 
             } catch(Exception e) {
                 // TODO show login error on screen
                 System.out.println("login failed");
-
+                WindowLogin.setLoginFail("Fail");
             }
         } else {
             // TODO show login error on screen
             System.out.println("login failed");
+            WindowLogin.setLoginFail("Fail");
 
         }
     }

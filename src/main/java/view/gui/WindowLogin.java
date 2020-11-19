@@ -4,8 +4,10 @@
 
 package view.gui;
 
-import com.sun.tools.javac.comp.Todo;
+
+
 import controller.Controller;
+import model.networking.server.PublicIP;
 
 import java.awt.event.*;
 import javax.swing.*;
@@ -13,7 +15,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 /**
  * @author Adrian Emil Chambe-Eng
@@ -27,12 +28,14 @@ public class WindowLogin extends JFrame {
     private void attemptLogin() {
         String username = InputUsr.getText();
         String password = InputPwd.getText();
-        String Ip = "123"; //Todo get real ip
+        String Ip = PublicIP.get().getIp();
 
         if (username.equals("") || password.equals("")) {
             displayErrorDialog("Could not log in!");
         } else {
+
             Controller.Login(username, password, Ip); // Log user in to the database
+
         }
     }
 
@@ -47,15 +50,20 @@ public class WindowLogin extends JFrame {
         dispose();
     }
 
+    public static void setLoginFail(String status) {
+        loginFail.setText(status);
+    }
+
     //Calls controller to register a new user
-    private void registerNewUser() {
+    private void attemptRegisterNewUser() {
         String usr = txtFieldRegisterUsr.getText();
         String pwd = pwdFieldRegisterPwd.getText();
 
         if (usr.equals("") || pwd.equals("")) {
             displayErrorDialog("Username or password is blank!");
         } else {
-            //TODO call controller to login
+            Controller.RegisterUser(usr, pwd, PublicIP.get().getIp());
+            //TODO call controller to register
             System.out.println(usr + " | " + pwd);
             txtFieldRegisterUsr.setText("");
             pwdFieldRegisterPwd.setText("");
@@ -72,6 +80,24 @@ public class WindowLogin extends JFrame {
     private void loggedInUserNameChanged(PropertyChangeEvent e) {
         System.out.println("Name Changed");
         loginUser(loggedInUserName.getText());
+    }
+
+    private void loginFailChanged(PropertyChangeEvent e) {
+        if (!loginFail.getText().equals("")) {
+            displayErrorDialog("Login failed: Database error");
+        }
+        loginFail.setText("");
+    }
+
+    private void registerFailChanged(PropertyChangeEvent e) {
+        if (!registerFail.getText().equals("")) {
+            displayErrorDialog("Failed to register: Database error");
+        }
+        registerFail.setText("");
+    }
+
+    private void newRegisteredUserChanged(PropertyChangeEvent e) {
+
     }
 
     //================ Action/Event Listeners ================
@@ -92,17 +118,17 @@ public class WindowLogin extends JFrame {
 
     // Exits the program with code 0
     private void BtnQuitMouseClicked(MouseEvent e) {
-        System.exit(0);
+        Controller.Shutdown();
     }
 
     //======== Register New User Dialog ========
 
     private void pwdFieldRegisterPwdActionPerformed(ActionEvent e) {
-        registerNewUser();
+        attemptRegisterNewUser();
     }
 
     private void btnRegisterNewUserActionPerformed(ActionEvent e) {
-        registerNewUser();
+        attemptRegisterNewUser();
     }
 
     private void dialogRegisterBtnBackActionPerformed(ActionEvent e) {
@@ -117,7 +143,16 @@ public class WindowLogin extends JFrame {
 
     private void initComponents() {
         loggedInUserName = new JLabel();
-        loggedInUserName.addPropertyChangeListener(e -> loggedInUserNameChanged(e));
+        loggedInUserName.addPropertyChangeListener(this::loggedInUserNameChanged);
+
+        loginFail = new JLabel();
+        loginFail.addPropertyChangeListener(this::loginFailChanged);
+
+        registerFail = new JLabel();
+        registerFail.addPropertyChangeListener(this::registerFailChanged);
+
+        newRegisteredUser = new JLabel();
+        newRegisteredUser.addPropertyChangeListener(this::newRegisteredUserChanged);
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
         AppName = new JLabel();
@@ -352,7 +387,10 @@ public class WindowLogin extends JFrame {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
-    public static JLabel loggedInUserName;
+    private static JLabel loggedInUserName;
+    private static JLabel loginFail;
+    private static JLabel registerFail;
+    private static JLabel newRegisteredUser;
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - unknown

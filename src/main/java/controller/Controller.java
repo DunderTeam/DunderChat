@@ -67,6 +67,10 @@ public class Controller { // The controller of all functions
         DB.deleteUser(Doc, Name, Password); // Delete user from database
     }
 
+    public static void Shutdown() {
+        System.exit(0);
+    }
+
     public static void UpdateSession(String Name, String Ip){ // Update Session to say your still active
         Session.restart(Name, Ip); // restart Session timer
     }
