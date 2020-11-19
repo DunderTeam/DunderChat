@@ -109,7 +109,7 @@ public class Main {
             // delete user
             if(Session.isLoggedIn()) {
                 //DB.deleteUser(userCollection, username, password);
-                //Session.logOff(username);
+                //Session.endSession(username);
             }
 
             // change password
