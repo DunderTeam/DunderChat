@@ -46,6 +46,8 @@ public class MessageFetch extends Thread {
         httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
         int responseCode = httpURLConnection.getResponseCode();
 
+
+        // todo: refactor below code by creating GET function
         if(responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             String inputLine;
