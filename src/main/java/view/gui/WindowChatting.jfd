@@ -12,7 +12,6 @@ new FormModel {
 			"defaultCloseOperation": 3
 			"minimumSize": new java.awt.Dimension( 300, 400 )
 			"resizable": false
-			addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "thisMouseClicked", true ) )
 			add( new FormComponent( "javax.swing.JList" ) {
 				name: "ListConversations"
 				"selectionMode": 0
@@ -113,6 +112,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "TxtFieldAddress"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "TxtFieldAddressActionPerformed", true ) )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "BtnConnect"
@@ -135,6 +135,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "TxtFieldNewUsr"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "TxtFieldNewUsrActionPerformed", true ) )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "BtnConfirmNewUsr"
@@ -169,10 +170,69 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JPasswordField" ) {
 				name: "PwdFieldChangePwdNew"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "PwdFieldChangePwdNewActionPerformed", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 10, 510 )
 			"size": new java.awt.Dimension( 200, 210 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :::p, comp dialogErrorLabel::::236:x, space :::p}, seq l {space :p:85:p, comp dialogErrorBtnConfirm:::p::p, space ::85:x}}"
+			"$verticalGroup": "par l {seq l {space :::p, comp dialogErrorLabel:::p::p, space :::p, comp dialogErrorBtnConfirm:::p::p, space ::8:x}}"
+		} ) {
+			name: "dialogError"
+			"modal": true
+			"defaultCloseOperation": 2
+			"$locationPolicy": 1
+			"alwaysOnTop": true
+			"title": "ERROR!"
+			"resizable": false
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "dialogErrorLabel"
+				"text": "Error text"
+				"horizontalAlignment": 0
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "dialogErrorBtnConfirm"
+				"text": "OK"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "dialogErrorBtnConfirmActionPerformed", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"size": new java.awt.Dimension( 250, 90 )
+			"location": new java.awt.Point( 485, 175 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :::p, par l {comp dialogDeleteUsrLabel2::::186:x, comp dialogDeleteUsrLabel1::::186:x}, space :::p}, seq l {space :p:20:p, comp btnDeleteUsrYes:::p:77:p, space :::p, comp btnDeleteUsrNo:::p:77:p, space ::18:x}}"
+			"$verticalGroup": "par l {seq l {space :::p, comp dialogDeleteUsrLabel1:::p::p, space :::p, comp dialogDeleteUsrLabel2:::p::p, space s:::p, par b {comp btnDeleteUsrYes::b:p::p, comp btnDeleteUsrNo::b:p::p}, space ::19:x}}"
+		} ) {
+			name: "dialogDeleteUsr"
+			"title": "Warning!"
+			"resizable": false
+			"modal": true
+			"defaultCloseOperation": 2
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "dialogDeleteUsrLabel1"
+				"text": "This will delete your user"
+				"horizontalAlignment": 0
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "dialogDeleteUsrLabel2"
+				"text": "Are you sure?"
+				"horizontalAlignment": 0
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnDeleteUsrYes"
+				"text": "YES"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "btnDeleteUsrYesActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnDeleteUsrNo"
+				"text": "NO"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "btnDeleteUsrNoActionPerformed", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 485, 275 )
+			"size": new java.awt.Dimension( 200, 135 )
 		} )
 	}
 }

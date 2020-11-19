@@ -28,31 +28,50 @@ public class WindowChatting extends JFrame {
         getConversations();
     }
 
+    //Creates a new chat connection to another client and adds it to the list on the left
     private void connectNewChat() {
         // Gets the text in the user/ip TxtField
         String user = TxtFieldAddress.getText();
-        //TODO connect to user and get actual address
+        //TODO call controller
         String address = "";
-        ChatManager.addChat(user, address, 5555);
-        chats.add(ChatManager.getChatById(user, address));
-        addConversationToList(user);
+
+        if (user.equals("")) {
+            displayErrorDialog("User/address field required!");
+        } else {
+            ChatManager.addChat(user, address, 5555);
+            chats.add(ChatManager.getChatById(user, address));
+            addConversationToList(user);
+            TxtFieldAddress.setText("");
+            connectionDialog.dispose();
+        }
     }
 
+    //Sends a message from our client to another user
     private void ChatMsgSend() {
         // TODO actually send message and not just display locally
         String sender = "You";
         String message = TxtFieldMsg.getText();
-        String address = chats.get(ListConversations.getSelectedIndex()).getAddress();
 
-        Message msg = new Message();
+        //opens error dialogs if the message is empty or no conversation is selected
+        if (message.equals("")) {
+            displayErrorDialog("Cannot send empty message!");
+        } else if (ListConversations.getSelectedIndex() < 0) {
+            displayErrorDialog("Select a conversation!");
+        } else {
+            Message msg = new Message();
+            String address = chats.get(ListConversations.getSelectedIndex()).getAddress();
 
-        msg.setName(sender);
-        msg.setData(message);
+            msg.setName(sender);
+            msg.setData(message);
 
-        Chat currentChat = chats.get(ListConversations.getSelectedIndex());
-        ChatManager.addMessage(currentChat.getName(), currentChat.getAddress(), msg);
+            Chat currentChat = chats.get(ListConversations.getSelectedIndex());
+            ChatManager.addMessage(currentChat.getName(), currentChat.getAddress(), msg);
 
-        TxtAreaChat.append(sender + ": " + message + "\n");
+            TxtAreaChat.append(sender + ": " + message + "\n");
+        }
+
+        //Clear the message field either way
+        TxtFieldMsg.setText("");
     }
 
     //Adds a new conversation to the list on the left
@@ -70,14 +89,128 @@ public class WindowChatting extends JFrame {
         }
     }
 
+    //Changes the username that is displayed in the top left
     public void setLoggedInUsrName (String usr) {
+        loggedInUser = usr;
         WindowTitle.setText(usr);
+    }
+
+    /*
+    * Gets the conversations that are already stored in ChatManager
+    * This is only called when the window is initialized
+     */
+    private void getConversations() {
+        List<Chat> tempChats = ChatManager.getChatList();
+
+        for (int i = 0; i < tempChats.size(); i++) {
+            chats.add(tempChats.get(i));
+            addConversationToList(tempChats.get(i).getName());
+        }
+    }
+
+    //Deletes the currently logged in user from the database and calls logOut
+    private void deleteUser(String usr) {
+        //TODO call controller and delete user, currently only logs out
+        System.out.println("Deleting user...");
+        logOut();
+    }
+
+    //Logs out of the chat client and opens a new WindowLogin
+    private void logOut() {
+        //TODO call controller and logout that way
+        System.out.println("Logging out...");
+        new WindowLogin().setVisible(true);
+        dispose();
+    }
+
+    //Changes the username of the currently logged in user
+    private void changeUsername() {
+        //TODO call controller and change username
+        System.out.println("Changing username...");
+        if (TxtFieldNewUsr.getText().equals("")) {
+            displayErrorDialog("Username required!");
+        } else {
+            changeUsrDialog.dispose();
+            setLoggedInUsrName(TxtFieldNewUsr.getText());
+            TxtFieldNewUsr.setText("");
+        }
+    }
+
+    //Changes the password of the currently logged in user
+    private void changePassword() {
+        //TODO add call to controller
+        if (PwdFieldChangePwdNew.getText().equals("") || PwdFieldChangePwdOld.getText().equals("")) {
+            displayErrorDialog("Both fields required!");
+        } else {
+            changePasswordDialog.dispose();
+            PwdFieldChangePwdOld.setText("");
+            PwdFieldChangePwdNew.setText("");
+        }
+    }
+
+    //Displays an error dialog with the given text
+    private void displayErrorDialog(String error) {
+        dialogErrorLabel.setText(error);
+        dialogError.setVisible(true);
+    }
+
+    //Calls the controller to shut down the application gracefully
+    private void shutDown() {
+        //TODO call controller, currently just exits
+        System.exit(0);
+    }
+
+    //================ Action/Event Listeners ================
+
+    //======== Menu Bar ========
+
+    //Opens the change username dialog when that menu option is clicked
+    private void SettingsProfileChangeUsrActionPerformed(ActionEvent e) {
+        changeUsrDialog.setVisible(true);
+    }
+
+    //Opens the change username dialog when that menu option is clicked
+    private void SettingsProfileChangePwdActionPerformed(ActionEvent e) {
+        changePasswordDialog.setVisible(true);
+    }
+
+    //Opens a dialog to confirm that the user actually wants to delete their user
+    private void SettingsProfileDeleteUsrActionPerformed(ActionEvent e) {
+        dialogDeleteUsr.setVisible(true);
+    }
+
+    //Calls logOut when the user clicks the Log Out option in the settings menu
+    private void SettingLogoutActionPerformed(ActionEvent e) {
+        logOut();
+    }
+
+    //Call shutDown when the user clicks the Quit option in the settings menu
+    private void SettingQuitActionPerformed(ActionEvent e) {
+        shutDown();
+    }
+
+    //======== Chat Window Elements ========
+
+    /*
+     * Executed when the user clicks on a conversation from the list
+     * Changes the "active" conversation and gets the message history of that chat to display it
+     * Fetches from the local copy of the chatList in order to avoid polling the ChatManager constantly
+     */
+    private void ListConversationsValueChanged(ListSelectionEvent e) {
+        TxtAreaChat.setText("Currently chatting in conversation: " + ListConversations.getSelectedValue() + "\n");
+
+        List<Message> messageHistory = chats.get(ListConversations.getSelectedIndex()).getListMessages();
+        for (int i = 0; i < messageHistory.toArray().length; i++) {
+            String tempSender = messageHistory.get(i).getName();
+            String tempContent = messageHistory.get(i).getData();
+
+            TxtAreaChat.append(tempSender + ": " + tempContent + "\n");
+        }
     }
 
     // Calls ChatMsgSend() when the user presses enter in the chat field
     private void TxtFieldMsgActionPerformed(ActionEvent e) {
         ChatMsgSend();
-        TxtFieldMsg.setText("");
     }
 
     // Calls ChatMsgSend() if the user clicks the send button
@@ -88,77 +221,69 @@ public class WindowChatting extends JFrame {
     // Opens a dialog box to connect to a new User/IP
     private void BtnNewMouseClicked(MouseEvent e) {
         connectionDialog.setVisible(true); // here the modal dialog takes over
-        connectNewChat();
         TxtFieldAddress.setText("");
     }
 
-    // Executed when the user clicks on a conversation from the list
-    private void ListConversationsValueChanged(ListSelectionEvent e) {
-        TxtAreaChat.setText("Currently chatting in conversation: " + ListConversations.getSelectedValue() + "\n");
+    //======== New Connection Dialog ========
 
-        List<Message> messageHistory =  chats.get(ListConversations.getSelectedIndex()).getListMessages();
-        for (int i = 0; i < messageHistory.toArray().length; i ++) {
-            String tempSender = messageHistory.get(i).getName();
-            String tempContent = messageHistory.get(i).getData();
-
-            TxtAreaChat.append(tempSender + ": " + tempContent + "\n");
-        }
-    }
-
+    //Calls connectNewChat() when teh connect button is clicked
     private void BtnConnectMouseClicked(MouseEvent e) {
-        connectionDialog.dispose();
+        connectNewChat();
     }
 
+    //Calls connectNewChat() when the user presses enter in the text field
     private void TxtFieldAddressActionPerformed(ActionEvent e) {
-        connectionDialog.dispose();
+        connectNewChat();
     }
 
-    private void getConversations() {
-        List<Chat> tempChats = ChatManager.getChatList();
+    //======== Change Username Dialog ========
 
-        for (int i = 0; i < tempChats.size(); i++) {
-            chats.add(tempChats.get(i));
-            addConversationToList(tempChats.get(i).getName());
-        }
-    }
-
-    private void SettingLogoutActionPerformed(ActionEvent e) {
-        System.out.println("Logging out...");
-        new WindowLogin().setVisible(true);
-        dispose();
-    }
-
-    private void SettingQuitActionPerformed(ActionEvent e) {
-        System.exit(0);
-    }
-
-    private void SettingsProfileChangeUsrActionPerformed(ActionEvent e) {
-        changeUsrDialog.setVisible(true);
-    }
-
-    private void SettingsProfileChangePwdActionPerformed(ActionEvent e) {
-        changePasswordDialog.setVisible(true);
-    }
-
-    private void SettingsProfileDeleteUsrActionPerformed(ActionEvent e) {
-        //TODO delete user
-    }
-
+    //Calls changeUsername when the confirm button is clicked in the change username dialog
     private void BtnConfirmNewUsrActionPerformed(ActionEvent e) {
-        changeUsrDialog.dispose();
+        changeUsername();
     }
 
+    //Calls changeUsername whe the user presses enter in the newUsername field
+    private void TxtFieldNewUsrActionPerformed(ActionEvent e) {
+        changeUsername();
+    }
+
+    //======== Change Password Dialog ========
+
+    //Calls changePassword when the confirm button is clicked in the change password dialog
     private void BtnConfirmChangePwdActionPerformed(ActionEvent e) {
-        changePasswordDialog.dispose();
+        changePassword();
     }
 
-    private void thisMouseClicked(MouseEvent e) {
-        System.out.println("Click");
+    //Calls changePassword when the user presses enter in teh newPasswrod field
+    private void PwdFieldChangePwdNewActionPerformed(ActionEvent e) {
+        changePassword();
+    }
+
+    //======== Delete User Dialog ========
+
+    //Calls deleteUser when the "yes" button is pressed in the delete user dialog and closes the dialog
+    private void btnDeleteUsrYesActionPerformed(ActionEvent e) {
+        deleteUser (loggedInUser);
+        dialogDeleteUsr.dispose();
+    }
+
+    //Closes the deleteUser dialog when the "no" button is pressed
+    private void btnDeleteUsrNoActionPerformed(ActionEvent e) {
+        dialogDeleteUsr.dispose();
+    }
+
+    //======== Error Dialog ========
+
+    //Closes the error dialog when the confirm button is pressed
+    private void dialogErrorBtnConfirmActionPerformed(ActionEvent e) {
+        dialogError.dispose();
     }
 
     private void initComponents() {
         conversations = new Vector<>();
         chats = new ArrayList<>();
+        loggedInUser = "";
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
         MenuBar = new JMenuBar();
@@ -190,17 +315,20 @@ public class WindowChatting extends JFrame {
         PwdFieldChangePwdOld = new JPasswordField();
         LalebChangePwdNew = new JLabel();
         PwdFieldChangePwdNew = new JPasswordField();
+        dialogError = new JDialog();
+        dialogErrorLabel = new JLabel();
+        dialogErrorBtnConfirm = new JButton();
+        dialogDeleteUsr = new JDialog();
+        dialogDeleteUsrLabel1 = new JLabel();
+        dialogDeleteUsrLabel2 = new JLabel();
+        btnDeleteUsrYes = new JButton();
+        btnDeleteUsrNo = new JButton();
 
         //======== this ========
         setTitle("ChatApp");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(300, 400));
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                thisMouseClicked(e);
-            }
-        });
+        setResizable(false);
         Container contentPane = getContentPane();
 
         //======== MenuBar ========
@@ -338,13 +466,14 @@ public class WindowChatting extends JFrame {
         {
             connectionDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             connectionDialog.setModal(true);
+            connectionDialog.setResizable(false);
             Container connectionDialogContentPane = connectionDialog.getContentPane();
 
             //---- Label ----
-            Label.setText("New Conversation");
+            Label.setText("Enter Username or IP address");
 
             //---- TxtFieldAddress ----
-            TxtFieldAddress.setText("Username/IP");
+            TxtFieldAddress.addActionListener(e -> TxtFieldAddressActionPerformed(e));
 
             //---- BtnConnect ----
             BtnConnect.setText("connect");
@@ -361,11 +490,14 @@ public class WindowChatting extends JFrame {
                 connectionDialogContentPaneLayout.createParallelGroup()
                     .addGroup(connectionDialogContentPaneLayout.createSequentialGroup()
                         .addGap(46, 46, 46)
-                        .addGroup(connectionDialogContentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                            .addComponent(BtnConnect, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Label, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(TxtFieldAddress, GroupLayout.Alignment.LEADING))
+                        .addGroup(connectionDialogContentPaneLayout.createParallelGroup()
+                            .addComponent(TxtFieldAddress, GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
+                            .addComponent(BtnConnect, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(46, 46, 46))
+                    .addGroup(connectionDialogContentPaneLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(Label, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                        .addContainerGap())
             );
             connectionDialogContentPaneLayout.setVerticalGroup(
                 connectionDialogContentPaneLayout.createParallelGroup()
@@ -376,7 +508,7 @@ public class WindowChatting extends JFrame {
                         .addComponent(TxtFieldAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(BtnConnect)
-                        .addContainerGap(63, Short.MAX_VALUE))
+                        .addContainerGap(18, Short.MAX_VALUE))
             );
             connectionDialog.pack();
             connectionDialog.setLocationRelativeTo(connectionDialog.getOwner());
@@ -384,10 +516,14 @@ public class WindowChatting extends JFrame {
 
         //======== changeUsrDialog ========
         {
+            changeUsrDialog.setResizable(false);
             Container changeUsrDialogContentPane = changeUsrDialog.getContentPane();
 
             //---- LabelNewUsr ----
             LabelNewUsr.setText("Enter New Username");
+
+            //---- TxtFieldNewUsr ----
+            TxtFieldNewUsr.addActionListener(e -> TxtFieldNewUsrActionPerformed(e));
 
             //---- BtnConfirmNewUsr ----
             BtnConfirmNewUsr.setText("confirm");
@@ -414,7 +550,7 @@ public class WindowChatting extends JFrame {
                         .addComponent(TxtFieldNewUsr, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(BtnConfirmNewUsr)
-                        .addContainerGap(63, Short.MAX_VALUE))
+                        .addContainerGap(23, Short.MAX_VALUE))
             );
             changeUsrDialog.pack();
             changeUsrDialog.setLocationRelativeTo(changeUsrDialog.getOwner());
@@ -422,6 +558,7 @@ public class WindowChatting extends JFrame {
 
         //======== changePasswordDialog ========
         {
+            changePasswordDialog.setResizable(false);
             Container changePasswordDialogContentPane = changePasswordDialog.getContentPane();
 
             //---- LabelChangePwdOld ----
@@ -433,6 +570,9 @@ public class WindowChatting extends JFrame {
 
             //---- LalebChangePwdNew ----
             LalebChangePwdNew.setText("Enter new pasword");
+
+            //---- PwdFieldChangePwdNew ----
+            PwdFieldChangePwdNew.addActionListener(e -> PwdFieldChangePwdNewActionPerformed(e));
 
             GroupLayout changePasswordDialogContentPaneLayout = new GroupLayout(changePasswordDialogContentPane);
             changePasswordDialogContentPane.setLayout(changePasswordDialogContentPaneLayout);
@@ -470,11 +610,113 @@ public class WindowChatting extends JFrame {
             changePasswordDialog.pack();
             changePasswordDialog.setLocationRelativeTo(changePasswordDialog.getOwner());
         }
+
+        //======== dialogError ========
+        {
+            dialogError.setModal(true);
+            dialogError.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            dialogError.setAlwaysOnTop(true);
+            dialogError.setTitle("ERROR!");
+            dialogError.setResizable(false);
+            Container dialogErrorContentPane = dialogError.getContentPane();
+
+            //---- dialogErrorLabel ----
+            dialogErrorLabel.setText("Error text");
+            dialogErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+            //---- dialogErrorBtnConfirm ----
+            dialogErrorBtnConfirm.setText("OK");
+            dialogErrorBtnConfirm.addActionListener(e -> dialogErrorBtnConfirmActionPerformed(e));
+
+            GroupLayout dialogErrorContentPaneLayout = new GroupLayout(dialogErrorContentPane);
+            dialogErrorContentPane.setLayout(dialogErrorContentPaneLayout);
+            dialogErrorContentPaneLayout.setHorizontalGroup(
+                dialogErrorContentPaneLayout.createParallelGroup()
+                    .addGroup(dialogErrorContentPaneLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(dialogErrorLabel, GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(dialogErrorContentPaneLayout.createSequentialGroup()
+                        .addGap(85, 85, 85)
+                        .addComponent(dialogErrorBtnConfirm)
+                        .addContainerGap(85, Short.MAX_VALUE))
+            );
+            dialogErrorContentPaneLayout.setVerticalGroup(
+                dialogErrorContentPaneLayout.createParallelGroup()
+                    .addGroup(dialogErrorContentPaneLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(dialogErrorLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dialogErrorBtnConfirm)
+                        .addContainerGap(8, Short.MAX_VALUE))
+            );
+            dialogError.pack();
+            dialogError.setLocationRelativeTo(null);
+        }
+
+        //======== dialogDeleteUsr ========
+        {
+            dialogDeleteUsr.setTitle("Warning!");
+            dialogDeleteUsr.setResizable(false);
+            dialogDeleteUsr.setModal(true);
+            dialogDeleteUsr.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            Container dialogDeleteUsrContentPane = dialogDeleteUsr.getContentPane();
+
+            //---- dialogDeleteUsrLabel1 ----
+            dialogDeleteUsrLabel1.setText("This will delete your user");
+            dialogDeleteUsrLabel1.setHorizontalAlignment(SwingConstants.CENTER);
+
+            //---- dialogDeleteUsrLabel2 ----
+            dialogDeleteUsrLabel2.setText("Are you sure?");
+            dialogDeleteUsrLabel2.setHorizontalAlignment(SwingConstants.CENTER);
+
+            //---- btnDeleteUsrYes ----
+            btnDeleteUsrYes.setText("YES");
+            btnDeleteUsrYes.addActionListener(e -> btnDeleteUsrYesActionPerformed(e));
+
+            //---- btnDeleteUsrNo ----
+            btnDeleteUsrNo.setText("NO");
+            btnDeleteUsrNo.addActionListener(e -> btnDeleteUsrNoActionPerformed(e));
+
+            GroupLayout dialogDeleteUsrContentPaneLayout = new GroupLayout(dialogDeleteUsrContentPane);
+            dialogDeleteUsrContentPane.setLayout(dialogDeleteUsrContentPaneLayout);
+            dialogDeleteUsrContentPaneLayout.setHorizontalGroup(
+                dialogDeleteUsrContentPaneLayout.createParallelGroup()
+                    .addGroup(dialogDeleteUsrContentPaneLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(dialogDeleteUsrContentPaneLayout.createParallelGroup()
+                            .addComponent(dialogDeleteUsrLabel2, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                            .addComponent(dialogDeleteUsrLabel1, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
+                        .addContainerGap())
+                    .addGroup(dialogDeleteUsrContentPaneLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(btnDeleteUsrYes, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDeleteUsrNo, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(18, Short.MAX_VALUE))
+            );
+            dialogDeleteUsrContentPaneLayout.setVerticalGroup(
+                dialogDeleteUsrContentPaneLayout.createParallelGroup()
+                    .addGroup(dialogDeleteUsrContentPaneLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(dialogDeleteUsrLabel1)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dialogDeleteUsrLabel2)
+                        .addGap(18, 18, 18)
+                        .addGroup(dialogDeleteUsrContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnDeleteUsrYes)
+                            .addComponent(btnDeleteUsrNo))
+                        .addContainerGap(19, Short.MAX_VALUE))
+            );
+            dialogDeleteUsr.pack();
+            dialogDeleteUsr.setLocationRelativeTo(dialogDeleteUsr.getOwner());
+        }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
     private Vector<String> conversations;
     private List<Chat> chats;
+    private String loggedInUser;
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - unknown
     private JMenuBar MenuBar;
@@ -506,5 +748,13 @@ public class WindowChatting extends JFrame {
     private JPasswordField PwdFieldChangePwdOld;
     private JLabel LalebChangePwdNew;
     private JPasswordField PwdFieldChangePwdNew;
+    private JDialog dialogError;
+    private JLabel dialogErrorLabel;
+    private JButton dialogErrorBtnConfirm;
+    private JDialog dialogDeleteUsr;
+    private JLabel dialogDeleteUsrLabel1;
+    private JLabel dialogDeleteUsrLabel2;
+    private JButton btnDeleteUsrYes;
+    private JButton btnDeleteUsrNo;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
