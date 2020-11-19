@@ -28,13 +28,12 @@ public class Controller { // The controller of all functions
         UpdateSession(Name,Ip); // Still active
     }
 
-    public static boolean Login(String Name, String Password , String Ip){ // login user
+    public static void Login(String Name, String Password , String Ip){ // login user
 
-        Boolean temp = DB.login(Doc, Name, Password); // log user inn to database
+        DB.login(Doc, Name, Password); // log user inn to database
 
-        Session.sessionInit(Name, Ip); // Start session
+        UpdateSession(Name, Ip); // Still active
 
-        return temp;
     }
 
     public static void LogOut(String Name) { // log out user
@@ -66,6 +65,10 @@ public class Controller { // The controller of all functions
 
         Session.endSession(Name); //  End Session
         DB.deleteUser(Doc, Name, Password); // Delete user from database
+    }
+
+    public static void Shutdown() {
+        System.exit(0);
     }
 
     public static void UpdateSession(String Name, String Ip){ // Update Session to say your still active
