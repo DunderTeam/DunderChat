@@ -43,7 +43,7 @@ public class SocketWorker extends Thread {
                 ChatManager.addChat(msg.getName(), clientSocket.getRemoteSocketAddress().toString(), clientSocket.getPort());
             }
 
-            ChatManager.addMessage(msg.getName(), clientSocket.getRemoteSocketAddress().toString(), msg);
+            ChatManager.addMessage(msg.getName(), clientSocket.getInetAddress().toString().substring(1), msg);
 
             debug(msg.getData());
             dataOutput.writeUTF(Status.encode(200)); // Received but empty

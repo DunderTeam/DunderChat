@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-public class SocketListener extends Thread implements Runnable {
+public class SocketListener implements Runnable {
     private static ServerSocket server;
 
     // Constructor to assign port and other values..
@@ -16,15 +16,10 @@ public class SocketListener extends Thread implements Runnable {
         try {
             server = new ServerSocket(port, 10, Inet4Address.getByName(UPnP.getLocalIP()));
             portForward(server.getLocalPort());
-
-            this.start(); // Starts the server listener on its own thread
         } catch (Exception e) {
             // Incase of error the server will not start
             System.out.println(e.getMessage());
         }
-
-        // todo: maybe move fetcher/messagegetter outside of SocketListener and run independently?
-        MessageGetter fetcher = new MessageGetter(1);
     }
 
     // Function which runs when server thread is started.
