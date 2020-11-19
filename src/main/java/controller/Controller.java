@@ -9,7 +9,7 @@ import model.database.Session;
 
 public class Controller { // The controller of all functions
 
-    MongoCollection<Document> Doc = DB.getUserCollection();
+    static MongoCollection<Document> Doc = DB.getUserCollection();
 
     public static void SendMessage(String sen, String mes, String Ip, String ChatName, String Name){ //ChatMsgSend
 
@@ -28,39 +28,41 @@ public class Controller { // The controller of all functions
         UpdateSession(Name,Ip); // Still active
     }
 
-    public  void Login(String Name, String Password , String Ip){ // login user
+    public static boolean Login(String Name, String Password , String Ip){ // login user
 
-        DB.login(Doc, Name, Password); // log user inn to database
+        Boolean temp = DB.login(Doc, Name, Password); // log user inn to database
 
         Session.sessionInit(Name, Ip); // Start session
+
+        return temp;
     }
 
-    public void LogOut(String Name) { // log out user
+    public static void LogOut(String Name) { // log out user
 
         Session.endSession(Name); // Still active
     }
 
-    public void RegisterUser(String Name, String Password, String Ip ){ // register new user for app
+    public static void RegisterUser(String Name, String Password, String Ip ){ // register new user for app
 
         DB.addUser(Doc, Name, Ip, Password ); // adds new user to Database
 
     }
 
-    public void ChangeName(String OldName, String NewName, String Password, String Ip ) { // Change name on user
+    public static void ChangeName(String OldName, String NewName, String Password, String Ip ) { // Change name on user
 
         DB.changeUsername(Doc, OldName, Password, NewName); // change name on user
 
         UpdateSession(NewName,Ip); // Still active
     }
 
-    public void ChangePassword(String Name, String OldPassword, String NewPassword, String Ip){ // Change password on user
+    public static void ChangePassword(String Name, String OldPassword, String NewPassword, String Ip){ // Change password on user
 
         DB.changePassword(Doc, Name, OldPassword, NewPassword); // Change password on user
 
         UpdateSession(Name,Ip); // Still active
     }
 
-    public void DeleteUser(String Name, String Password){ // Delete current user
+    public static void DeleteUser(String Name, String Password){ // Delete current user
 
         Session.endSession(Name); //  End Session
         DB.deleteUser(Doc, Name, Password); // Delete user from database

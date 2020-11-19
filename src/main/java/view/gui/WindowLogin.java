@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
+import controller.Controller;
 
 /**
  * @author Adrian Emil Chambe-Eng
@@ -22,14 +23,19 @@ public class WindowLogin extends JFrame {
     private void LoginUser() {
         String username = InputUsr.getText();
         String password = InputPwd.getText();
+        String Ip ; // ToDo get ip address
 
         if (username.equals("") || password.equals("")) {
             setErrorText("Could not log in");
             dialogError.setVisible(true);
         } else {
             // TODO actually log the user in, currently just opens a default chat window
-            new WindowChatting(username).setVisible(true);
-            dispose();
+
+            if(Controller.Login(username, password, Ip)){
+                new WindowChatting(username).setVisible(true);
+                dispose();
+            }
+
         }
     }
 
