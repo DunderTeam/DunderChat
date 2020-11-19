@@ -23,7 +23,7 @@ public class SocketListener extends Thread implements Runnable {
             System.out.println(e.getMessage());
         }
 
-        MessageFetch fetcher = new MessageFetch(1);
+        MessageGetter fetcher = new MessageGetter(1);
     }
 
     // Function which runs when server thread is started.
