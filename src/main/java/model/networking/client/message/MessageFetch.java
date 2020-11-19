@@ -5,6 +5,7 @@ public class MessageFetch extends Thread {
         // TODO: Start interval of fetching data
         // -> Maybe do singleton, so we dont clutter out system with several fetchers?
     }
+
     @Override
     public void run() {
         /*
