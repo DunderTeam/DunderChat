@@ -4,10 +4,12 @@
 
 package view.gui;
 
+import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 
 /**
  * @author Adrian Emil Chambe-Eng
@@ -17,6 +19,40 @@ public class WindowLogin extends JFrame {
         initComponents();
     }
 
+    private void LoginUser() {
+        String username = InputUsr.getText();
+        String password = InputPwd.getText();
+
+        if (username.equals("") || password.equals("")) {
+            setErrorText("Could not log in");
+            dialogError.setVisible(true);
+        } else {
+            // TODO actually log the user in, currently just opens a default chat window
+            new WindowChatting(username).setVisible(true);
+            dispose();
+        }
+    }
+
+    private void registerNewUser() {
+        String usr = txtFieldRegisterUsr.getText();
+        String pwd = pwdFieldRegisterPwd.getText();
+
+        if (usr.equals("") || pwd.equals("")) {
+            setErrorText("Username or password is blank");
+            dialogError.setVisible(true);
+        } else {
+            //TODO call controller to login
+            System.out.println(usr + " | " + pwd);
+            txtFieldRegisterUsr.setText("");
+            pwdFieldRegisterPwd.setText("");
+            DialogRegister.dispose();
+        }
+    }
+
+    private void setErrorText(String error) {
+        dialogErrorLabel.setText(error);
+    }
+
     // Calls LoginUser to actually log in the user
     private void BtnLoginMouseClicked(MouseEvent e) {
         LoginUser();
@@ -24,8 +60,7 @@ public class WindowLogin extends JFrame {
 
     // Opens a new window with a registration form
     private void BtnRegisterMouseClicked(MouseEvent e) {
-        new WindowRegister().setVisible(true);
-        dispose();
+        DialogRegister.setVisible(true);
     }
 
     // Exits the program with code 0
@@ -33,13 +68,20 @@ public class WindowLogin extends JFrame {
         System.exit(0);
     }
 
-    private void LoginUser() {
-        String username = InputUsr.getText();
-        char[] password = InputPwd.getPassword();
+    private void pwdFieldRegisterPwdActionPerformed(ActionEvent e) {
+        registerNewUser();
+    }
 
-        // TODO actually log the user in, currently just opens a default chat window
-        new WindowChatting().setVisible(true);
-        dispose();
+    private void btnRegisterNewUserActionPerformed(ActionEvent e) {
+        registerNewUser();
+    }
+
+    private void dialogRegisterBtnBackActionPerformed(ActionEvent e) {
+        DialogRegister.dispose();
+    }
+
+    private void dialogErrorBtnConfirmActionPerformed(ActionEvent e) {
+        dialogError.dispose();
     }
 
     private void initComponents() {
@@ -49,8 +91,21 @@ public class WindowLogin extends JFrame {
         InputUsr = new JTextField();
         InputPwd = new JPasswordField();
         BtnLogin = new JButton();
-        BtnRegister = new JButton();
         BtnQuit = new JButton();
+        labelUsr = new JLabel();
+        labelPwd = new JLabel();
+        BtnRegister = new JButton();
+        DialogRegister = new JDialog();
+        LabelRegister = new JLabel();
+        txtFieldRegisterUsr = new JTextField();
+        pwdFieldRegisterPwd = new JPasswordField();
+        btnRegisterNewUser = new JButton();
+        dialogRegisterLabelUsr = new JLabel();
+        dialogRegisterLabelPwd = new JLabel();
+        dialogRegisterBtnBack = new JButton();
+        dialogError = new JDialog();
+        dialogErrorLabel = new JLabel();
+        dialogErrorBtnConfirm = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -62,27 +117,12 @@ public class WindowLogin extends JFrame {
         AppName.setFont(new Font(".AppleSystemUIFont", Font.PLAIN, 20));
         AppName.setHorizontalAlignment(SwingConstants.CENTER);
 
-        //---- InputUsr ----
-        InputUsr.setText("username");
-
-        //---- InputPwd ----
-        InputPwd.setText("password");
-
         //---- BtnLogin ----
         BtnLogin.setText("login");
         BtnLogin.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 BtnLoginMouseClicked(e);
-            }
-        });
-
-        //---- BtnRegister ----
-        BtnRegister.setText("register");
-        BtnRegister.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                BtnRegisterMouseClicked(e);
             }
         });
 
@@ -95,31 +135,52 @@ public class WindowLogin extends JFrame {
             }
         });
 
+        //---- labelUsr ----
+        labelUsr.setText("Username");
+
+        //---- labelPwd ----
+        labelPwd.setText("Password");
+
+        //---- BtnRegister ----
+        BtnRegister.setText("register");
+        BtnRegister.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                BtnRegisterMouseClicked(e);
+            }
+        });
+
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
         contentPaneLayout.setHorizontalGroup(
             contentPaneLayout.createParallelGroup()
                 .addGroup(contentPaneLayout.createSequentialGroup()
-                    .addContainerGap(75, Short.MAX_VALUE)
-                    .addGroup(contentPaneLayout.createParallelGroup()
-                        .addComponent(BtnQuit)
-                        .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                            .addGroup(contentPaneLayout.createSequentialGroup()
-                                .addComponent(BtnLogin)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(BtnRegister))
-                            .addComponent(InputPwd)
-                            .addComponent(InputUsr)
-                            .addComponent(AppName, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addContainerGap(76, Short.MAX_VALUE))
+                    .addGap(25, 25, 25)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                        .addComponent(InputUsr)
+                        .addComponent(labelPwd, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(AppName, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                        .addComponent(labelUsr, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                        .addComponent(InputPwd, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                        .addGroup(contentPaneLayout.createSequentialGroup()
+                            .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(BtnQuit, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                                .addComponent(BtnLogin, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(BtnRegister, GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)))
+                    .addContainerGap(23, Short.MAX_VALUE))
         );
         contentPaneLayout.setVerticalGroup(
             contentPaneLayout.createParallelGroup()
                 .addGroup(contentPaneLayout.createSequentialGroup()
-                    .addGap(50, 50, 50)
+                    .addGap(25, 25, 25)
                     .addComponent(AppName)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(labelUsr)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(InputUsr, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(labelPwd)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(InputPwd, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -128,10 +189,127 @@ public class WindowLogin extends JFrame {
                         .addComponent(BtnRegister))
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(BtnQuit)
-                    .addContainerGap(57, Short.MAX_VALUE))
+                    .addContainerGap(23, Short.MAX_VALUE))
         );
         pack();
         setLocationRelativeTo(getOwner());
+
+        //======== DialogRegister ========
+        {
+            DialogRegister.setModal(true);
+            DialogRegister.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            Container DialogRegisterContentPane = DialogRegister.getContentPane();
+
+            //---- LabelRegister ----
+            LabelRegister.setText("Register a new user");
+            LabelRegister.setFont(LabelRegister.getFont().deriveFont(LabelRegister.getFont().getSize() + 4f));
+
+            //---- txtFieldRegisterUsr ----
+            txtFieldRegisterUsr.setToolTipText("username");
+
+            //---- pwdFieldRegisterPwd ----
+            pwdFieldRegisterPwd.addActionListener(e -> pwdFieldRegisterPwdActionPerformed(e));
+
+            //---- btnRegisterNewUser ----
+            btnRegisterNewUser.setText("register");
+            btnRegisterNewUser.addActionListener(e -> btnRegisterNewUserActionPerformed(e));
+
+            //---- dialogRegisterLabelUsr ----
+            dialogRegisterLabelUsr.setText("Username");
+            dialogRegisterLabelUsr.setHorizontalAlignment(SwingConstants.CENTER);
+
+            //---- dialogRegisterLabelPwd ----
+            dialogRegisterLabelPwd.setText("Password");
+            dialogRegisterLabelPwd.setHorizontalAlignment(SwingConstants.CENTER);
+
+            //---- dialogRegisterBtnBack ----
+            dialogRegisterBtnBack.setText("back");
+            dialogRegisterBtnBack.addActionListener(e -> dialogRegisterBtnBackActionPerformed(e));
+
+            GroupLayout DialogRegisterContentPaneLayout = new GroupLayout(DialogRegisterContentPane);
+            DialogRegisterContentPane.setLayout(DialogRegisterContentPaneLayout);
+            DialogRegisterContentPaneLayout.setHorizontalGroup(
+                DialogRegisterContentPaneLayout.createParallelGroup()
+                    .addGroup(DialogRegisterContentPaneLayout.createSequentialGroup()
+                        .addGroup(DialogRegisterContentPaneLayout.createParallelGroup()
+                            .addGroup(DialogRegisterContentPaneLayout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addComponent(LabelRegister))
+                            .addGroup(DialogRegisterContentPaneLayout.createSequentialGroup()
+                                .addGap(42, 42, 42)
+                                .addGroup(DialogRegisterContentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(dialogRegisterLabelUsr, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtFieldRegisterUsr, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                                    .addComponent(dialogRegisterLabelPwd, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                                    .addComponent(pwdFieldRegisterPwd, GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnRegisterNewUser, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                                    .addComponent(dialogRegisterBtnBack, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE))))
+                        .addContainerGap(24, Short.MAX_VALUE))
+            );
+            DialogRegisterContentPaneLayout.setVerticalGroup(
+                DialogRegisterContentPaneLayout.createParallelGroup()
+                    .addGroup(DialogRegisterContentPaneLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(LabelRegister)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dialogRegisterLabelUsr)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFieldRegisterUsr, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dialogRegisterLabelPwd)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pwdFieldRegisterPwd, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRegisterNewUser)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dialogRegisterBtnBack)
+                        .addContainerGap(43, Short.MAX_VALUE))
+            );
+            DialogRegister.pack();
+            DialogRegister.setLocationRelativeTo(DialogRegister.getOwner());
+        }
+
+        //======== dialogError ========
+        {
+            dialogError.setModal(true);
+            dialogError.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            dialogError.setAlwaysOnTop(true);
+            dialogError.setTitle("ERROR!");
+            Container dialogErrorContentPane = dialogError.getContentPane();
+
+            //---- dialogErrorLabel ----
+            dialogErrorLabel.setText("Error text");
+            dialogErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+            //---- dialogErrorBtnConfirm ----
+            dialogErrorBtnConfirm.setText("OK");
+            dialogErrorBtnConfirm.addActionListener(e -> dialogErrorBtnConfirmActionPerformed(e));
+
+            GroupLayout dialogErrorContentPaneLayout = new GroupLayout(dialogErrorContentPane);
+            dialogErrorContentPane.setLayout(dialogErrorContentPaneLayout);
+            dialogErrorContentPaneLayout.setHorizontalGroup(
+                dialogErrorContentPaneLayout.createParallelGroup()
+                    .addGroup(dialogErrorContentPaneLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(dialogErrorLabel, GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(dialogErrorContentPaneLayout.createSequentialGroup()
+                        .addGap(85, 85, 85)
+                        .addComponent(dialogErrorBtnConfirm)
+                        .addContainerGap(85, Short.MAX_VALUE))
+            );
+            dialogErrorContentPaneLayout.setVerticalGroup(
+                dialogErrorContentPaneLayout.createParallelGroup()
+                    .addGroup(dialogErrorContentPaneLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(dialogErrorLabel)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dialogErrorBtnConfirm)
+                        .addContainerGap(8, Short.MAX_VALUE))
+            );
+            dialogError.pack();
+            dialogError.setLocationRelativeTo(null);
+        }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
@@ -141,7 +319,20 @@ public class WindowLogin extends JFrame {
     private JTextField InputUsr;
     private JPasswordField InputPwd;
     private JButton BtnLogin;
-    private JButton BtnRegister;
     private JButton BtnQuit;
+    private JLabel labelUsr;
+    private JLabel labelPwd;
+    private JButton BtnRegister;
+    private JDialog DialogRegister;
+    private JLabel LabelRegister;
+    private JTextField txtFieldRegisterUsr;
+    private JPasswordField pwdFieldRegisterPwd;
+    private JButton btnRegisterNewUser;
+    private JLabel dialogRegisterLabelUsr;
+    private JLabel dialogRegisterLabelPwd;
+    private JButton dialogRegisterBtnBack;
+    private JDialog dialogError;
+    private JLabel dialogErrorLabel;
+    private JButton dialogErrorBtnConfirm;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
