@@ -71,15 +71,17 @@ public class DB {
         MongoCursor<Document> cursor = findIterable.cursor();
         if (cursor.hasNext()){
             // if username is taken
+            WindowLogin.displayErrorDialog("Name `" + name + "` is already taken");
             return false;
         } else {
             // add user to the user collection
             try {
                 Document doc = new Document("username", name).append("ip", ip).append("password", encryptedPassword);
                 userCollection.insertOne(doc);
+                WindowLogin.setNewRegisteredUser(name);
                 return true;
             } catch (Exception e) {
-                // TODO show database error on screen
+                WindowLogin.displayErrorDialog("Failed to register: Database error");
                 System.out.println("error adding user to database");
                 return false;
             }
@@ -106,12 +108,12 @@ public class DB {
             } catch(Exception e) {
                 // TODO show login error on screen
                 System.out.println("login failed");
-                WindowLogin.setLoginFail("Fail");
+                WindowLogin.displayErrorDialog("Login failed: Database error");
             }
         } else {
             // TODO show login error on screen
             System.out.println("login failed");
-            WindowLogin.setLoginFail("Fail");
+            WindowLogin.displayErrorDialog("Login failed: Database error");
 
         }
     }
