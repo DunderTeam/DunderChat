@@ -214,8 +214,8 @@ new FormModel {
 			"location": new java.awt.Point( 10, 510 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :::p, par l {comp dialogDeleteUsrLabel2::::186:x, comp dialogDeleteUsrLabel1::::186:x}, space :::p}, seq l {space :p:20:p, comp btnDeleteUsrYes:::p:77:p, space :::p, comp btnDeleteUsrNo:::p:77:p, space ::18:x}}"
-			"$verticalGroup": "par l {seq l {space :::p, comp dialogDeleteUsrLabel1:::p::p, space :::p, comp dialogDeleteUsrLabel2:::p::p, space s:::p, par b {comp btnDeleteUsrYes::b:p::p, comp btnDeleteUsrNo::b:p::p}, space ::19:x}}"
+			"$horizontalGroup": "par l {seq l {space :::p, par l {comp dialogDeleteUsrLabel2::::186:x, comp dialogDeleteUsrLabel1::::186:x}, space :::p}, seq t {space ::7:x, par t:::p {comp dialogDeleteUsrLabel3:::::x, par l:t {seq {comp btnDeleteUsrYes:::p:77:p, space :::p, comp btnDeleteUsrNo:::p:77:p}, comp pwdFieldDeleteUsr:::p:160:p}}, space :p:17:p}}"
+			"$verticalGroup": "par l {seq l {space :::p, comp dialogDeleteUsrLabel1:::p::p, space :::p, comp dialogDeleteUsrLabel2:::p::p, space :::p, comp dialogDeleteUsrLabel3:::p::p, space :::p, comp pwdFieldDeleteUsr:::p::p, space :::p, par b {comp btnDeleteUsrYes::b:p::p, comp btnDeleteUsrNo::b:p::p}, space ::18:x}}"
 		} ) {
 			name: "dialogDeleteUsr"
 			"title": "Warning!"
@@ -242,9 +242,18 @@ new FormModel {
 				"text": "NO"
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "btnDeleteUsrNoActionPerformed", true ) )
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "dialogDeleteUsrLabel3"
+				"text": "Enter your password to delete"
+				"horizontalAlignment": 0
+			} )
+			add( new FormComponent( "javax.swing.JPasswordField" ) {
+				name: "pwdFieldDeleteUsr"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "pwdFieldDeleteUsrActionPerformed", true ) )
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 610, 400 )
-			"size": new java.awt.Dimension( 200, 135 )
+			"size": new java.awt.Dimension( 200, 180 )
 		} )
 	}
 }

@@ -134,13 +134,24 @@ public class WindowChatting extends JFrame {
         }
     }
 
+    private void userDeletedChanged(PropertyChangeEvent e) {
+        if (!userDeleted.getText().equals("")) {
+            dialogDeleteUsr.dispose();
+            logOut(loggedInUser);
+            userDeleted.setText("");
+        }
+    }
+
     //Deletes the currently logged in user from the database and calls logOut
     private void deleteUser(String Name) {
         //TODO call controller and delete user, currently only logs out
-        String Password = "";
+        String Password = String.valueOf(pwdFieldDeleteUsr.getPassword());
         System.out.println("Deleting user...");
         Controller.DeleteUser(Name, Password); // Delete user from database
-        logOut(Name);
+    }
+
+    public static void setUserDeleted(String deleted) {
+        userDeleted.setText(deleted);
     }
 
     //Logs out of the chat client and opens a new WindowLogin
@@ -177,15 +188,23 @@ public class WindowChatting extends JFrame {
     }
 
     //Displays an error dialog with the given text
-    private void displayErrorDialog(String error) {
-        dialogErrorLabel.setText(error);
-        dialogError.setVisible(true);
+    public static void displayErrorDialog(String error) {
+        errorMessage.setText(error);
     }
 
     //Calls the controller to shut down the application gracefully
     private void shutDown() {
         //TODO call controller, currently just exits
         System.exit(0);
+    }
+
+    private void errorMessageChanged(PropertyChangeEvent e) {
+        if (!errorMessage.getText().equals("")) {
+            displayErrorDialog(errorMessage.getText());
+            dialogErrorLabel.setText(errorMessage.getText());
+            dialogError.setVisible(true);
+            errorMessage.setText("");
+        }
     }
 
     //================ Action/Event Listeners ================
@@ -292,8 +311,15 @@ public class WindowChatting extends JFrame {
 
     //Calls deleteUser when the "yes" button is pressed in the delete user dialog and closes the dialog
     private void btnDeleteUsrYesActionPerformed(ActionEvent e) {
-        deleteUser (loggedInUser);
-        dialogDeleteUsr.dispose();
+        deleteUser(loggedInUser);
+    }
+
+    private void pwdFieldDeleteUsrActionPerformed(ActionEvent e) {
+        if (String.valueOf(pwdFieldDeleteUsr.getPassword()).equals("")) {
+            displayErrorDialog("Enter your old password");
+        } else {
+            deleteUser(loggedInUser);
+        }
     }
 
     //Closes the deleteUser dialog when the "no" button is pressed
@@ -312,6 +338,12 @@ public class WindowChatting extends JFrame {
 
         NewChat = new JLabel();
         NewChat.addPropertyChangeListener(this::NewChatChanged);
+
+        userDeleted = new JLabel();
+        userDeleted.addPropertyChangeListener(this::userDeletedChanged);
+
+        errorMessage = new JLabel("");
+        errorMessage.addPropertyChangeListener(this::errorMessageChanged);
 
         conversations = new Vector<>();
         chats = new ArrayList<>();
@@ -359,6 +391,8 @@ public class WindowChatting extends JFrame {
         dialogDeleteUsrLabel2 = new JLabel();
         btnDeleteUsrYes = new JButton();
         btnDeleteUsrNo = new JButton();
+        dialogDeleteUsrLabel3 = new JLabel();
+        pwdFieldDeleteUsr = new JPasswordField();
 
         //======== this ========
         setTitle("ChatApp");
@@ -731,6 +765,13 @@ public class WindowChatting extends JFrame {
             btnDeleteUsrNo.setText("NO");
             btnDeleteUsrNo.addActionListener(e -> btnDeleteUsrNoActionPerformed(e));
 
+            //---- dialogDeleteUsrLabel3 ----
+            dialogDeleteUsrLabel3.setText("Enter your password to delete");
+            dialogDeleteUsrLabel3.setHorizontalAlignment(SwingConstants.CENTER);
+
+            //---- pwdFieldDeleteUsr ----
+            pwdFieldDeleteUsr.addActionListener(e -> pwdFieldDeleteUsrActionPerformed(e));
+
             GroupLayout dialogDeleteUsrContentPaneLayout = new GroupLayout(dialogDeleteUsrContentPane);
             dialogDeleteUsrContentPane.setLayout(dialogDeleteUsrContentPaneLayout);
             dialogDeleteUsrContentPaneLayout.setHorizontalGroup(
@@ -741,12 +782,17 @@ public class WindowChatting extends JFrame {
                             .addComponent(dialogDeleteUsrLabel2, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
                             .addComponent(dialogDeleteUsrLabel1, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
                         .addContainerGap())
-                    .addGroup(dialogDeleteUsrContentPaneLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(btnDeleteUsrYes, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDeleteUsrNo, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(18, Short.MAX_VALUE))
+                    .addGroup(GroupLayout.Alignment.TRAILING, dialogDeleteUsrContentPaneLayout.createSequentialGroup()
+                        .addContainerGap(7, Short.MAX_VALUE)
+                        .addGroup(dialogDeleteUsrContentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(dialogDeleteUsrLabel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(dialogDeleteUsrContentPaneLayout.createParallelGroup()
+                                .addGroup(dialogDeleteUsrContentPaneLayout.createSequentialGroup()
+                                    .addComponent(btnDeleteUsrYes, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnDeleteUsrNo, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
+                                .addComponent(pwdFieldDeleteUsr, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)))
+                        .addGap(17, 17, 17))
             );
             dialogDeleteUsrContentPaneLayout.setVerticalGroup(
                 dialogDeleteUsrContentPaneLayout.createParallelGroup()
@@ -755,11 +801,15 @@ public class WindowChatting extends JFrame {
                         .addComponent(dialogDeleteUsrLabel1)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dialogDeleteUsrLabel2)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dialogDeleteUsrLabel3)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pwdFieldDeleteUsr, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(dialogDeleteUsrContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                             .addComponent(btnDeleteUsrYes)
                             .addComponent(btnDeleteUsrNo))
-                        .addContainerGap(19, Short.MAX_VALUE))
+                        .addContainerGap(18, Short.MAX_VALUE))
             );
             dialogDeleteUsr.pack();
             dialogDeleteUsr.setLocationRelativeTo(dialogDeleteUsr.getOwner());
@@ -769,6 +819,10 @@ public class WindowChatting extends JFrame {
 
     private static JLabel NewChat;
     private static Chat NewChatList;
+
+    private static JLabel userDeleted;
+
+    private static JLabel errorMessage;
 
     private Vector<String> conversations;
     private List<Chat> chats;
@@ -814,5 +868,7 @@ public class WindowChatting extends JFrame {
     private JLabel dialogDeleteUsrLabel2;
     private JButton btnDeleteUsrYes;
     private JButton btnDeleteUsrNo;
+    private JLabel dialogDeleteUsrLabel3;
+    private JPasswordField pwdFieldDeleteUsr;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
