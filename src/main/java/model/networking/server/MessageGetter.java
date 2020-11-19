@@ -1,4 +1,4 @@
-package model.networking.client;
+package model.networking.server;
 
 import model.networking.Request;
 import model.networking.data.Message;
@@ -6,10 +6,10 @@ import model.networking.data.MessageCarrier;
 
 import java.io.IOException;
 
-public class MessageFetch extends Thread {
+public class MessageGetter extends Thread {
     private final int interval;
 
-    public MessageFetch(int updatesPerSecond) {
+    public MessageGetter(int updatesPerSecond) {
         // -> Maybe do thread-safe singleton, so we dont accidentally clutter out system with several fetchers?
         this.interval = updatesPerSecond / 1000;
 

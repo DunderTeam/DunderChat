@@ -1,7 +1,6 @@
 package model.networking.server;
 
 import com.dosse.upnp.UPnP;
-import model.networking.client.MessageFetch;
 
 import java.net.Inet4Address;
 import java.net.ServerSocket;
@@ -24,7 +23,7 @@ public class SocketListener extends Thread implements Runnable {
             System.out.println(e.getMessage());
         }
 
-        MessageFetch fetcher = new MessageFetch(1);
+        MessageGetter fetcher = new MessageGetter(1);
     }
 
     // Function which runs when server thread is started.
