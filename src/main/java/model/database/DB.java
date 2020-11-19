@@ -100,16 +100,19 @@ public class DB {
                 String name = getUsername(userCollection, username, password);
                 String ip = getIP(userCollection, username, password);
                 System.out.println("Logged in as " + name + ". IP: " + ip);
+                Session.sessionInit(name, ip);
                 WindowLogin.setLoggedInUserName(name);
                 return true;
             } catch(Exception e) {
                 // TODO show login error on screen
                 System.out.println("login failed");
+                WindowLogin.setLoginFail("Fail");
                 return false;
             }
         } else {
             // TODO show login error on screen
             System.out.println("login failed");
+            WindowLogin.setLoginFail("Fail");
             return false;
         }
     }

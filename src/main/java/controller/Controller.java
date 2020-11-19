@@ -32,8 +32,6 @@ public class Controller { // The controller of all functions
 
         DB.login(Doc, Name, Password); // log user inn to database
 
-        Session.sessionInit(Name, Ip); // Start session
-
 
     }
 
@@ -66,6 +64,10 @@ public class Controller { // The controller of all functions
 
         Session.endSession(Name); //  End Session
         DB.deleteUser(Doc, Name, Password); // Delete user from database
+    }
+
+    public static void Shutdown() {
+        System.exit(0);
     }
 
     public static void UpdateSession(String Name, String Ip){ // Update Session to say your still active
