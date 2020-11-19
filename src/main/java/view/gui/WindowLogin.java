@@ -4,6 +4,8 @@
 
 package view.gui;
 
+import controller.Controller;
+
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +31,7 @@ public class WindowLogin extends JFrame {
             displayErrorDialog("Could not log in!");
         } else {
             // TODO actually log the user in, currently just opens a default chat window
-            //Controller.Login(username, password, "");
+            Controller.Login(username, password, "");
         }
     }
 
@@ -61,6 +63,17 @@ public class WindowLogin extends JFrame {
         dialogError.setVisible(true);
     }
 
+    private void loggedInUserNameChanged(PropertyChangeEvent e) {
+        System.out.println("Name Changed");
+        loginUser(loggedInUserName.getText());
+    }
+
+    //================ Action/Event Listeners ================
+
+    private void InputPwdActionPerformed(ActionEvent e) {
+        attemptLogin();
+    }
+
     // Calls LoginUser to actually log in the user
     private void BtnLoginMouseClicked(MouseEvent e) {
         attemptLogin();
@@ -76,6 +89,8 @@ public class WindowLogin extends JFrame {
         System.exit(0);
     }
 
+    //======== Register New User Dialog ========
+
     private void pwdFieldRegisterPwdActionPerformed(ActionEvent e) {
         registerNewUser();
     }
@@ -88,17 +103,10 @@ public class WindowLogin extends JFrame {
         DialogRegister.dispose();
     }
 
+    //======== Error Dialog ========
+
     private void dialogErrorBtnConfirmActionPerformed(ActionEvent e) {
         dialogError.dispose();
-    }
-
-    private void InputPwdActionPerformed(ActionEvent e) {
-        attemptLogin();
-    }
-
-    private void loggedInUserNameChanged(PropertyChangeEvent e) {
-        System.out.println("Name Changed");
-        loginUser(loggedInUserName.getText());
     }
 
     private void initComponents() {
@@ -136,6 +144,9 @@ public class WindowLogin extends JFrame {
         AppName.setText("ChatApp");
         AppName.setFont(new Font(".AppleSystemUIFont", Font.PLAIN, 20));
         AppName.setHorizontalAlignment(SwingConstants.CENTER);
+
+        //---- InputPwd ----
+        InputPwd.addActionListener(e -> InputPwdActionPerformed(e));
 
         //---- BtnLogin ----
         BtnLogin.setText("login");
