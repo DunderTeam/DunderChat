@@ -4,8 +4,8 @@
 
 package view.gui;
 
-import controller.chat.Chat;
-import controller.chat.ChatManager;
+import model.chat.Chat;
+import model.chat.ChatManager;
 import model.networking.data.Message;
 
 import javax.swing.*;

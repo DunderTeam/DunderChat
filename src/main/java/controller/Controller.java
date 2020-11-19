@@ -1,6 +1,7 @@
-package controller.chat;
+package controller;
 
 import com.mongodb.client.MongoCollection;
+import model.chat.ChatManager;
 import model.networking.data.Message;
 import model.database.DB;
 import org.bson.Document;

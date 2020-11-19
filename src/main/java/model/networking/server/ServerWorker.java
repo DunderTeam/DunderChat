@@ -1,6 +1,6 @@
 package model.networking.server;
 
-import controller.chat.ChatManager;
+import model.chat.ChatManager;
 import model.networking.data.Message;
 import model.networking.data.Status;
 

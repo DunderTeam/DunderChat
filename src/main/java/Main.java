@@ -55,7 +55,6 @@ public class Main {
         manager.addConnection(new Connection("84.211.225.160", 5555)); // Public
         manager.addConnection(new Connection("192.168.0.2", 5555)); // External
         manager.addConnection(new Connection(UPnP.getLocalIP(), 5555));
-        System.out.println(UPnP.getLocalIP());
 
         Message msg = new Message();
         Message msg1 = new Message();
@@ -73,9 +72,9 @@ public class Main {
 
 
         // Send a message via our manager to a specific client
-        //manager.sendMessage(manager.connections.get(0), msg); // Sends message to own device. e.g localhost
-        //manager.sendMessage(manager.connections.get(1), msg1); // Sends message to own device. e.g localhost
-        //manager.sendMessage(manager.connections.get(2), msg2); // Sends message to own device. e.g localhost
+        manager.sendMessage(manager.connections.get(0), msg); // Sends message to own device. e.g localhost
+        manager.sendMessage(manager.connections.get(1), msg1); // Sends message to own device. e.g localhost
+        manager.sendMessage(manager.connections.get(2), msg2); // Sends message to own device. e.g localhost
 
         // Start view (gui)
         java.awt.EventQueue.invokeLater(() -> new WindowLogin().setVisible(true));
