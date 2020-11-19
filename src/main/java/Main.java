@@ -1,24 +1,12 @@
-
 import com.dosse.upnp.UPnP;
-import model.database.DBTest;
-import model.networking.client.Connection;
-import model.networking.client.ConnectionManager;
-import model.networking.data.Message;
-import model.networking.server.Server;
-import view.gui.WindowLogin;
-
-import com.mongodb.ClientSessionOptions;
-import com.mongodb.ServerAddress;
-import com.mongodb.TransactionOptions;
-
-import com.mongodb.client.*;
+import com.mongodb.client.MongoCollection;
 import model.database.DB;
-import model.database.Session;
 import model.networking.client.Connection;
 import model.networking.client.ConnectionManager;
 import model.networking.data.Message;
 import model.networking.server.Server;
 import org.bson.Document;
+import view.gui.WindowLogin;
 
 
 

@@ -9,15 +9,14 @@ import model.chat.ChatManager;
 import model.networking.data.Message;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Vector;
 import java.util.List;
-import javax.swing.event.*;
-import controller.Controller;
+import java.util.Vector;
 
 /**
  * @author Adrian Emil Chambe-Eng

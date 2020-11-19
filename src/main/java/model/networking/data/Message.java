@@ -35,11 +35,19 @@ public class Message {
         this.destination = destination;
     }
 
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
 
     private String data;
     private String name;
     private String timestamp;
     private String destination;
+    private String origin;
 
     public static Message decode(String data) {
         Gson gson = new Gson();
