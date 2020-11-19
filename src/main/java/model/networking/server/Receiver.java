@@ -16,8 +16,7 @@ public class Receiver {
     }
 
     public void start() {
-        messageThread.start();
-
+        messageThread.start(); // todo: check this function, it seems to not function properly
         socketThread.start();
     }
 }

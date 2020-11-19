@@ -51,7 +51,6 @@ public class Request {
         int responseCode = httpURLConnection.getResponseCode();
 
 
-        // todo: refactor below code by creating GET function
         if(responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             String inputLine;
