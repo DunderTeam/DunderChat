@@ -158,29 +158,43 @@ public class WindowChatting extends JFrame {
     private void logOut(String Name) {
         Controller.LogOut(Name); // Logout of database
         System.out.println("Logging out...");
-        new WindowLogin().setVisible(true);
+        new WindowLogin().setVisible(true); // go to login screen
         dispose();
     }
 
     //Changes the username of the currently logged in user
     private void changeUsername() {
-        //TODO call controller and change username
+        String Password = "" ;
+        String Ip = PublicIP.get().getIp();
+        String NewName = TxtFieldNewUsr.getText();
+        String OldName = loggedInUser;
+
+        //TODO password and check that name is changed
         System.out.println("Changing username...");
-        if (TxtFieldNewUsr.getText().equals("")) {
+        if (TxtFieldNewUsr.getText().equals("")) { // check if TextField is empty
             displayErrorDialog("Username required!");
         } else {
+            Controller.ChangeName(OldName, NewName,Password, Ip); // changes name on user in database
             changeUsrDialog.dispose();
-            setLoggedInUsrName(TxtFieldNewUsr.getText());
+            setLoggedInUsrName(NewName);
             TxtFieldNewUsr.setText("");
         }
     }
 
     //Changes the password of the currently logged in user
     private void changePassword() {
-        //TODO add call to controller
+        String OldPassword = String.valueOf(PwdFieldChangePwdOld.getPassword());
+        String NewPassword = String.valueOf(PwdFieldChangePwdNew.getPassword());
+        String Name = loggedInUser;
+        String Ip = PublicIP.get().getIp();
+
         if (PwdFieldChangePwdNew.getText().equals("") || PwdFieldChangePwdOld.getText().equals("")) {
             displayErrorDialog("Both fields required!");
         } else {
+
+            Controller.ChangePassword(Name, OldPassword, NewPassword, Ip); // change password to user in database
+            // Todo check that password got changed
+
             changePasswordDialog.dispose();
             PwdFieldChangePwdOld.setText("");
             PwdFieldChangePwdNew.setText("");
