@@ -36,7 +36,7 @@ public class Main {
 
 
         /* This Starts our Server/Receiver */
-        Thread server = new Thread(new Server(5555));
+        Server server = new Server(5555);
 
         /*
 
