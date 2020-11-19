@@ -66,8 +66,8 @@ public class WindowChatting extends JFrame {
 
     // Called from ChatManager to say new chat is added to list
     public static void ChatUpdated(String temp, Chat ch) {
-        NewChat.setText(temp);
         NewChatList = ch;
+        NewChat.setText(temp);
     }
 
     //Sends a message from our client to another user
@@ -76,7 +76,6 @@ public class WindowChatting extends JFrame {
         String sender = "You";
         String message = TxtFieldMsg.getText();
         String method = comboBoxChatMethod.getSelectedItem().toString();
-        System.out.println(method);
 
         //opens error dialogs if the message is empty or no conversation is selected
         if (message.equals("")) {
@@ -91,6 +90,7 @@ public class WindowChatting extends JFrame {
             msg.setData(message);
 
             Chat currentChat = chats.get(ListConversations.getSelectedIndex());
+            System.out.println(currentChat.getName() + " | " + currentChat.getAddress());
             ChatManager.addMessage(currentChat.getName(), currentChat.getAddress(), msg);
 
             TxtAreaChat.append(sender + ": " + message + "\n");

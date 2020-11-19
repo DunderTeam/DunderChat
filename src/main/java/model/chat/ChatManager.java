@@ -28,7 +28,6 @@ public class ChatManager {
     public static void addChat (String name, String address, int port) {
         if (!chatExists(name, address)){
             Chat temp = new Chat(name, address, port);
-            temp.addMessageToList(new Message());
             chatList.add(temp); // Adds new chat
             WindowChatting.ChatUpdated(name, temp);
 

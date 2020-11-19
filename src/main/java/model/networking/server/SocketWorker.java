@@ -9,11 +9,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class ServerWorker extends Thread {
+public class SocketWorker extends Thread {
     private final Socket clientSocket;
     private boolean doDebug = true;
 
-    public ServerWorker(Socket cli)
+    public SocketWorker(Socket cli)
     {
         this.clientSocket = cli;
     }
@@ -43,7 +43,7 @@ public class ServerWorker extends Thread {
                 ChatManager.addChat(msg.getName(), clientSocket.getRemoteSocketAddress().toString(), clientSocket.getPort());
             }
 
-            ChatManager.addMessage(msg.getName(), clientSocket.getRemoteSocketAddress().toString(), msg);
+            ChatManager.addMessage(msg.getName(), clientSocket.getInetAddress().toString().substring(1), msg);
 
             debug(msg.getData());
             dataOutput.writeUTF(Status.encode(200)); // Received but empty

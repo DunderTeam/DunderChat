@@ -1,9 +1,9 @@
 package model.networking.server;
 
 class ServerTest {
-    private Server server;
+    private SocketListener socketListener;
     ServerTest() {
-        server = new Server(25);
+        socketListener = new SocketListener(25);
 
 
 
