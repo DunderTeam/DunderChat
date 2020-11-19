@@ -23,31 +23,37 @@ public class DBTest {
         }
 
         // when login button pressed
-        /*
-        if(DB.login(userCollection, username, password)) {
-            String IPAddress = DB.getIP(userCollection, username, password);
-            Session.sessionInit(username, IPAddress);
+        DB.login(userCollection, username, password);
+        String IPAddress = DB.getIP(userCollection, username, password);
+        Session.sessionInit(username, IPAddress);
 
-            // delete user
-            if(Session.isLoggedIn()) {
-                //DB.deleteUser(userCollection, username, password);
-                //Session.endSession(username);
-            }
-
-            // change password
-            if(Session.isLoggedIn()) {
-                //DB.changePassword(userCollection, username, password, newPassword);
-                //Session.restart(username, IPAddress);
-            }
-
-            // change username
-            if(Session.isLoggedIn()) {
-                //DB.changeUsername(userCollection, username, password, newUsername);
-            }
-
+        // delete user
+        if(Session.isLoggedIn()) {
+            //DB.deleteUser(userCollection, username, password);
+            //Session.endSession(username);
         }
 
-         */
+        // change password
+        if(Session.isLoggedIn()) {
+            //DB.changePassword(userCollection, username, password, newPassword);
+            //Session.restart(username, IPAddress);
+        }
+
+        // change username
+        if(Session.isLoggedIn()) {
+            //DB.changeUsername(userCollection, username, password, newUsername);
+        }
+
+        // testing getSessionUser
+        if(Session.isLoggedIn()) {
+            System.out.println(Session.getSessionUser(username));
+        }
+
+        // testing getSession id
+        if(Session.isLoggedIn()) {
+            System.out.println(Session.getSessionId(username));
+        }
+
     }
 
 }

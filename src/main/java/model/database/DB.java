@@ -39,8 +39,8 @@ public class DB {
     public static MongoCollection<Document> getUserCollection() {
         try {
             MongoClient mongoClient = connect();
-            MongoCollection<Document> c = mongoClient.getDatabase("App").getCollection("users");
-            return c;
+            assert mongoClient != null;
+            return mongoClient.getDatabase("App").getCollection("users");
         } catch (Exception e) {
             // TODO show database error on screen
             System.out.println("error getting collection");
@@ -52,8 +52,8 @@ public class DB {
     public static MongoCollection<Document> getSessionCollection() {
         try {
             MongoClient mongoClient = connect();
-            MongoCollection<Document> c = mongoClient.getDatabase("App").getCollection("sessions");
-            return c;
+            assert mongoClient != null;
+            return mongoClient.getDatabase("App").getCollection("sessions");
         } catch (Exception e) {
             // TODO show database error on screen
             System.out.println("error getting collection");

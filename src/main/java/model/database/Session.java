@@ -53,7 +53,7 @@ public class Session {
 
     // start a timer for the session
     public static void startSessionTimer(String username) {
-        int time = 10; // time in seconds
+        int time = 60; // time in seconds
         Timer timer = new Timer(time*1000, arg0 -> {
             // code executed
             endSession(username);
@@ -77,7 +77,7 @@ public class Session {
         }
     }
 
-    // method to return the username from the database as a string
+    // method to return the session id from the database as a string
     public static String getSessionId(String username) {
         // make query to find the user
         Document query = new Document("username", username);
@@ -87,6 +87,24 @@ public class Session {
             // if it finds the correct user returns the session id as a string
             try {
                 return cursor.next().get("_id").toString();
+            } catch(Exception e) {
+                // TODO show database error
+                System.out.println("error getting session id");
+                return null;
+            }
+        } else return null;
+    }
+
+    // method to return the username from the session database as a string
+    public static String getSessionUser(String username) {
+        // make query to find the user
+        Document query = new Document("username", username);
+        FindIterable<Document> findIterable = sessionCollection.find(query);
+        MongoCursor<Document> cursor = findIterable.cursor();
+        if (cursor.hasNext()){
+            // if it finds the correct user returns the username as a string
+            try {
+                return cursor.next().get("username").toString();
             } catch(Exception e) {
                 // TODO show database error
                 System.out.println("error getting session id");
