@@ -32,8 +32,6 @@ public class PublicIP {
 
             Gson gson = new Gson();
             ip = gson.fromJson(response, IP.class);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
