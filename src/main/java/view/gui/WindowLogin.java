@@ -35,6 +35,11 @@ public class WindowLogin extends JFrame {
         }
     }
 
+    //Changes the logged in username
+    public static void setLoggedInUserName(String user) {
+        loggedInUserName.setText(user);
+    }
+
     //Open the chat window with the displayed username that is passed to it
     public void loginUser(String username) {
         new WindowChatting(username).setVisible(true);

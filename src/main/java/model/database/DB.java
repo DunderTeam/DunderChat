@@ -5,6 +5,7 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
+import view.gui.WindowLogin;
 
 public class DB {
 
@@ -95,6 +96,7 @@ public class DB {
                 String name = getUsername(userCollection, username, password);
                 String ip = getIP(userCollection, username, password);
                 System.out.println("Logged in as " + name + ". IP: " + ip);
+                WindowLogin.setLoggedInUserName(name);
                 return true;
             } catch(Exception e) {
                 // if login failed
