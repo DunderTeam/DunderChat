@@ -7,11 +7,19 @@ public class DBTest {
 
     public static void testDB(MongoCollection<Document> userCollection) {
         // variables used for testing input to database before buttons are added/simulating registering new users
-        String username = "bruker1";
+        String username = "bruker2";
         String ip = "123";
-        String password = "123456";
-        String newPassword = "password";
+        String password = "Abcd1234";
+        String newPassword = "aBcd1234";
         String newUsername = "bruker11";
+
+        /* password requirements
+         * needs at least one digit
+         * needs at least one lower case letter
+         * needs at least one upper case letter
+         * no whitespace allowed
+         * needs at least 8 characters
+         */
 
         // add new user to data base
         if(DB.addUser(userCollection, username, ip, password)) {
@@ -23,31 +31,38 @@ public class DBTest {
         }
 
         // when login button pressed
-        /*
-        if(DB.login(userCollection, username, password)) {
+        try {
+            DB.login(userCollection, username, password);
             String IPAddress = DB.getIP(userCollection, username, password);
             Session.sessionInit(username, IPAddress);
-
-            // delete user
-            if(Session.isLoggedIn()) {
-                //DB.deleteUser(userCollection, username, password);
-                //Session.endSession(username);
-            }
-
-            // change password
-            if(Session.isLoggedIn()) {
-                //DB.changePassword(userCollection, username, password, newPassword);
-                //Session.restart(username, IPAddress);
-            }
-
-            // change username
-            if(Session.isLoggedIn()) {
-                //DB.changeUsername(userCollection, username, password, newUsername);
-            }
-
+        } catch (Exception e){
+            System.out.println("login failed");
+            Session.endSession(username);
         }
 
-         */
+        // test db methods
+        if(Session.isLoggedIn()) {
+            // delete user
+            //DB.deleteUser(userCollection, username, password);
+            //Session.endSession(username);
+
+            // change password
+            //DB.changePassword(userCollection, username, password, newPassword);
+            //Session.restart(username, IPAddress);
+
+            // change username
+            //DB.changeUsername(userCollection, username, password, newUsername);
+
+            // testing getSessionUser
+            //System.out.println(Session.getSessionUser(username));
+
+            // testing getSession id
+            //System.out.println(Session.getSessionId(username));
+
+        } else {
+            System.out.println("Not logged in");
+        }
+
     }
 
 }
