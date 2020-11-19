@@ -158,11 +158,11 @@ public class WindowChatting extends JFrame {
         String NewName = TxtFieldNewUsr.getText();
         String OldName = loggedInUser;
 
-        //TODO call controller and change username
+        //TODO password and check that name is changed
         System.out.println("Changing username...");
         if (TxtFieldNewUsr.getText().equals("")) { // check if TextField is empty
             displayErrorDialog("Username required!");
-        } else { 
+        } else {
             Controller.ChangeName(OldName, NewName,Password, Ip); // changes name on user in database
             changeUsrDialog.dispose();
             setLoggedInUsrName(NewName);
@@ -172,10 +172,18 @@ public class WindowChatting extends JFrame {
 
     //Changes the password of the currently logged in user
     private void changePassword() {
-        //TODO add call to controller
+        String OldPassword = String.valueOf(PwdFieldChangePwdOld.getPassword());
+        String NewPassword = String.valueOf(PwdFieldChangePwdNew.getPassword());
+        String Name = loggedInUser;
+        String Ip = PublicIP.get().getIp();
+
         if (PwdFieldChangePwdNew.getText().equals("") || PwdFieldChangePwdOld.getText().equals("")) {
             displayErrorDialog("Both fields required!");
         } else {
+
+            Controller.ChangePassword(Name, OldPassword, NewPassword, Ip); // change password to user in database
+            // Todo check that password got changed
+
             changePasswordDialog.dispose();
             PwdFieldChangePwdOld.setText("");
             PwdFieldChangePwdNew.setText("");
