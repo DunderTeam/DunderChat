@@ -4,7 +4,8 @@ import model.database.DB;
 import model.networking.client.Connection;
 import model.networking.client.ConnectionManager;
 import model.networking.data.Message;
-import model.networking.server.Server;
+import model.networking.server.Receiver;
+import model.networking.server.SocketListener;
 import org.bson.Document;
 import view.gui.WindowLogin;
 
@@ -24,7 +25,9 @@ public class Main {
         MongoCollection<Document> userCollection = DB.getUserCollection();
 
         /* This Starts our Server/Receiver */
-        Server server = new Server(5555);
+        Receiver server_service = new Receiver();
+
+        server_service.start();
 
         /*
 
@@ -40,8 +43,8 @@ public class Main {
         /* Test Environment for running code snippets  */
         // Add a new connection to our manager
 
-        manager.addConnection(new Connection("84.211.225.160", 5555)); // Public
-        manager.addConnection(new Connection("192.168.0.2", 5555)); // External
+        manager.addConnection(new Connection(UPnP.getLocalIP(), 5555)); // Public
+        manager.addConnection(new Connection(UPnP.getLocalIP(), 5555)); // External
         manager.addConnection(new Connection(UPnP.getLocalIP(), 5555));
 
         Message msg = new Message();
