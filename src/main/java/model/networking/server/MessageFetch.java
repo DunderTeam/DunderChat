@@ -1,4 +1,4 @@
-package model.networking.client;
+package model.networking.server;
 
 import model.networking.Request;
 import model.networking.data.Message;

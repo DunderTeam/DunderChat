@@ -1,7 +1,6 @@
 package model.networking.server;
 
 import com.dosse.upnp.UPnP;
-import model.networking.client.MessageFetch;
 
 import java.net.Inet4Address;
 import java.net.ServerSocket;
