@@ -27,12 +27,10 @@ public class ChatManager {
     //Adds a new chat to the list, with given name, address and port
     public static void addChat (String name, String address, int port) {
         if (!chatExists(name, address)){
-            chatList.add(new Chat(name, address, port)); // Adds new chat
-            System.out.println("New chat with name " + name + " and address " + address);
-
-            Chat temp = getChatById(name,address);
-            System.out.println("her er jeg " + temp);
-            WindowChatting.ChatUpdated(name,getChatById(name,address));
+            Chat temp = new Chat(name, address, port);
+            temp.addMessageToList(new Message());
+            chatList.add(temp); // Adds new chat
+            WindowChatting.ChatUpdated(name, temp);
 
         }
     }
@@ -52,7 +50,6 @@ public class ChatManager {
     //Checks if chat with name and address already exists
     public static boolean chatExists(String name, String address){
         for (Chat ch: chatList) {
-            System.out.println(ch.getName() + " vs " + name + "| " + ch.getAddress() + " vs " + address);
             //If there already exists a chat with this name and address, return true
             if (ch.getName() == name && ch.getAddress() == address){
                 return true;

@@ -10,7 +10,7 @@ public class Chat {
         this.name = name;
         this.address = address;
         this.port = port;
-        this.listMessages = new ArrayList<Message>();
+        this.listMessages = new ArrayList<>();
     }
 
     public String getName() {

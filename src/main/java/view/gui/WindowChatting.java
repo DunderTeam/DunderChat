@@ -17,9 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 import java.util.List;
 import javax.swing.event.*;
 import controller.Controller;
@@ -29,8 +27,6 @@ import model.networking.server.PublicIP;
  * @author Adrian Emil Chambe-Eng
  */
 public class WindowChatting extends JFrame {
-
-    private static Chat NewChatList = null;
 
     public WindowChatting(String username) {
         initComponents();
@@ -58,18 +54,16 @@ public class WindowChatting extends JFrame {
     // adds new chat to GUI
     private void NewChatAdded(String ChatName){
         chats.add(NewChatList); // adds chat to chats lists
-
-        System.out.println("hehhhhheee" + chats.size());
-
         addConversationToList(ChatName);
         TxtFieldAddress.setText("");
         connectionDialog.dispose();
     }
-    // is rund when NewChat Jlable is updated
+
+    // is run when NewChat Jlabel is updated
     private void NewChatChanged(PropertyChangeEvent e) {
-        System.out.println("Name Changed");
         NewChatAdded(NewChat.getText());
     }
+
     // Called from ChatManager to say new chat is added to list
     public static void ChatUpdated(String temp, Chat ch) {
         NewChat.setText(temp);
@@ -231,9 +225,6 @@ public class WindowChatting extends JFrame {
     private void ListConversationsValueChanged(ListSelectionEvent e) {
         TxtAreaChat.setText("Currently chatting in conversation: " + ListConversations.getSelectedValue() + "\n");
 
-        System.out.println("ooooooooo " + ListConversations.getSelectedIndex());
-        System.out.println("chats " + chats.size());
-
         List<Message> messageHistory = chats.get(ListConversations.getSelectedIndex()).getListMessages();
         for (int i = 0; i < messageHistory.toArray().length; i++) {
             String tempSender = messageHistory.get(i).getName();
@@ -323,6 +314,8 @@ public class WindowChatting extends JFrame {
         conversations = new Vector<>();
         chats = new ArrayList<>();
         loggedInUser = "";
+
+        NewChatList = new Chat("", "", 0);
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
         MenuBar = new JMenuBar();
@@ -773,6 +766,7 @@ public class WindowChatting extends JFrame {
     }
 
     private static JLabel NewChat;
+    private static Chat NewChatList;
 
     private Vector<String> conversations;
     private List<Chat> chats;
