@@ -147,19 +147,25 @@ public class WindowChatting extends JFrame {
     private void logOut(String Name) {
         Controller.LogOut(Name); // Logout of database
         System.out.println("Logging out...");
-        new WindowLogin().setVisible(true);
+        new WindowLogin().setVisible(true); // go to login screen
         dispose();
     }
 
     //Changes the username of the currently logged in user
     private void changeUsername() {
+        String Password = "" ;
+        String Ip = PublicIP.get().getIp();
+        String NewName = TxtFieldNewUsr.getText();
+        String OldName = loggedInUser;
+
         //TODO call controller and change username
         System.out.println("Changing username...");
-        if (TxtFieldNewUsr.getText().equals("")) {
+        if (TxtFieldNewUsr.getText().equals("")) { // check if TextField is empty
             displayErrorDialog("Username required!");
-        } else {
+        } else { 
+            Controller.ChangeName(OldName, NewName,Password, Ip); // changes name on user in database
             changeUsrDialog.dispose();
-            setLoggedInUsrName(TxtFieldNewUsr.getText());
+            setLoggedInUsrName(NewName);
             TxtFieldNewUsr.setText("");
         }
     }
