@@ -36,7 +36,7 @@ public class Main {
         MongoCollection<Document> userCollection = DB.getUserCollection();
 
         /* This Starts our Server/Receiver */
-        Thread server = new Thread(new Server(5555));
+        Server server = new Server(5555);
 
         /*
 

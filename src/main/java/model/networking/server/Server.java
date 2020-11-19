@@ -1,10 +1,12 @@
 package model.networking.server;
 
 import com.dosse.upnp.UPnP;
+import model.networking.client.MessageFetch;
+
 import java.net.*;
 
 
-public class Server implements Runnable {
+public class Server extends Thread implements Runnable {
     private static ServerSocket server;
 
     // Constructor to assign port and other values..
@@ -13,9 +15,14 @@ public class Server implements Runnable {
         try {
             server = new ServerSocket(port, 10, Inet4Address.getByName(UPnP.getLocalIP()));
             portForward(server.getLocalPort());
+
+            this.start(); // Starts the server listener on its own thread
         } catch (Exception e) {
+            // Incase of error the server will not start
             System.out.println(e.getMessage());
         }
+
+        MessageFetch fetcher = new MessageFetch(1);
     }
 
     // Function which runs when server thread is started.
