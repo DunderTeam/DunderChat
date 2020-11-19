@@ -1,4 +1,4 @@
-package controller.chat;
+package model.chat;
 
 import model.networking.data.Message;
 
