@@ -4,12 +4,15 @@
 
 package view.gui;
 
+import controller.Controller;
+
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * @author Adrian Emil Chambe-Eng
@@ -19,27 +22,37 @@ public class WindowLogin extends JFrame {
         initComponents();
     }
 
-    private void LoginUser() {
+    //Calls controller to try to log in a user
+    private void attemptLogin() {
         String username = InputUsr.getText();
         String password = InputPwd.getText();
 
         if (username.equals("") || password.equals("")) {
-            setErrorText("Could not log in");
-            dialogError.setVisible(true);
+            displayErrorDialog("Could not log in!");
         } else {
             // TODO actually log the user in, currently just opens a default chat window
-            new WindowChatting(username).setVisible(true);
-            dispose();
+            Controller.Login(username, password, "");
         }
     }
 
+    //Changes the logged in username
+    public static void setLoggedInUserName(String user) {
+        loggedInUserName.setText(user);
+    }
+
+    //Open the chat window with the displayed username that is passed to it
+    public void loginUser(String username) {
+        new WindowChatting(username).setVisible(true);
+        dispose();
+    }
+
+    //Calls controller to register a new user
     private void registerNewUser() {
         String usr = txtFieldRegisterUsr.getText();
         String pwd = pwdFieldRegisterPwd.getText();
 
         if (usr.equals("") || pwd.equals("")) {
-            setErrorText("Username or password is blank");
-            dialogError.setVisible(true);
+            displayErrorDialog("Username or password is blank!");
         } else {
             //TODO call controller to login
             System.out.println(usr + " | " + pwd);
@@ -49,13 +62,26 @@ public class WindowLogin extends JFrame {
         }
     }
 
-    private void setErrorText(String error) {
+    //Displays an error dialog with the given text
+    private void displayErrorDialog(String error) {
         dialogErrorLabel.setText(error);
+        dialogError.setVisible(true);
+    }
+
+    private void loggedInUserNameChanged(PropertyChangeEvent e) {
+        System.out.println("Name Changed");
+        loginUser(loggedInUserName.getText());
+    }
+
+    //================ Action/Event Listeners ================
+
+    private void InputPwdActionPerformed(ActionEvent e) {
+        attemptLogin();
     }
 
     // Calls LoginUser to actually log in the user
     private void BtnLoginMouseClicked(MouseEvent e) {
-        LoginUser();
+        attemptLogin();
     }
 
     // Opens a new window with a registration form
@@ -67,6 +93,8 @@ public class WindowLogin extends JFrame {
     private void BtnQuitMouseClicked(MouseEvent e) {
         System.exit(0);
     }
+
+    //======== Register New User Dialog ========
 
     private void pwdFieldRegisterPwdActionPerformed(ActionEvent e) {
         registerNewUser();
@@ -80,11 +108,15 @@ public class WindowLogin extends JFrame {
         DialogRegister.dispose();
     }
 
+    //======== Error Dialog ========
+
     private void dialogErrorBtnConfirmActionPerformed(ActionEvent e) {
         dialogError.dispose();
     }
 
     private void initComponents() {
+        loggedInUserName = new JLabel();
+        loggedInUserName.addPropertyChangeListener(e -> loggedInUserNameChanged(e));
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
         AppName = new JLabel();
@@ -110,12 +142,16 @@ public class WindowLogin extends JFrame {
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("ChatApp");
+        setResizable(false);
         Container contentPane = getContentPane();
 
         //---- AppName ----
         AppName.setText("ChatApp");
         AppName.setFont(new Font(".AppleSystemUIFont", Font.PLAIN, 20));
         AppName.setHorizontalAlignment(SwingConstants.CENTER);
+
+        //---- InputPwd ----
+        InputPwd.addActionListener(e -> InputPwdActionPerformed(e));
 
         //---- BtnLogin ----
         BtnLogin.setText("login");
@@ -198,6 +234,7 @@ public class WindowLogin extends JFrame {
         {
             DialogRegister.setModal(true);
             DialogRegister.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            DialogRegister.setResizable(false);
             Container DialogRegisterContentPane = DialogRegister.getContentPane();
 
             //---- LabelRegister ----
@@ -275,6 +312,7 @@ public class WindowLogin extends JFrame {
             dialogError.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             dialogError.setAlwaysOnTop(true);
             dialogError.setTitle("ERROR!");
+            dialogError.setResizable(false);
             Container dialogErrorContentPane = dialogError.getContentPane();
 
             //---- dialogErrorLabel ----
@@ -312,6 +350,8 @@ public class WindowLogin extends JFrame {
         }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
+
+    public static JLabel loggedInUserName;
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - unknown

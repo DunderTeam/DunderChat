@@ -12,7 +12,6 @@ new FormModel {
 			"defaultCloseOperation": 3
 			"minimumSize": new java.awt.Dimension( 300, 400 )
 			"resizable": false
-			addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "thisMouseClicked", true ) )
 			add( new FormComponent( "javax.swing.JList" ) {
 				name: "ListConversations"
 				"selectionMode": 0
@@ -113,6 +112,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "TxtFieldAddress"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "TxtFieldAddressActionPerformed", true ) )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "BtnConnect"
@@ -135,6 +135,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "TxtFieldNewUsr"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "TxtFieldNewUsrActionPerformed", true ) )
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "BtnConfirmNewUsr"
@@ -169,6 +170,7 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JPasswordField" ) {
 				name: "PwdFieldChangePwdNew"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "PwdFieldChangePwdNewActionPerformed", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 10, 510 )

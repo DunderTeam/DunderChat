@@ -4,8 +4,8 @@
 
 package view.gui;
 
-import controller.chat.Chat;
-import controller.chat.ChatManager;
+import model.chat.Chat;
+import model.chat.ChatManager;
 import model.networking.data.Message;
 
 import javax.swing.*;
@@ -28,27 +28,35 @@ public class WindowChatting extends JFrame {
         getConversations();
     }
 
+    //Creates a new chat connection to another client and adds it to the list on the left
     private void connectNewChat() {
         // Gets the text in the user/ip TxtField
         String user = TxtFieldAddress.getText();
-        //TODO connect to user and get actual address
+        //TODO call controller
         String address = "";
-        ChatManager.addChat(user, address, 5555);
-        chats.add(ChatManager.getChatById(user, address));
-        addConversationToList(user);
+
+        if (user.equals("")) {
+            displayErrorDialog("User/address field required!");
+        } else {
+            ChatManager.addChat(user, address, 5555);
+            chats.add(ChatManager.getChatById(user, address));
+            addConversationToList(user);
+            TxtFieldAddress.setText("");
+            connectionDialog.dispose();
+        }
     }
 
+    //Sends a message from our client to another user
     private void ChatMsgSend() {
         // TODO actually send message and not just display locally
         String sender = "You";
         String message = TxtFieldMsg.getText();
 
-        if (message == "") {
-            setErrorText("Cannot send empty message!");
-            dialogError.setVisible(true);
+        //opens error dialogs if the message is empty or no conversation is selected
+        if (message.equals("")) {
+            displayErrorDialog("Cannot send empty message!");
         } else if (ListConversations.getSelectedIndex() < 0) {
-            setErrorText("Select a conversation before sending a message!");
-            dialogError.setVisible(true);
+            displayErrorDialog("Select a conversation!");
         } else {
             Message msg = new Message();
             String address = chats.get(ListConversations.getSelectedIndex()).getAddress();
@@ -61,6 +69,9 @@ public class WindowChatting extends JFrame {
 
             TxtAreaChat.append(sender + ": " + message + "\n");
         }
+
+        //Clear the message field either way
+        TxtFieldMsg.setText("");
     }
 
     //Adds a new conversation to the list on the left
@@ -78,11 +89,16 @@ public class WindowChatting extends JFrame {
         }
     }
 
+    //Changes the username that is displayed in the top left
     public void setLoggedInUsrName (String usr) {
         loggedInUser = usr;
         WindowTitle.setText(usr);
     }
 
+    /*
+    * Gets the conversations that are already stored in ChatManager
+    * This is only called when the window is initialized
+     */
     private void getConversations() {
         List<Chat> tempChats = ChatManager.getChatList();
 
@@ -92,25 +108,109 @@ public class WindowChatting extends JFrame {
         }
     }
 
-    private void setErrorText(String error) {
-        dialogErrorLabel.setText(error);
-    }
-
+    //Deletes the currently logged in user from the database and calls logOut
     private void deleteUser(String usr) {
         //TODO call controller and delete user, currently only logs out
+        System.out.println("Deleting user...");
         logOut();
     }
 
+    //Logs out of the chat client and opens a new WindowLogin
     private void logOut() {
+        //TODO call controller and logout that way
         System.out.println("Logging out...");
         new WindowLogin().setVisible(true);
         dispose();
     }
 
+    //Changes the username of the currently logged in user
+    private void changeUsername() {
+        //TODO call controller and change username
+        System.out.println("Changing username...");
+        if (TxtFieldNewUsr.getText().equals("")) {
+            displayErrorDialog("Username required!");
+        } else {
+            changeUsrDialog.dispose();
+            setLoggedInUsrName(TxtFieldNewUsr.getText());
+            TxtFieldNewUsr.setText("");
+        }
+    }
+
+    //Changes the password of the currently logged in user
+    private void changePassword() {
+        //TODO add call to controller
+        if (PwdFieldChangePwdNew.getText().equals("") || PwdFieldChangePwdOld.getText().equals("")) {
+            displayErrorDialog("Both fields required!");
+        } else {
+            changePasswordDialog.dispose();
+            PwdFieldChangePwdOld.setText("");
+            PwdFieldChangePwdNew.setText("");
+        }
+    }
+
+    //Displays an error dialog with the given text
+    private void displayErrorDialog(String error) {
+        dialogErrorLabel.setText(error);
+        dialogError.setVisible(true);
+    }
+
+    //Calls the controller to shut down the application gracefully
+    private void shutDown() {
+        //TODO call controller, currently just exits
+        System.exit(0);
+    }
+
+    //================ Action/Event Listeners ================
+
+    //======== Menu Bar ========
+
+    //Opens the change username dialog when that menu option is clicked
+    private void SettingsProfileChangeUsrActionPerformed(ActionEvent e) {
+        changeUsrDialog.setVisible(true);
+    }
+
+    //Opens the change username dialog when that menu option is clicked
+    private void SettingsProfileChangePwdActionPerformed(ActionEvent e) {
+        changePasswordDialog.setVisible(true);
+    }
+
+    //Opens a dialog to confirm that the user actually wants to delete their user
+    private void SettingsProfileDeleteUsrActionPerformed(ActionEvent e) {
+        dialogDeleteUsr.setVisible(true);
+    }
+
+    //Calls logOut when the user clicks the Log Out option in the settings menu
+    private void SettingLogoutActionPerformed(ActionEvent e) {
+        logOut();
+    }
+
+    //Call shutDown when the user clicks the Quit option in the settings menu
+    private void SettingQuitActionPerformed(ActionEvent e) {
+        shutDown();
+    }
+
+    //======== Chat Window Elements ========
+
+    /*
+     * Executed when the user clicks on a conversation from the list
+     * Changes the "active" conversation and gets the message history of that chat to display it
+     * Fetches from the local copy of the chatList in order to avoid polling the ChatManager constantly
+     */
+    private void ListConversationsValueChanged(ListSelectionEvent e) {
+        TxtAreaChat.setText("Currently chatting in conversation: " + ListConversations.getSelectedValue() + "\n");
+
+        List<Message> messageHistory = chats.get(ListConversations.getSelectedIndex()).getListMessages();
+        for (int i = 0; i < messageHistory.toArray().length; i++) {
+            String tempSender = messageHistory.get(i).getName();
+            String tempContent = messageHistory.get(i).getData();
+
+            TxtAreaChat.append(tempSender + ": " + tempContent + "\n");
+        }
+    }
+
     // Calls ChatMsgSend() when the user presses enter in the chat field
     private void TxtFieldMsgActionPerformed(ActionEvent e) {
         ChatMsgSend();
-        TxtFieldMsg.setText("");
     }
 
     // Calls ChatMsgSend() if the user clicks the send button
@@ -121,88 +221,63 @@ public class WindowChatting extends JFrame {
     // Opens a dialog box to connect to a new User/IP
     private void BtnNewMouseClicked(MouseEvent e) {
         connectionDialog.setVisible(true); // here the modal dialog takes over
-        connectNewChat();
         TxtFieldAddress.setText("");
     }
 
-    // Executed when the user clicks on a conversation from the list
-    private void ListConversationsValueChanged(ListSelectionEvent e) {
-        TxtAreaChat.setText("Currently chatting in conversation: " + ListConversations.getSelectedValue() + "\n");
+    //======== New Connection Dialog ========
 
-        List<Message> messageHistory =  chats.get(ListConversations.getSelectedIndex()).getListMessages();
-        for (int i = 0; i < messageHistory.toArray().length; i ++) {
-            String tempSender = messageHistory.get(i).getName();
-            String tempContent = messageHistory.get(i).getData();
-
-            TxtAreaChat.append(tempSender + ": " + tempContent + "\n");
-        }
-    }
-
+    //Calls connectNewChat() when teh connect button is clicked
     private void BtnConnectMouseClicked(MouseEvent e) {
-        connectionDialog.dispose();
+        connectNewChat();
     }
 
+    //Calls connectNewChat() when the user presses enter in the text field
     private void TxtFieldAddressActionPerformed(ActionEvent e) {
-        connectionDialog.dispose();
+        connectNewChat();
     }
 
-    private void SettingLogoutActionPerformed(ActionEvent e) {
-        logOut();
-    }
+    //======== Change Username Dialog ========
 
-    private void SettingQuitActionPerformed(ActionEvent e) {
-        System.exit(0);
-    }
-
-    private void SettingsProfileChangeUsrActionPerformed(ActionEvent e) {
-        changeUsrDialog.setVisible(true);
-    }
-
-    private void SettingsProfileChangePwdActionPerformed(ActionEvent e) {
-        changePasswordDialog.setVisible(true);
-    }
-
-    private void SettingsProfileDeleteUsrActionPerformed(ActionEvent e) {
-        dialogDeleteUsr.setVisible(true);
-    }
-
+    //Calls changeUsername when the confirm button is clicked in the change username dialog
     private void BtnConfirmNewUsrActionPerformed(ActionEvent e) {
-        if (TxtFieldNewUsr.getText().equals("")) {
-            setErrorText("Username needed!");
-            dialogError.setVisible(true);
-        } else {
-            changeUsrDialog.dispose();
-            setLoggedInUsrName(TxtFieldNewUsr.getText());
-            TxtFieldNewUsr.setText("");
-        }
+        changeUsername();
     }
 
+    //Calls changeUsername whe the user presses enter in the newUsername field
+    private void TxtFieldNewUsrActionPerformed(ActionEvent e) {
+        changeUsername();
+    }
+
+    //======== Change Password Dialog ========
+
+    //Calls changePassword when the confirm button is clicked in the change password dialog
     private void BtnConfirmChangePwdActionPerformed(ActionEvent e) {
-        if (PwdFieldChangePwdNew.getText().equals("") || PwdFieldChangePwdOld.getText().equals("")) {
-            setErrorText("Both fields required!");
-            dialogError.setVisible(true);
-        } else {
-            changePasswordDialog.dispose();
-            PwdFieldChangePwdOld.setText("");
-            PwdFieldChangePwdNew.setText("");
-        }
+        changePassword();
     }
 
-    private void thisMouseClicked(MouseEvent e) {
-        System.out.println("Click");
+    //Calls changePassword when the user presses enter in teh newPasswrod field
+    private void PwdFieldChangePwdNewActionPerformed(ActionEvent e) {
+        changePassword();
     }
 
-    private void dialogErrorBtnConfirmActionPerformed(ActionEvent e) {
-        dialogError.dispose();
-    }
+    //======== Delete User Dialog ========
 
+    //Calls deleteUser when the "yes" button is pressed in the delete user dialog and closes the dialog
     private void btnDeleteUsrYesActionPerformed(ActionEvent e) {
         deleteUser (loggedInUser);
         dialogDeleteUsr.dispose();
     }
 
+    //Closes the deleteUser dialog when the "no" button is pressed
     private void btnDeleteUsrNoActionPerformed(ActionEvent e) {
         dialogDeleteUsr.dispose();
+    }
+
+    //======== Error Dialog ========
+
+    //Closes the error dialog when the confirm button is pressed
+    private void dialogErrorBtnConfirmActionPerformed(ActionEvent e) {
+        dialogError.dispose();
     }
 
     private void initComponents() {
@@ -254,12 +329,6 @@ public class WindowChatting extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(300, 400));
         setResizable(false);
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                thisMouseClicked(e);
-            }
-        });
         Container contentPane = getContentPane();
 
         //======== MenuBar ========
@@ -403,6 +472,9 @@ public class WindowChatting extends JFrame {
             //---- Label ----
             Label.setText("Enter Username or IP address");
 
+            //---- TxtFieldAddress ----
+            TxtFieldAddress.addActionListener(e -> TxtFieldAddressActionPerformed(e));
+
             //---- BtnConnect ----
             BtnConnect.setText("connect");
             BtnConnect.addMouseListener(new MouseAdapter() {
@@ -450,6 +522,9 @@ public class WindowChatting extends JFrame {
             //---- LabelNewUsr ----
             LabelNewUsr.setText("Enter New Username");
 
+            //---- TxtFieldNewUsr ----
+            TxtFieldNewUsr.addActionListener(e -> TxtFieldNewUsrActionPerformed(e));
+
             //---- BtnConfirmNewUsr ----
             BtnConfirmNewUsr.setText("confirm");
             BtnConfirmNewUsr.addActionListener(e -> BtnConfirmNewUsrActionPerformed(e));
@@ -495,6 +570,9 @@ public class WindowChatting extends JFrame {
 
             //---- LalebChangePwdNew ----
             LalebChangePwdNew.setText("Enter new pasword");
+
+            //---- PwdFieldChangePwdNew ----
+            PwdFieldChangePwdNew.addActionListener(e -> PwdFieldChangePwdNewActionPerformed(e));
 
             GroupLayout changePasswordDialogContentPaneLayout = new GroupLayout(changePasswordDialogContentPane);
             changePasswordDialogContentPane.setLayout(changePasswordDialogContentPaneLayout);
