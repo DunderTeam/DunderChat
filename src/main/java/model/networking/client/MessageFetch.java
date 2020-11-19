@@ -1,5 +1,8 @@
 package model.networking.client;
 
+import model.networking.data.Message;
+import model.networking.data.MessageCarrier;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,7 +25,12 @@ public class MessageFetch extends Thread {
             // todo: infinite-loop - maybe do if thread is interrupted check
             while (true) {
                 String resp = fetch("https://messagebouncer.herokuapp.com/message");
-                // todo: decode response and pass to chatManager
+                MessageCarrier msgCarrier = MessageCarrier.decode(resp);
+
+                for (Message message : msgCarrier.getMsg()) {
+                    // todo: pass message to chatmanager
+                    // consider implementing sort algorithm in chatmanager as messages here may have various timestamps
+                }
 
                 this.wait(interval); // Makes this thread wait a bit, before doing new update
             }
