@@ -32,19 +32,24 @@ public class WindowChatting extends JFrame {
     //Creates a new chat connection to another client and adds it to the list on the left
     private void connectNewChat() {
         // Gets the text in the user/ip TxtField
-        String user = TxtFieldAddress.getText();
-        //TODO call controller
-        String address = "";
+        String ChatName = TxtFieldAddress.getText();
+        String UserName = "";
+        String Ip = "";
+        int Port = 5555;
 
-        if (user.equals("")) {
+        if (ChatName.equals("")) {
             displayErrorDialog("User/address field required!");
         } else {
-            ChatManager.addChat(user, address, 5555);
-            chats.add(ChatManager.getChatById(user, address));
+            //ChatManager.addChat(user, Ip, 5555);
+            Controller.CreateNewChat(ChatName, UserName, Ip, Port); // create new chat
+
+            chats.add(ChatManager.getChatById(user, Ip));
             addConversationToList(user);
             TxtFieldAddress.setText("");
             connectionDialog.dispose();
         }
+
+
     }
 
     //Sends a message from our client to another user

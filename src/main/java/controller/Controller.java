@@ -22,10 +22,10 @@ public class Controller { // The controller of all functions
         UpdateSession(Name,Ip); // Still active
     }
 
-    public static void CreateNewChat(String user, String address, String Name, String Ip ){ // connectNEwChat
-        ChatManager.addChat(user, address, 5555);
+    public static void CreateNewChat(String ChatName, String UserName, String Ip, int Port ){ // connectNEwChat
+        ChatManager.addChat(ChatName, Ip, Port);
 
-        UpdateSession(Name,Ip); // Still active
+        UpdateSession(UserName,Ip); // Still active
     }
 
     public static void Login(String Name, String Password , String Ip){ // login user
