@@ -2,6 +2,7 @@ package model.chat;
 
 
 import model.networking.data.Message;
+import view.gui.WindowChatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,11 @@ public class ChatManager {
         if (!chatExists(name, address)){
             chatList.add(new Chat(name, address, port)); // Adds new chat
             System.out.println("New chat with name " + name + " and address " + address);
+
+            Chat temp = getChatById(name,address);
+            System.out.println("her er jeg " + temp);
+            WindowChatting.ChatUpdated(name,getChatById(name,address));
+
         }
     }
 
