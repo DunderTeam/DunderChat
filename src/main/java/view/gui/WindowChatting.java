@@ -13,16 +13,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.List;
 import javax.swing.event.*;
 import controller.Controller;
+import model.networking.server.PublicIP;
 
 /**
  * @author Adrian Emil Chambe-Eng
  */
 public class WindowChatting extends JFrame {
+
+    private static Chat NewChatList = null;
+
     public WindowChatting(String username) {
         initComponents();
         setLoggedInUsrName(username);
@@ -30,11 +35,11 @@ public class WindowChatting extends JFrame {
     }
 
     //Creates a new chat connection to another client and adds it to the list on the left
-    private void connectNewChat() {
+    private void connectNewChat() { // call controller to setup new chat
         // Gets the text in the user/ip TxtField
         String ChatName = TxtFieldAddress.getText();
         String UserName = "";
-        String Ip = "";
+        String Ip = PublicIP.get().getIp();
         int Port = 5555;
 
         if (ChatName.equals("")) {
@@ -42,14 +47,31 @@ public class WindowChatting extends JFrame {
         } else {
             //ChatManager.addChat(user, Ip, 5555);
             Controller.CreateNewChat(ChatName, UserName, Ip, Port); // create new chat
-
-            chats.add(ChatManager.getChatById(user, Ip));
-            addConversationToList(user);
-            TxtFieldAddress.setText("");
-            connectionDialog.dispose();
         }
 
+    }
 
+    // adds new chat to GUI
+    private void NewChatAdded(String ChatName){
+        chats.add(NewChatList); // adds chat to chats lists
+
+        System.out.println("hehhhhheee" + chats.size());
+
+        addConversationToList(ChatName);
+        TxtFieldAddress.setText("");
+        connectionDialog.dispose();
+    }
+
+    // is rund when NewChat Jlable is updated
+    private void NewChatChanged(PropertyChangeEvent e) {
+        System.out.println("Name Changed");
+        NewChatAdded(NewChat.getText());
+    }
+
+    // Called from ChatManager to say new chat is added to list
+    public static void ChatUpdated(String temp, Chat ch){
+        NewChat.setText(temp);
+        NewChatList = ch;
     }
 
     //Sends a message from our client to another user
@@ -205,6 +227,9 @@ public class WindowChatting extends JFrame {
     private void ListConversationsValueChanged(ListSelectionEvent e) {
         TxtAreaChat.setText("Currently chatting in conversation: " + ListConversations.getSelectedValue() + "\n");
 
+        System.out.println("ooooooooo " + ListConversations.getSelectedIndex());
+        System.out.println("chats " + chats.size());
+
         List<Message> messageHistory = chats.get(ListConversations.getSelectedIndex()).getListMessages();
         for (int i = 0; i < messageHistory.toArray().length; i++) {
             String tempSender = messageHistory.get(i).getName();
@@ -287,6 +312,10 @@ public class WindowChatting extends JFrame {
     }
 
     private void initComponents() {
+
+        NewChat = new JLabel();
+        NewChat.addPropertyChangeListener(this::NewChatChanged);
+
         conversations = new Vector<>();
         chats = new ArrayList<>();
         loggedInUser = "";
@@ -719,6 +748,8 @@ public class WindowChatting extends JFrame {
         }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
+
+    private static JLabel NewChat;
 
     private Vector<String> conversations;
     private List<Chat> chats;
