@@ -1,6 +1,7 @@
 package model.networking.server;
 
 import com.google.gson.Gson;
+import model.networking.Request;
 import model.networking.data.IP;
 
 import java.io.BufferedReader;
@@ -31,26 +32,10 @@ public class PublicIP {
             /*
                 Runs a get request to an API which pings back our public IP
              */
-            URL obj = new URL(GET_URL);
-            HttpURLConnection httpURLConnection = (HttpURLConnection)obj.openConnection();
-            httpURLConnection.setRequestMethod("GET");
-            httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
-            int responseCode = httpURLConnection.getResponseCode();
+            String response = Request.GET(GET_URL);
 
-            if(responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-                String inputLine;
-                StringBuffer response = new StringBuffer();
-
-                while((inputLine = in .readLine()) != null) {
-                    response.append(inputLine);
-                }
-
-                Gson gson = new Gson();
-                ip = gson.fromJson(response.toString(), IP.class);
-            } else {
-                ip = null;
-            }
+            Gson gson = new Gson();
+            ip = gson.fromJson(response, IP.class);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
