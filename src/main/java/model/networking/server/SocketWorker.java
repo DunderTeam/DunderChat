@@ -9,11 +9,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class ServerWorker extends Thread {
+public class SocketWorker extends Thread {
     private final Socket clientSocket;
     private boolean doDebug = true;
 
-    public ServerWorker(Socket cli)
+    public SocketWorker(Socket cli)
     {
         this.clientSocket = cli;
     }

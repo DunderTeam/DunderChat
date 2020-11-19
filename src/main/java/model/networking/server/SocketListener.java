@@ -8,11 +8,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-public class Server extends Thread implements Runnable {
+public class SocketListener extends Thread implements Runnable {
     private static ServerSocket server;
 
     // Constructor to assign port and other values..
-    public Server(int port)
+    public SocketListener(int port)
     {
         try {
             server = new ServerSocket(port, 10, Inet4Address.getByName(UPnP.getLocalIP()));
@@ -41,7 +41,7 @@ public class Server extends Thread implements Runnable {
             {
                 Socket clientConnection = server.accept(); // This will block thread - e.g waits for connection
                 // Runs data transfer in the background and waits for new connection
-                new ServerWorker(clientConnection).start();
+                new SocketWorker(clientConnection).start();
             }
         } catch (Exception e) {
 

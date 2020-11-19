@@ -4,7 +4,7 @@ import model.database.DB;
 import model.networking.client.Connection;
 import model.networking.client.ConnectionManager;
 import model.networking.data.Message;
-import model.networking.server.Server;
+import model.networking.server.SocketListener;
 import org.bson.Document;
 import view.gui.WindowLogin;
 
@@ -24,7 +24,7 @@ public class Main {
         MongoCollection<Document> userCollection = DB.getUserCollection();
 
         /* This Starts our Server/Receiver */
-        Server server = new Server(5555);
+        SocketListener socketListener = new SocketListener(5555);
 
         /*
 
