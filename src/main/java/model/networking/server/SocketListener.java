@@ -23,6 +23,7 @@ public class SocketListener extends Thread implements Runnable {
             System.out.println(e.getMessage());
         }
 
+        // todo: maybe move fetcher/messagegetter outside of SocketListener and run independently?
         MessageGetter fetcher = new MessageGetter(1);
     }
 
