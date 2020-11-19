@@ -24,12 +24,16 @@ public class MessageFetch extends Thread {
                 String resp = Request.GET("https://messagebouncer.herokuapp.com/message");
                 MessageCarrier msgCarrier = MessageCarrier.decode(resp);
 
-                for (Message message : msgCarrier.getMsg()) {
-                    // todo: pass message to chatmanager
-                    // consider implementing sort algorithm in chatmanager as messages here may have various timestamps
+                if (msgCarrier != null) {
+                    for (Message message : msgCarrier.getMsg()) {
+                        // todo: pass message to chatmanager
+                        // consider implementing sort algorithm in chatmanager as messages here may have various timestamps
+                    }
                 }
 
-                this.wait(interval); // Makes this thread wait a bit, before doing new update
+                synchronized (this) {
+                    this.wait(interval); // Wait for interval
+                }
             }
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
