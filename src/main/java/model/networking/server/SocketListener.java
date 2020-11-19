@@ -26,7 +26,7 @@ public class SocketListener implements Runnable {
     public void run()
     {
         try {
-            System.out.printf("Listening on %s:%d...", UPnP.getExternalIP(), server.getLocalPort());
+            System.out.printf("Listening on %s:%d...", UPnP.getLocalIP(), server.getLocalPort());
             /*
                 Current setup below will only allow for one connection at a time, consider
                 new approach to listening. Maybe create a new thread upon accepting a
@@ -54,7 +54,7 @@ public class SocketListener implements Runnable {
             }
         } else {
             System.out.println("Port Forwarding Failed");
-            // TODO: Implement notification to user, that application is not working
+            // TODO: Implement notification to user, that socket connections are not working
         }
     }
 }

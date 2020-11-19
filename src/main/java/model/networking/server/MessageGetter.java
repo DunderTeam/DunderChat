@@ -31,6 +31,9 @@ public class MessageGetter implements Runnable {
                 synchronized (this) {
                     this.wait(interval); // Wait for interval
                 }
+
+                System.out.println("After sync");
+
             }
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
