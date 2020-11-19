@@ -23,7 +23,7 @@ public class Session {
             addSession(username, IP);
             startSessionTimer(username);
         } catch(Exception e) {
-            // error initiating session
+            // TODO show error initiating session
             System.out.println("error initiating session");
         }
     }
@@ -33,7 +33,7 @@ public class Session {
         try {
             sessionCollection = DB.getSessionCollection();
         } catch(Exception e) {
-            // error getting the session collection
+            // TODO show error getting the session collection
             System.out.println("error getting the session collection");
         }
     }
@@ -46,7 +46,7 @@ public class Session {
             loggedIn = true;
             System.out.println("Session initiated");
         } catch(Exception e) {
-            // error adding session to database
+            // TODO show database error
             System.out.println("error adding session to database");
         }
     }
@@ -72,7 +72,7 @@ public class Session {
             sessionCollection.deleteOne(query);
             loggedIn = false;
         } catch(Exception e) {
-            // error deleting session from database
+            // TODO show database error
             System.out.println("error deleting session from database");
         }
     }
@@ -88,8 +88,8 @@ public class Session {
             try {
                 return cursor.next().get("_id").toString();
             } catch(Exception e) {
-                // error initiating session
-                System.out.println("error initiating session");
+                // TODO show database error
+                System.out.println("error getting session id");
                 return null;
             }
         } else return null;

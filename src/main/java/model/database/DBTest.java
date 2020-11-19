@@ -22,7 +22,7 @@ public class DBTest {
             System.out.println("Username already exists");
         }
 
-        // login
+        // when login button pressed
         if(DB.login(userCollection, username, password)) {
             String IPAddress = DB.getIP(userCollection, username, password);
             Session.sessionInit(username, IPAddress);

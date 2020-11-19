@@ -28,7 +28,7 @@ public class DB {
         try {
             return MongoClients.create(connection);
         } catch(Exception e) {
-            // error connecting to database
+            // TODO show error connecting to database on screen
             System.out.println("error connecting to database");
             return null;
         }
@@ -41,7 +41,7 @@ public class DB {
             MongoCollection<Document> c = mongoClient.getDatabase("App").getCollection("users");
             return c;
         } catch (Exception e) {
-            // error getting collection
+            // TODO show database error on screen
             System.out.println("error getting collection");
             return null;
         }
@@ -54,7 +54,7 @@ public class DB {
             MongoCollection<Document> c = mongoClient.getDatabase("App").getCollection("sessions");
             return c;
         } catch (Exception e) {
-            // error getting collection
+            // TODO show database error on screen
             System.out.println("error getting collection");
             return null;
         }
@@ -78,7 +78,7 @@ public class DB {
                 userCollection.insertOne(doc);
                 return true;
             } catch (Exception e) {
-                // error adding user to database
+                // TODO show database error on screen
                 System.out.println("error adding user to database");
                 return false;
             }
@@ -101,12 +101,12 @@ public class DB {
                 System.out.println("Logged in as " + name + ". IP: " + ip);
                 return true;
             } catch(Exception e) {
-                // if login failed
+                // TODO show login error on screen
                 System.out.println("login failed");
                 return false;
             }
         } else {
-            // if login failed
+            // TODO show login error on screen
             System.out.println("login failed");
             return false;
         }
@@ -125,12 +125,12 @@ public class DB {
             try {
                 return cursor.next().get("username").toString();
             } catch(Exception e) {
-                // error getting username
+                // TODO show database error on screen
                 System.out.println("error getting username");
                 return null;
             }
         } else {
-            // error finding user in database
+            // TODO show database error on screen
             System.out.println("error getting username");
             return null;
         }
@@ -149,12 +149,12 @@ public class DB {
             try {
                 return cursor.next().get("ip").toString();
             } catch(Exception e) {
-                // error getting ip
+                // TODO show database error on screen
                 System.out.println("error getting ip");
                 return null;
             }
         } else {
-            // error finding user in database
+            // TODO show database error on screen
             System.out.println("error getting ip");
             return null;
         }
@@ -171,7 +171,7 @@ public class DB {
             userCollection.deleteOne(query);
             System.out.println(username + " has been deleted");
         } catch(Exception e) {
-            // error deleting user
+            // TODO show database error on screen
             System.out.println("error deleting user");
         }
     }
@@ -188,7 +188,7 @@ public class DB {
             userCollection.findOneAndUpdate(query, Updates.set("password", encryptedNewPassword));
             System.out.println("Changed password for " + username);
         } catch(Exception e) {
-            // error changing password
+            // TODO show error changing password
             System.out.println("error changing password");
         }
     }
@@ -203,7 +203,7 @@ public class DB {
             userCollection.findOneAndUpdate(query, Updates.set("username", newUsername));
             System.out.println("Changed username from " + username + " to " + newUsername);
         } catch(Exception e) {
-            // error changing username
+            // TODO show error changing username
             System.out.println("error changing username");
         }
     }
