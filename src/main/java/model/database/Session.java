@@ -5,13 +5,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 
-
-
-
 import javax.swing.*;
 
 public class Session {
-
 
     static MongoCollection<Document> sessionCollection;
     private static boolean loggedIn = false;
@@ -22,22 +18,34 @@ public class Session {
 
     // initiate a new session
     public static void sessionInit(String username, String IP) {
-        setCollection();
-        addSession(username, IP);
-        startSessionTimer(username);
+        try {
+            setCollection();
+            addSession(username, IP);
+            startSessionTimer(username);
+        } catch(Exception e) {
+            // error initiating session
+        }
     }
 
     // set the mongoDB collection
     public static void setCollection() {
-        sessionCollection = DB.getSessionCollection();
+        try {
+            sessionCollection = DB.getSessionCollection();
+        } catch(Exception e) {
+            // error getting the session collection
+        }
     }
 
     // add new session to database
     public static void addSession(String name, String ip) {
         Document doc = new Document("username", name).append("ip", ip);
-        sessionCollection.insertOne(doc);
-        loggedIn = true;
-        System.out.println("Session initiated");
+        try {
+            sessionCollection.insertOne(doc);
+            loggedIn = true;
+            System.out.println("Session initiated");
+        } catch(Exception e) {
+            // error adding session to database
+        }
     }
 
     // start a timer for the session
@@ -57,9 +65,12 @@ public class Session {
         // find user with the given username and password
         Document query = new Document("username", username);
         // delete user from database
-        sessionCollection.deleteOne(query);
-        loggedIn = false;
-
+        try {
+            sessionCollection.deleteOne(query);
+            loggedIn = false;
+        } catch(Exception e) {
+            // error deleting session from database
+        }
     }
 
     // method to return the username from the database as a string
@@ -70,7 +81,12 @@ public class Session {
         MongoCursor<Document> cursor = findIterable.cursor();
         if (cursor.hasNext()){
             // if it finds the correct user returns the session id as a string
-            return cursor.next().get("_id").toString();
+            try {
+                return cursor.next().get("_id").toString();
+            } catch(Exception e) {
+                // error initiating session
+                return null;
+            }
         } else return null;
     }
 

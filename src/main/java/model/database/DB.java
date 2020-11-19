@@ -25,20 +25,36 @@ public class DB {
 
     // connect to mongodb, returns a MongoClient
     public static MongoClient connect() {
-        return MongoClients.create(connection);
+        try {
+            return MongoClients.create(connection);
+        } catch(Exception e) {
+            // error connecting to database
+            return null;
+        }
     }
 
     // select the user collection, returns a MongoCollection
     public static MongoCollection<Document> getUserCollection() {
-        MongoClient mongoClient = connect();
-
-        return mongoClient.getDatabase("App").getCollection("users");
+        try {
+            MongoClient mongoClient = connect();
+            MongoCollection<Document> c = mongoClient.getDatabase("App").getCollection("users");
+            return c;
+        } catch (Exception e) {
+            // error getting collection
+            return null;
+        }
     }
 
+    // select the session collection, returns a MongoCollection
     public static MongoCollection<Document> getSessionCollection() {
-        MongoClient mongoClient = connect();
-
-        return mongoClient.getDatabase("App").getCollection("sessions");
+        try {
+            MongoClient mongoClient = connect();
+            MongoCollection<Document> c = mongoClient.getDatabase("App").getCollection("sessions");
+            return c;
+        } catch (Exception e) {
+            // error getting collection
+            return null;
+        }
     }
 
     // adding a new user to database
@@ -54,9 +70,14 @@ public class DB {
             return false;
         } else {
             // add user to the user collection
-            Document doc = new Document("username", name).append("ip", ip).append("password", encryptedPassword);
-            userCollection.insertOne(doc);
-            return true;
+            try {
+                Document doc = new Document("username", name).append("ip", ip).append("password", encryptedPassword);
+                userCollection.insertOne(doc);
+                return true;
+            } catch (Exception e) {
+                // error adding user to database
+                return false;
+            }
         }
     }
 
@@ -70,10 +91,15 @@ public class DB {
         MongoCursor<Document> cursor = findIterable.cursor();
         if (cursor.hasNext()){
             // if login is successful
-            String name = getUsername(userCollection, username, password);
-            String ip = getIP(userCollection, username, password);
-            System.out.println("Logged in as " + name + ". IP: " + ip);
-            return true;
+            try {
+                String name = getUsername(userCollection, username, password);
+                String ip = getIP(userCollection, username, password);
+                System.out.println("Logged in as " + name + ". IP: " + ip);
+                return true;
+            } catch(Exception e) {
+                // if login failed
+                return false;
+            }
         } else {
             // if login failed
             return false;
@@ -90,8 +116,16 @@ public class DB {
         MongoCursor<Document> cursor = findIterable.cursor();
         if (cursor.hasNext()){
             // if it finds the correct user returns the username as a string
-            return cursor.next().get("username").toString();
-        } else return null;
+            try {
+                return cursor.next().get("username").toString();
+            } catch(Exception e) {
+                // error getting username
+                return null;
+            }
+        } else {
+            // error finding user in database
+            return null;
+        }
     }
 
     // method to return the ip from the database as a string
@@ -104,8 +138,16 @@ public class DB {
         MongoCursor<Document> cursor = findIterable.cursor();
         if (cursor.hasNext()){
             // if it finds the correct user returns the ip as a string
-            return cursor.next().get("ip").toString();
-        } else return null;
+            try {
+                return cursor.next().get("ip").toString();
+            } catch(Exception e) {
+                // error getting ip
+                return null;
+            }
+        } else {
+            // error finding user in database
+            return null;
+        }
     }
 
     // delete a user from database
@@ -115,8 +157,12 @@ public class DB {
         // find user with the given username and password
         Document query = new Document("username", username).append("password", encryptedPassword);
         // delete user from database
-        userCollection.deleteOne(query);
-        System.out.println(username + " has been deleted");
+        try {
+            userCollection.deleteOne(query);
+            System.out.println(username + " has been deleted");
+        } catch(Exception e) {
+            // error deleting user
+        }
     }
 
     // change password for a user
@@ -124,20 +170,29 @@ public class DB {
         // encrypt the password using simple hash
         String encryptedPassword = Encryption.encryptPassword(password);
         String encryptedNewPassword = Encryption.encryptPassword(newPassword);
-        // change password
+        // find user with the given username and password
         Document query = new Document("username", username).append("password", encryptedPassword);
-        userCollection.findOneAndUpdate(query, Updates.set("password", encryptedNewPassword));
-        System.out.println("Changed password for " + username);
+        // change password
+        try {
+            userCollection.findOneAndUpdate(query, Updates.set("password", encryptedNewPassword));
+            System.out.println("Changed password for " + username);
+        } catch(Exception e) {
+            // error changing password
+        }
     }
 
     // change username for a user
     public static void changeUsername(MongoCollection<Document> userCollection, String username, String password, String newUsername) {
         // encrypt the password using simple hash
         String encryptedPassword = Encryption.encryptPassword(password);
-        // change password
+        // find user with the given username and password
         Document query = new Document("username", username).append("password", encryptedPassword);
-        userCollection.findOneAndUpdate(query, Updates.set("username", newUsername));
-        System.out.println("Changed username from " + username + " to " + newUsername);
+        try {
+            userCollection.findOneAndUpdate(query, Updates.set("username", newUsername));
+            System.out.println("Changed username from " + username + " to " + newUsername);
+        } catch(Exception e) {
+            // error changing username
+        }
     }
 
 }
