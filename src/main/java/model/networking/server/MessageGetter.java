@@ -28,9 +28,7 @@ public class MessageGetter implements Runnable {
                     }
                 }
 
-                synchronized (this) {
-                    this.wait(interval); // Wait for interval
-                }
+                Thread.sleep(interval);
 
                 System.out.println("After sync");
 
