@@ -1,6 +1,6 @@
-package model.networking.client;
+package model.networking.client.message;
 
-import com.google.gson.Gson;
+import model.networking.client.Connection;
 import model.networking.data.Message;
 import model.networking.data.Status;
 
@@ -9,33 +9,26 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class SendMessage implements Runnable {
+public class SendMessageSocket extends Thread implements MessageStrategy{
+    private final Connection connection;
     private int connectionAttempts = 5;
+    private Message message;
 
-    SendMessage(String i, int p, Message m) {
-        ip = i; port = p; msg = m;
-        m.setTimestamp(java.time.Clock.systemUTC().instant().toString());
+    public SendMessageSocket(Connection receiver) {
+        // Todo: Refactor code from SendMessage and implement here
+
+        this.connection = receiver;
     }
 
-    private final Message msg;
-    private final String ip; private final int port;
-
-
-    private String encodeMessage(Message msg) {
-        Gson gson = new Gson();
-        return gson.toJson(msg);
+    public void send(Message msg) {
+        this.message = msg;
+        this.start();
     }
 
-    private Status decodeStatus(String data) {
-        Gson gson = new Gson();
-        return gson.fromJson(data, Status.class);
-    }
-
-    // This will run once this class is loaded into a new thread and is started in that thread.
-    // Thread x = new Thread(new SendMessage()); x.start();
+    @Override
     public void run() {
         try {
-            if(!send()) { // if failed to send, retry
+            if(!sendImplementation()) { // if failed to send, retry
                 retry();
             }
         } catch(Exception e) {
@@ -43,32 +36,38 @@ public class SendMessage implements Runnable {
         }
     }
 
-    private boolean send() throws IOException {
-        Socket conn = new Socket(ip, port); // Opens Connection
+    private boolean sendImplementation() throws IOException {
+        Socket conn = new Socket(connection.ip, connection.port); // Opens Connection
 
         DataInputStream in = new DataInputStream(conn.getInputStream());
         DataOutputStream out = new DataOutputStream(conn.getOutputStream());
 
-        out.writeUTF(encodeMessage(msg));
+        out.writeUTF(Message.encode(message));
         out.flush();
 
-        int status = decodeStatus(in.readUTF()).getStatus();
+        int status = Status.decode(in.readUTF()).getStatus();
 
-        out.close();
-        conn.close();
         // Gets server response, do something based on result?:
         switch(status) {
             case 200:
                 // all good, message sent and received
+                out.close();
+                conn.close();
                 return true;
             case 204:
                 // empty message sent
                 // Todo: implement message check
+                out.close();
+                conn.close();
                 return false;
             default:
                 // Message not received, try resending
-                return false;
+                out.close();
+                conn.close();
+                break;
         }
+
+        return false;
     }
 
     private void retry() {
@@ -76,7 +75,7 @@ public class SendMessage implements Runnable {
             try {
                 Thread.currentThread().wait(500);
                 System.out.println("Message failed to send, retrying...");
-                if(send()) { // If successful, then break loop
+                if(sendImplementation()) { // If successful, then break loop
                     break;
                 }
                 connectionAttempts--;
