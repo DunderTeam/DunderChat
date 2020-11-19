@@ -29,6 +29,7 @@ public class DB {
             return MongoClients.create(connection);
         } catch(Exception e) {
             // error connecting to database
+            System.out.println("error connecting to database");
             return null;
         }
     }
@@ -41,6 +42,7 @@ public class DB {
             return c;
         } catch (Exception e) {
             // error getting collection
+            System.out.println("error getting collection");
             return null;
         }
     }
@@ -53,6 +55,7 @@ public class DB {
             return c;
         } catch (Exception e) {
             // error getting collection
+            System.out.println("error getting collection");
             return null;
         }
     }
@@ -76,6 +79,7 @@ public class DB {
                 return true;
             } catch (Exception e) {
                 // error adding user to database
+                System.out.println("error adding user to database");
                 return false;
             }
         }
@@ -98,10 +102,12 @@ public class DB {
                 return true;
             } catch(Exception e) {
                 // if login failed
+                System.out.println("login failed");
                 return false;
             }
         } else {
             // if login failed
+            System.out.println("login failed");
             return false;
         }
     }
@@ -120,10 +126,12 @@ public class DB {
                 return cursor.next().get("username").toString();
             } catch(Exception e) {
                 // error getting username
+                System.out.println("error getting username");
                 return null;
             }
         } else {
             // error finding user in database
+            System.out.println("error getting username");
             return null;
         }
     }
@@ -142,10 +150,12 @@ public class DB {
                 return cursor.next().get("ip").toString();
             } catch(Exception e) {
                 // error getting ip
+                System.out.println("error getting ip");
                 return null;
             }
         } else {
             // error finding user in database
+            System.out.println("error getting ip");
             return null;
         }
     }
@@ -162,6 +172,7 @@ public class DB {
             System.out.println(username + " has been deleted");
         } catch(Exception e) {
             // error deleting user
+            System.out.println("error deleting user");
         }
     }
 
@@ -178,6 +189,7 @@ public class DB {
             System.out.println("Changed password for " + username);
         } catch(Exception e) {
             // error changing password
+            System.out.println("error changing password");
         }
     }
 
@@ -192,6 +204,7 @@ public class DB {
             System.out.println("Changed username from " + username + " to " + newUsername);
         } catch(Exception e) {
             // error changing username
+            System.out.println("error changing username");
         }
     }
 
