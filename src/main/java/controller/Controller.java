@@ -28,13 +28,13 @@ public class Controller { // The controller of all functions
         UpdateSession(Name,Ip); // Still active
     }
 
-    public static boolean Login(String Name, String Password , String Ip){ // login user
+    public static void Login(String Name, String Password , String Ip){ // login user
 
-        Boolean temp = DB.login(Doc, Name, Password); // log user inn to database
+        DB.login(Doc, Name, Password); // log user inn to database
 
         Session.sessionInit(Name, Ip); // Start session
 
-        return temp;
+
     }
 
     public static void LogOut(String Name) { // log out user
