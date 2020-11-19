@@ -4,6 +4,8 @@
 
 package view.gui;
 
+import java.beans.*;
+import controller.Controller;
 import model.chat.Chat;
 import model.chat.ChatManager;
 import model.networking.data.Message;
@@ -42,10 +44,12 @@ public class WindowChatting extends JFrame {
             //ChatManager.addChat(user, Ip, 5555);
             Controller.CreateNewChat(ChatName, UserName, Ip, Port); // create new chat
 
+            /*
             chats.add(ChatManager.getChatById(user, Ip));
             addConversationToList(user);
             TxtFieldAddress.setText("");
             connectionDialog.dispose();
+             */
         }
 
 
@@ -56,6 +60,8 @@ public class WindowChatting extends JFrame {
         // TODO actually send message and not just display locally
         String sender = "You";
         String message = TxtFieldMsg.getText();
+        String method = comboBoxChatMethod.getSelectedItem().toString();
+        System.out.println(method);
 
         //opens error dialogs if the message is empty or no conversation is selected
         if (message.equals("")) {
@@ -306,6 +312,8 @@ public class WindowChatting extends JFrame {
         TxtFieldMsg = new JTextField();
         BtnSend = new JButton();
         BtnNew = new JButton();
+        comboBoxChatMethod = new JComboBox<>();
+        labelChatMethod = new JLabel();
         connectionDialog = new JDialog();
         Label = new JLabel();
         TxtFieldAddress = new JTextField();
@@ -418,13 +426,22 @@ public class WindowChatting extends JFrame {
         });
 
         //---- BtnNew ----
-        BtnNew.setText("new");
+        BtnNew.setText("new conversation");
         BtnNew.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 BtnNewMouseClicked(e);
             }
         });
+
+        //---- comboBoxChatMethod ----
+        comboBoxChatMethod.setModel(new DefaultComboBoxModel<>(new String[] {
+            "get request",
+            "socket"
+        }));
+
+        //---- labelChatMethod ----
+        labelChatMethod.setText("Chat method:");
 
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
@@ -434,18 +451,21 @@ public class WindowChatting extends JFrame {
                     .addContainerGap()
                     .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                         .addGroup(contentPaneLayout.createSequentialGroup()
-                            .addComponent(BtnNew)
+                            .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(ListConversations, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(BtnNew, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(WindowTitle, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(TxtFieldMsg, GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(ScrollPaneChatArea, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                        .addGroup(contentPaneLayout.createSequentialGroup()
+                            .addComponent(labelChatMethod)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(BtnSend))
-                        .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
-                            .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                .addComponent(WindowTitle, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(ListConversations, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE))
+                            .addComponent(comboBoxChatMethod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(ScrollPaneChatArea, GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)))
-                    .addContainerGap())
+                            .addComponent(TxtFieldMsg, GroupLayout.PREFERRED_SIZE, 310, GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(BtnSend, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)))
+                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         contentPaneLayout.setVerticalGroup(
             contentPaneLayout.createParallelGroup()
@@ -455,13 +475,18 @@ public class WindowChatting extends JFrame {
                         .addGroup(contentPaneLayout.createSequentialGroup()
                             .addComponent(WindowTitle, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(ListConversations, GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE))
-                        .addComponent(ScrollPaneChatArea, GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE))
+                            .addComponent(ListConversations, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BtnNew))
+                        .addComponent(ScrollPaneChatArea, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                        .addComponent(BtnNew)
-                        .addComponent(BtnSend)
-                        .addComponent(TxtFieldMsg, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                        .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(BtnSend)
+                            .addComponent(TxtFieldMsg, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(labelChatMethod)
+                            .addComponent(comboBoxChatMethod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap())
         );
         pack();
@@ -739,6 +764,8 @@ public class WindowChatting extends JFrame {
     private JTextField TxtFieldMsg;
     private JButton BtnSend;
     private JButton BtnNew;
+    private JComboBox<String> comboBoxChatMethod;
+    private JLabel labelChatMethod;
     private JDialog connectionDialog;
     private JLabel Label;
     private JTextField TxtFieldAddress;
