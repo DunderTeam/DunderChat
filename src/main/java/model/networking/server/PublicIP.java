@@ -4,12 +4,8 @@ import com.google.gson.Gson;
 import model.networking.Request;
 import model.networking.data.IP;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
 
 public class PublicIP {
     private static final String GET_URL = "https://api.ipify.org/?format=json";

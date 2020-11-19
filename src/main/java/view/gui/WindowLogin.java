@@ -5,13 +5,12 @@
 package view.gui;
 
 
-
 import controller.Controller;
 import model.networking.server.PublicIP;
 
-import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;

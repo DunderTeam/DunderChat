@@ -3,7 +3,9 @@ package model.networking.server;
 import com.dosse.upnp.UPnP;
 import model.networking.client.MessageFetch;
 
-import java.net.*;
+import java.net.Inet4Address;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 
 public class Server extends Thread implements Runnable {

@@ -1,8 +1,8 @@
 package model.networking.server;
 
+import model.chat.ChatManager;
 import model.networking.data.Message;
 import model.networking.data.Status;
-import model.chat.ChatManager;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
