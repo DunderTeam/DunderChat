@@ -87,7 +87,7 @@ public class DB {
     }
 
     // method to log in
-    public static boolean login(MongoCollection<Document> userCollection, String username, String password) {
+    public static void login(MongoCollection<Document> userCollection, String username, String password) {
         // encrypt the password using simple hash
         String encryptedPassword = Encryption.encryptPassword(password);
         // check if there is a user with the given username and password
@@ -100,17 +100,19 @@ public class DB {
                 String name = getUsername(userCollection, username, password);
                 String ip = getIP(userCollection, username, password);
                 System.out.println("Logged in as " + name + ". IP: " + ip);
+                Session.sessionInit(name, ip);
                 WindowLogin.setLoggedInUserName(name);
-                return true;
+
             } catch(Exception e) {
                 // TODO show login error on screen
                 System.out.println("login failed");
-                return false;
+                WindowLogin.setLoginFail("Fail");
             }
         } else {
             // TODO show login error on screen
             System.out.println("login failed");
-            return false;
+            WindowLogin.setLoginFail("Fail");
+
         }
     }
 
