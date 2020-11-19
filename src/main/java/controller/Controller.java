@@ -32,8 +32,7 @@ public class Controller { // The controller of all functions
 
         DB.login(Doc, Name, Password); // log user inn to database
 
-        Session.sessionInit(Name, Ip); // Start session
-
+        UpdateSession(Name, Ip); // Still active
 
     }
 

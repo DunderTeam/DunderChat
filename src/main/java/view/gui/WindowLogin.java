@@ -4,6 +4,7 @@
 
 package view.gui;
 
+import com.sun.tools.javac.comp.Todo;
 import controller.Controller;
 
 import java.awt.event.*;
@@ -26,12 +27,12 @@ public class WindowLogin extends JFrame {
     private void attemptLogin() {
         String username = InputUsr.getText();
         String password = InputPwd.getText();
+        String Ip = "123"; //Todo get real ip
 
         if (username.equals("") || password.equals("")) {
             displayErrorDialog("Could not log in!");
         } else {
-            // TODO actually log the user in, currently just opens a default chat window
-            Controller.Login(username, password, "");
+            Controller.Login(username, password, Ip); // Log user in to the database
         }
     }
 

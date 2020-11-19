@@ -23,6 +23,7 @@ public class DBTest {
         }
 
         // when login button pressed
+        /*
         if(DB.login(userCollection, username, password)) {
             String IPAddress = DB.getIP(userCollection, username, password);
             Session.sessionInit(username, IPAddress);
@@ -43,7 +44,10 @@ public class DBTest {
             if(Session.isLoggedIn()) {
                 //DB.changeUsername(userCollection, username, password, newUsername);
             }
+
         }
+
+         */
     }
 
 }
