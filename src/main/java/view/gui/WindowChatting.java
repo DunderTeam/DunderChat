@@ -144,7 +144,6 @@ public class WindowChatting extends JFrame {
 
     //Deletes the currently logged in user from the database and calls logOut
     private void deleteUser(String Name) {
-        //TODO call controller and delete user, currently only logs out
         String Password = String.valueOf(pwdFieldDeleteUsr.getPassword());
         System.out.println("Deleting user...");
         Controller.DeleteUser(Name, Password); // Delete user from database
@@ -164,7 +163,7 @@ public class WindowChatting extends JFrame {
 
     //Changes the username of the currently logged in user
     private void changeUsername() {
-        String Password = "" ;
+        String Password = String.valueOf(pwdFieldNewUser.getPassword()) ;
         String Ip = PublicIP.get().getIp();
         String NewName = TxtFieldNewUsr.getText();
         String OldName = loggedInUser;
@@ -175,10 +174,20 @@ public class WindowChatting extends JFrame {
             displayErrorDialog("Username required!");
         } else {
             Controller.ChangeName(OldName, NewName,Password, Ip); // changes name on user in database
-            changeUsrDialog.dispose();
-            setLoggedInUsrName(NewName);
-            TxtFieldNewUsr.setText("");
         }
+    }
+
+    private void newUserChanged(PropertyChangeEvent e) {
+        if(!newUser.getText().equals("")) {
+            changeUsrDialog.dispose();
+            setLoggedInUsrName(TxtFieldNewUsr.getText());
+            TxtFieldNewUsr.setText("");
+            newUser.setText("");
+        }
+    }
+
+    public static void setNewUser(String userChanged) {
+        newUser.setText(userChanged);
     }
 
     //Changes the password of the currently logged in user
@@ -188,17 +197,24 @@ public class WindowChatting extends JFrame {
         String Name = loggedInUser;
         String Ip = PublicIP.get().getIp();
 
-        if (PwdFieldChangePwdNew.getText().equals("") || PwdFieldChangePwdOld.getText().equals("")) {
+        if (OldPassword.equals("") || NewPassword.equals("")) {
             displayErrorDialog("Both fields required!");
         } else {
-
             Controller.ChangePassword(Name, OldPassword, NewPassword, Ip); // change password to user in database
-            // Todo check that password got changed
+        }
+    }
 
+    private void newPwdChanged(PropertyChangeEvent e) {
+        if(!newPwd.getText().equals("")) {
             changePasswordDialog.dispose();
             PwdFieldChangePwdOld.setText("");
             PwdFieldChangePwdNew.setText("");
+            newPwd.setText("");
         }
+    }
+
+    public static void setNewPwd(String newP) {
+        newPwd.setText(newP);
     }
 
     //Displays an error dialog with the given text
@@ -208,8 +224,7 @@ public class WindowChatting extends JFrame {
 
     //Calls the controller to shut down the application gracefully
     private void shutDown() {
-        //TODO call controller, currently just exits
-        System.exit(0);
+        Controller.Shutdown();
     }
 
     private void errorMessageChanged(PropertyChangeEvent e) {
@@ -356,6 +371,12 @@ public class WindowChatting extends JFrame {
         userDeleted = new JLabel();
         userDeleted.addPropertyChangeListener(this::userDeletedChanged);
 
+        newUser = new JLabel();
+        newUser.addPropertyChangeListener(this::newUserChanged);
+
+        newPwd = new JLabel();
+        newPwd.addPropertyChangeListener(this::newPwdChanged);
+
         errorMessage = new JLabel("");
         errorMessage.addPropertyChangeListener(this::errorMessageChanged);
 
@@ -391,6 +412,8 @@ public class WindowChatting extends JFrame {
         LabelNewUsr = new JLabel();
         TxtFieldNewUsr = new JTextField();
         BtnConfirmNewUsr = new JButton();
+        labelnewUsrConfirmPwd = new JLabel();
+        pwdFieldNewUser = new JPasswordField();
         changePasswordDialog = new JDialog();
         LabelChangePwdOld = new JLabel();
         BtnConfirmChangePwd = new JButton();
@@ -622,6 +645,7 @@ public class WindowChatting extends JFrame {
 
             //---- LabelNewUsr ----
             LabelNewUsr.setText("Enter New Username");
+            LabelNewUsr.setHorizontalAlignment(SwingConstants.CENTER);
 
             //---- TxtFieldNewUsr ----
             TxtFieldNewUsr.addActionListener(e -> TxtFieldNewUsrActionPerformed(e));
@@ -630,17 +654,37 @@ public class WindowChatting extends JFrame {
             BtnConfirmNewUsr.setText("confirm");
             BtnConfirmNewUsr.addActionListener(e -> BtnConfirmNewUsrActionPerformed(e));
 
+            //---- labelnewUsrConfirmPwd ----
+            labelnewUsrConfirmPwd.setText("Enter password to confirm");
+            labelnewUsrConfirmPwd.setHorizontalAlignment(SwingConstants.CENTER);
+
             GroupLayout changeUsrDialogContentPaneLayout = new GroupLayout(changeUsrDialogContentPane);
             changeUsrDialogContentPane.setLayout(changeUsrDialogContentPaneLayout);
             changeUsrDialogContentPaneLayout.setHorizontalGroup(
                 changeUsrDialogContentPaneLayout.createParallelGroup()
                     .addGroup(changeUsrDialogContentPaneLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addGroup(changeUsrDialogContentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                            .addComponent(LabelNewUsr, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(TxtFieldNewUsr)
-                            .addComponent(BtnConfirmNewUsr, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(37, Short.MAX_VALUE))
+                        .addGroup(changeUsrDialogContentPaneLayout.createParallelGroup()
+                            .addGroup(GroupLayout.Alignment.TRAILING, changeUsrDialogContentPaneLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(labelnewUsrConfirmPwd, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
+                            .addGroup(changeUsrDialogContentPaneLayout.createSequentialGroup()
+                                .addGroup(changeUsrDialogContentPaneLayout.createParallelGroup()
+                                    .addGroup(changeUsrDialogContentPaneLayout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(LabelNewUsr, GroupLayout.PREFERRED_SIZE, 185, GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(changeUsrDialogContentPaneLayout.createSequentialGroup()
+                                        .addGap(40, 40, 40)
+                                        .addComponent(TxtFieldNewUsr, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 1, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(changeUsrDialogContentPaneLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addGroup(changeUsrDialogContentPaneLayout.createParallelGroup()
+                            .addGroup(changeUsrDialogContentPaneLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(BtnConfirmNewUsr, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
+                            .addComponent(pwdFieldNewUser, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(40, Short.MAX_VALUE))
             );
             changeUsrDialogContentPaneLayout.setVerticalGroup(
                 changeUsrDialogContentPaneLayout.createParallelGroup()
@@ -650,8 +694,12 @@ public class WindowChatting extends JFrame {
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(TxtFieldNewUsr, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelnewUsrConfirmPwd)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pwdFieldNewUser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(BtnConfirmNewUsr)
-                        .addContainerGap(23, Short.MAX_VALUE))
+                        .addContainerGap(50, Short.MAX_VALUE))
             );
             changeUsrDialog.pack();
             changeUsrDialog.setLocationRelativeTo(changeUsrDialog.getOwner());
@@ -664,6 +712,7 @@ public class WindowChatting extends JFrame {
 
             //---- LabelChangePwdOld ----
             LabelChangePwdOld.setText("Enter old password");
+            LabelChangePwdOld.setHorizontalAlignment(SwingConstants.CENTER);
 
             //---- BtnConfirmChangePwd ----
             BtnConfirmChangePwd.setText("confirm");
@@ -671,6 +720,7 @@ public class WindowChatting extends JFrame {
 
             //---- LalebChangePwdNew ----
             LalebChangePwdNew.setText("Enter new pasword");
+            LalebChangePwdNew.setHorizontalAlignment(SwingConstants.CENTER);
 
             //---- PwdFieldChangePwdNew ----
             PwdFieldChangePwdNew.addActionListener(e -> PwdFieldChangePwdNewActionPerformed(e));
@@ -680,18 +730,22 @@ public class WindowChatting extends JFrame {
             changePasswordDialogContentPaneLayout.setHorizontalGroup(
                 changePasswordDialogContentPaneLayout.createParallelGroup()
                     .addGroup(changePasswordDialogContentPaneLayout.createSequentialGroup()
-                        .addGap(40, 40, 40)
                         .addGroup(changePasswordDialogContentPaneLayout.createParallelGroup()
-                            .addComponent(BtnConfirmChangePwd, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(PwdFieldChangePwdNew, GroupLayout.Alignment.TRAILING)
                             .addGroup(changePasswordDialogContentPaneLayout.createSequentialGroup()
+                                .addContainerGap()
                                 .addGroup(changePasswordDialogContentPaneLayout.createParallelGroup()
-                                    .addGroup(changePasswordDialogContentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(LabelChangePwdOld, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(PwdFieldChangePwdOld))
-                                    .addComponent(LalebChangePwdNew))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(46, 46, 46))
+                                    .addComponent(LabelChangePwdOld, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(LalebChangePwdNew, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)))
+                            .addGroup(changePasswordDialogContentPaneLayout.createSequentialGroup()
+                                .addGap(40, 40, 40)
+                                .addGroup(changePasswordDialogContentPaneLayout.createParallelGroup()
+                                    .addComponent(PwdFieldChangePwdNew, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(PwdFieldChangePwdOld, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(changePasswordDialogContentPaneLayout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(BtnConfirmChangePwd, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 34, Short.MAX_VALUE)))
+                        .addContainerGap())
             );
             changePasswordDialogContentPaneLayout.setVerticalGroup(
                 changePasswordDialogContentPaneLayout.createParallelGroup()
@@ -797,16 +851,17 @@ public class WindowChatting extends JFrame {
                             .addComponent(dialogDeleteUsrLabel1, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
                         .addContainerGap())
                     .addGroup(GroupLayout.Alignment.TRAILING, dialogDeleteUsrContentPaneLayout.createSequentialGroup()
-                        .addContainerGap(7, Short.MAX_VALUE)
-                        .addGroup(dialogDeleteUsrContentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(dialogDeleteUsrLabel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(dialogDeleteUsrContentPaneLayout.createParallelGroup()
-                                .addGroup(dialogDeleteUsrContentPaneLayout.createSequentialGroup()
-                                    .addComponent(btnDeleteUsrYes, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnDeleteUsrNo, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
-                                .addComponent(pwdFieldDeleteUsr, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(21, Short.MAX_VALUE)
+                        .addGroup(dialogDeleteUsrContentPaneLayout.createParallelGroup()
+                            .addGroup(dialogDeleteUsrContentPaneLayout.createSequentialGroup()
+                                .addComponent(btnDeleteUsrYes, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDeleteUsrNo, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE))
+                            .addComponent(pwdFieldDeleteUsr, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
                         .addGap(17, 17, 17))
+                    .addGroup(dialogDeleteUsrContentPaneLayout.createSequentialGroup()
+                        .addComponent(dialogDeleteUsrLabel3, GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                        .addContainerGap())
             );
             dialogDeleteUsrContentPaneLayout.setVerticalGroup(
                 dialogDeleteUsrContentPaneLayout.createParallelGroup()
@@ -833,8 +888,9 @@ public class WindowChatting extends JFrame {
 
     private static JLabel NewChat;
     private static Chat NewChatList;
-
     private static JLabel userDeleted;
+    private static JLabel newUser;
+    private static JLabel newPwd;
 
     private static JLabel errorMessage;
 
@@ -868,6 +924,8 @@ public class WindowChatting extends JFrame {
     private JLabel LabelNewUsr;
     private JTextField TxtFieldNewUsr;
     private JButton BtnConfirmNewUsr;
+    private JLabel labelnewUsrConfirmPwd;
+    private JPasswordField pwdFieldNewUser;
     private JDialog changePasswordDialog;
     private JLabel LabelChangePwdOld;
     private JButton BtnConfirmChangePwd;

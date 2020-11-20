@@ -2,8 +2,11 @@ package model.database;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoException;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.internal.bulk.DeleteRequest;
 import org.bson.Document;
 import view.gui.WindowChatting;
 import view.gui.WindowLogin;
@@ -181,10 +184,11 @@ public class DB {
         // delete user from database
         try {
             //TODO fix error handling, currently deleteOne never throws an error
-            userCollection.deleteOne(query);
+            DeleteResult result = userCollection.deleteOne(query);
+            System.out.println(result.getDeletedCount());
             System.out.println(username + " has been deleted");
             WindowChatting.setUserDeleted("Yep");
-        } catch(Exception e) {
+        } catch(MongoException e) {
             WindowChatting.displayErrorDialog("Wrong password, could not delete user");
             System.out.println("error deleting user");
         }
@@ -197,17 +201,18 @@ public class DB {
         String encryptedNewPassword = Encryption.encryptPassword(newPassword);
         // checks if the password is strong enough and is not the same as the old one
         if(!checkPassword(newPassword) || newPassword.equals(password)){
-            // TODO show invalid password
+            WindowChatting.displayErrorDialog("New password is invalid");
             System.out.println("New password not valid");
         }else{
             // find user with the given username and password
             Document query = new Document("username", username).append("password", encryptedPassword);
             // change password
-            try {
+            if (!(userCollection.findOneAndUpdate(query, Updates.set("password", encryptedNewPassword)) == null)) {
                 userCollection.findOneAndUpdate(query, Updates.set("password", encryptedNewPassword));
                 System.out.println("Changed password for " + username);
-            } catch(Exception e) {
-                // TODO show error changing password
+                WindowChatting.setNewPwd(newPassword);
+            } else {
+                WindowChatting.displayErrorDialog("Error changing passowrd");
                 System.out.println("error changing password");
             }
         }
@@ -219,12 +224,14 @@ public class DB {
         String encryptedPassword = Encryption.encryptPassword(password);
         // find user with the given username and password
         Document query = new Document("username", username).append("password", encryptedPassword);
-        try {
+        if (!(userCollection.findOneAndUpdate(query, Updates.set("username", newUsername)) == null)) {
             userCollection.findOneAndUpdate(query, Updates.set("username", newUsername));
             System.out.println("Changed username from " + username + " to " + newUsername);
-        } catch(Exception e) {
-            // TODO show error changing username
+            WindowChatting.setNewUser(newUsername);
+        } else {
+            WindowChatting.displayErrorDialog("Could not change username: DB error");
             System.out.println("error changing username");
+
         }
     }
 
