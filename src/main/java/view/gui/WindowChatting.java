@@ -107,6 +107,7 @@ public class WindowChatting extends JFrame {
             displayErrorDialog("Select a conversation!");
         } else {
             String address = chats.get(ListConversations.getSelectedIndex()).getAddress();
+            System.out.println(address);
             String chatName = ListConversations.getSelectedValue();
 
             Controller.SendMessage(loggedInUser, message, localIp, address, chatName, method);

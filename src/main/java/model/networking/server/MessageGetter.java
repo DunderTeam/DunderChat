@@ -26,9 +26,6 @@ public class MessageGetter implements Runnable {
                         if (!ChatManager.chatExists(message.getName(), message.getOrigin())) {
                             ChatManager.addChat(message.getName(), message.getOrigin(), 5555); // todo: message via get request does not use ports
                         }
-
-                        System.out.println(ChatManager.getChatList().size());
-
                         ChatManager.addMessage(message.getName(), message.getOrigin(), message); // todo: this ip might be formatted differently
 
                     }
