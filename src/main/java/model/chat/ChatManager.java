@@ -5,11 +5,10 @@ import model.networking.data.Message;
 import view.gui.WindowChatting;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ChatManager {
-
-
     static List<Chat> chatList = new ArrayList<Chat>(); // lists of Chats
 
     //Adds a message to a given chat (by name and address)

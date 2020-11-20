@@ -3,6 +3,7 @@ package model.chat;
 import model.networking.data.Message;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Chat {
@@ -27,6 +28,7 @@ public class Chat {
 
     public void addMessageToList (Message me) { // Adds new message to list
         listMessages.add(me);
+        sortChat();
     }
 
     public List<Message> getListMessages() { // returns list
@@ -38,4 +40,16 @@ public class Chat {
     private int port;
 
     private List<Message> listMessages; // Creating list of all messages between two people
+
+    private class messageSorter implements Comparator<Message> {
+        @Override
+        public int compare(Message msg_1, Message msg_2) {
+            return msg_1.getTimestamp().compareTo(msg_2.getTimestamp());
+        }
+    }
+
+    public void sortChat() {
+        listMessages.sort(new messageSorter());
+    }
+
 }

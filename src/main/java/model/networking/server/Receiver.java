@@ -19,4 +19,9 @@ public class Receiver {
         messageThread.start();
         socketThread.start();
     }
+
+    public void stop() {
+        messageThread.interrupt();
+        socketThread.interrupt();
+    }
 }
