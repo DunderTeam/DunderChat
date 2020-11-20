@@ -53,6 +53,10 @@ public class Message {
         Gson gson = new Gson();
         return gson.fromJson(data, Message.class);
     }
+    public static Message[] decodeArray(String data) {
+        Gson gson = new Gson();
+        return gson.fromJson(data, Message[].class);
+    }
 
     public static String encode(Message data) {
         Gson gson = new Gson();
