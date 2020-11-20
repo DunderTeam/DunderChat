@@ -110,7 +110,7 @@ public class WindowLogin extends JFrame {
 
     // Exits the program with code 0
     private void BtnQuitMouseClicked(MouseEvent e) {
-        Controller.Shutdown();
+        Controller.Shutdown(InputUsr.getText());
     }
 
     //======== Register New User Dialog ========

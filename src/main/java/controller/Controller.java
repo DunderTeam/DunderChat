@@ -32,7 +32,9 @@ public class Controller { // The controller of all functions
 
         DB.login(Doc, Name, Password); // log user inn to database
 
-        UpdateSession(Name, Ip); // Still active
+        if (Session.isLoggedIn()) {
+            UpdateSession(Name, Ip); // Still active
+        }
 
     }
 
@@ -67,7 +69,13 @@ public class Controller { // The controller of all functions
         DB.deleteUser(Doc, Name, Password); // Delete user from database
     }
 
-    public static void Shutdown() {
+    public static void Shutdown(String Name) {
+        //TODO gracefully shutdown messaging and chat managers if needed
+
+        if (Session.isLoggedIn()) {
+            Session.endSession(Name);
+        }
+
         System.exit(0);
     }
 
