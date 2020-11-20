@@ -1,31 +1,72 @@
 package controller;
 
 import com.mongodb.client.MongoCollection;
+import model.chat.Chat;
 import model.chat.ChatManager;
 import model.database.DB;
 import model.database.Session;
+import model.networking.client.Connection;
+import model.networking.client.ConnectionManager;
+import model.networking.client.message.MessageStrategy;
+import model.networking.client.message.SendMessagePOST;
+import model.networking.client.message.SendMessageSocket;
 import model.networking.data.Message;
 import org.bson.Document;
+import view.gui.WindowChatting;
 
 public class Controller { // The controller of all functions
 
     static MongoCollection<Document> Doc = DB.getUserCollection();
+    static ConnectionManager manager = new ConnectionManager(); // Consider making Singleton
+    static MessageStrategy currentStrategy;
 
-    public static void SendMessage(String sen, String mes, String Ip, String ChatName, String Name){ //ChatMsgSend
+    public static void SendMessage(String sen, String mes, String localIp, String destinationIp, String ChatName, String strategy){ //ChatMsgSend
 
         Message msg = new Message(); // create ned message
         msg.setName(sen);
         msg.setData(mes);
 
-        ChatManager.addMessage(ChatName, Ip, msg); // add new message to list
+        Message msgLocal = new Message();
+        msgLocal.setName(sen + " (you)");
+        msgLocal.setData(mes);
 
-        UpdateSession(Name,Ip); // Still active
+        ChatManager.addMessage(ChatName, destinationIp, msgLocal);
+
+        Connection temp = new Connection(localIp, 5555);
+
+        switch (strategy){
+            case("http"): currentStrategy = new SendMessagePOST(); break;
+            case("socket"): currentStrategy = new SendMessageSocket(temp); break;
+            default: currentStrategy = new SendMessagePOST(); break;
+        }
+
+        manager.sendMessage(temp, msg, currentStrategy);
+
+        UpdateSession(sen,localIp); // Still active
     }
 
-    public static void CreateNewChat(String ChatName, String UserName, String Ip, int Port ){ // connectNEwChat
-        ChatManager.addChat(ChatName, Ip, Port);
+    public static void CreateNewChat(String ChatName, String UserName, String LocalIp, int Port ){ // connectNEwChat
+        String chatIp = Session.getSessionIP(ChatName);
 
-        UpdateSession(UserName,Ip); // Still active
+        if (chatIp == null) {
+            WindowChatting.displayErrorDialog("User does not have an active session");
+        } else {
+            ChatManager.addChat(ChatName, chatIp, Port);
+        }
+
+        UpdateSession(UserName, LocalIp);
+    }
+
+    public static void CreateNewChatByIP(String ChatIp, String UserName, String LocalIp, int Port){
+        String chatName = Session.getSessionUser(ChatIp);
+
+        if (chatName == null) {
+            WindowChatting.displayErrorDialog("No active session on that ip");
+        } else {
+            ChatManager.addChat(chatName, ChatIp, Port);
+        }
+
+        UpdateSession(UserName, LocalIp);
     }
 
     public static void Login(String Name, String Password , String Ip){ // login user

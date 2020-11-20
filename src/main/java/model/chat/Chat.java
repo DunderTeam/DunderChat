@@ -28,7 +28,7 @@ public class Chat {
 
     public void addMessageToList (Message me) { // Adds new message to list
         listMessages.add(me);
-        sortChat();
+        //sortChat();
     }
 
     public List<Message> getListMessages() { // returns list
@@ -49,7 +49,9 @@ public class Chat {
     }
 
     public void sortChat() {
-        listMessages.sort(new messageSorter());
+        if (listMessages.size() > 1){
+            listMessages.sort(new messageSorter());
+        }
     }
 
 }

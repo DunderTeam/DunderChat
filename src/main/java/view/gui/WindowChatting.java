@@ -38,15 +38,18 @@ public class WindowChatting extends JFrame {
     private void connectNewChat() { // call controller to setup new chat
         // Gets the text in the user/ip TxtField
         String ChatName = TxtFieldAddress.getText();
-        String UserName = "";
-        String Ip = PublicIP.get().getIp();
+        String UserName = loggedInUser;
+        String localIp = PublicIP.get().getIp();
         int Port = 5555;
+
+        String pattern = "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
 
         if (ChatName.equals("")) {
             displayErrorDialog("User/address field required!");
+        } else if (ChatName.matches(pattern)) {
+            Controller.CreateNewChatByIP(ChatName, UserName, localIp, Port);
         } else {
-            //ChatManager.addChat(user, Ip, 5555);
-            Controller.CreateNewChat(ChatName, UserName, Ip, Port); // create new chat
+            Controller.CreateNewChat(ChatName, UserName, localIp, Port); // create new chat
         }
 
     }
@@ -70,12 +73,32 @@ public class WindowChatting extends JFrame {
         NewChat.setText(temp);
     }
 
+    public static void NewMessageAdded(String chatName, Message msg) {
+        NewMessageContent = msg;
+        NewMessageChat.setText(chatName);
+    }
+
+    private void NewMessageChatChanged(PropertyChangeEvent e) {
+        if(!NewMessageChat.equals("")) {
+            NewMessageAdded(NewMessageChat.getText());
+            NewMessageChat.setText("");
+        }
+    }
+
+    private void NewMessageAdded(String chatName) {
+        if (ListConversations.getSelectedValue().equals(chatName)) {
+            TxtAreaChat.append(NewMessageContent.getName() + ": " + NewMessageContent.getData()
+            + "\n");
+        }
+    }
+
     //Sends a message from our client to another user
     private void ChatMsgSend() {
         // TODO actually send message and not just display locally
         String sender = "You";
         String message = TxtFieldMsg.getText();
         String method = comboBoxChatMethod.getSelectedItem().toString();
+        String localIp = PublicIP.get().ip;
 
         //opens error dialogs if the message is empty or no conversation is selected
         if (message.equals("")) {
@@ -83,17 +106,10 @@ public class WindowChatting extends JFrame {
         } else if (ListConversations.getSelectedIndex() < 0) {
             displayErrorDialog("Select a conversation!");
         } else {
-            Message msg = new Message();
             String address = chats.get(ListConversations.getSelectedIndex()).getAddress();
+            String chatName = ListConversations.getSelectedValue();
 
-            msg.setName(sender);
-            msg.setData(message);
-
-            Chat currentChat = chats.get(ListConversations.getSelectedIndex());
-            System.out.println(currentChat.getName() + " | " + currentChat.getAddress());
-            ChatManager.addMessage(currentChat.getName(), currentChat.getAddress(), msg);
-
-            TxtAreaChat.append(sender + ": " + message + "\n");
+            Controller.SendMessage(loggedInUser, message, localIp, address, chatName, method);
         }
 
         //Clear the message field either way
@@ -236,6 +252,10 @@ public class WindowChatting extends JFrame {
         }
     }
 
+    public static boolean isWindowOpen() {
+        return isWindowOpen;
+    }
+
     //================ Action/Event Listeners ================
 
     //======== Menu Bar ========
@@ -364,9 +384,13 @@ public class WindowChatting extends JFrame {
     }
 
     private void initComponents() {
+        isWindowOpen = true;
 
         NewChat = new JLabel();
         NewChat.addPropertyChangeListener(this::NewChatChanged);
+
+        NewMessageChat = new JLabel();
+        NewMessageChat.addPropertyChangeListener(this::NewMessageChatChanged);
 
         userDeleted = new JLabel();
         userDeleted.addPropertyChangeListener(this::userDeletedChanged);
@@ -530,7 +554,7 @@ public class WindowChatting extends JFrame {
 
         //---- comboBoxChatMethod ----
         comboBoxChatMethod.setModel(new DefaultComboBoxModel<>(new String[] {
-            "get request",
+            "http",
             "socket"
         }));
 
@@ -554,12 +578,12 @@ public class WindowChatting extends JFrame {
                         .addGroup(contentPaneLayout.createSequentialGroup()
                             .addComponent(labelChatMethod)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(comboBoxChatMethod, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboBoxChatMethod, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(TxtFieldMsg, GroupLayout.PREFERRED_SIZE, 310, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TxtFieldMsg, GroupLayout.PREFERRED_SIZE, 337, GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(BtnSend, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)))
-                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addContainerGap(18, Short.MAX_VALUE))
         );
         contentPaneLayout.setVerticalGroup(
             contentPaneLayout.createParallelGroup()
@@ -891,6 +915,11 @@ public class WindowChatting extends JFrame {
     private static JLabel userDeleted;
     private static JLabel newUser;
     private static JLabel newPwd;
+
+    private static JLabel NewMessageChat;
+    private static Message NewMessageContent;
+
+    private static boolean isWindowOpen = false;
 
     private static JLabel errorMessage;
 

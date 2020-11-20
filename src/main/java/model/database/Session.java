@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import view.gui.WindowChatting;
 import view.gui.WindowLogin;
+import view.gui.WindowChatting;
 
 import javax.swing.*;
 
@@ -55,7 +56,7 @@ public class Session {
 
     // start a timer for the session
     public static void startSessionTimer(String username) {
-        int time = 60; // time in seconds
+        int time = 600; // time in seconds
         Timer timer = new Timer(time*1000, arg0 -> {
             // code executed
             endSession(username);
@@ -80,7 +81,7 @@ public class Session {
     }
 
     // method to return the session id from the database as a string
-    public static String getSessionId(String username) {
+    public static String getSessionIP(String username) {
         // make query to find the user
         Document query = new Document("username", username);
         FindIterable<Document> findIterable = sessionCollection.find(query);
@@ -88,19 +89,19 @@ public class Session {
         if (cursor.hasNext()){
             // if it finds the correct user returns the session id as a string
             try {
-                return cursor.next().get("_id").toString();
+                return cursor.next().get("ip").toString();
             } catch(Exception e) {
-                WindowChatting.displayErrorDialog("Database Error: getSessionId");
                 System.out.println("error getting session id");
+                WindowChatting.displayErrorDialog("Error connecting to user");
                 return null;
             }
         } else return null;
     }
 
     // method to return the username from the session database as a string
-    public static String getSessionUser(String username) {
+    public static String getSessionUser(String ip) {
         // make query to find the user
-        Document query = new Document("username", username);
+        Document query = new Document("ip", ip);
         FindIterable<Document> findIterable = sessionCollection.find(query);
         MongoCursor<Document> cursor = findIterable.cursor();
         if (cursor.hasNext()){
@@ -108,8 +109,7 @@ public class Session {
             try {
                 return cursor.next().get("username").toString();
             } catch(Exception e) {
-                WindowChatting.displayErrorDialog("Database Error: getSessionUser");
-                System.out.println("error getting session id");
+                WindowChatting.displayErrorDialog("Error connecting to ip");
                 return null;
             }
         } else return null;
