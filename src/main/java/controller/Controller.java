@@ -1,6 +1,7 @@
 package controller;
 
 import com.mongodb.client.MongoCollection;
+import model.chat.Chat;
 import model.chat.ChatManager;
 import model.database.DB;
 import model.database.Session;
@@ -23,21 +24,28 @@ public class Controller { // The controller of all functions
         UpdateSession(Name,Ip); // Still active
     }
 
-    public static void CreateNewChat(String ChatName, String UserName, String localIp, int Port ){ // connectNEwChat
+    public static void CreateNewChat(String ChatName, String UserName, String LocalIp, int Port ){ // connectNEwChat
         String chatIp = Session.getSessionIP(ChatName);
 
         if (chatIp == null) {
             WindowChatting.displayErrorDialog("User does not have an active session");
         } else {
-
             ChatManager.addChat(ChatName, chatIp, Port);
-
-            UpdateSession(UserName, localIp); // Still active
         }
+
+        UpdateSession(UserName, LocalIp);
     }
 
-    public static void CreateNewChatByIP(String ChatAddress, String UserName, String LocalIp, int Port){
+    public static void CreateNewChatByIP(String ChatIp, String UserName, String LocalIp, int Port){
+        String chatName = Session.getSessionUser(ChatIp);
 
+        if (chatName == null) {
+            WindowChatting.displayErrorDialog("No active session on that ip");
+        } else {
+            ChatManager.addChat(chatName, ChatIp, Port);
+        }
+
+        UpdateSession(UserName, LocalIp);
     }
 
     public static void Login(String Name, String Password , String Ip){ // login user

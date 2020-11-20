@@ -56,7 +56,7 @@ public class Session {
 
     // start a timer for the session
     public static void startSessionTimer(String username) {
-        int time = 60; // time in seconds
+        int time = 600; // time in seconds
         Timer timer = new Timer(time*1000, arg0 -> {
             // code executed
             endSession(username);
