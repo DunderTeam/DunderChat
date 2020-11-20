@@ -97,9 +97,9 @@ public class Session {
     }
 
     // method to return the username from the session database as a string
-    public static String getSessionUser(String username) {
+    public static String getSessionUser(String ip) {
         // make query to find the user
-        Document query = new Document("username", username);
+        Document query = new Document("ip", ip);
         FindIterable<Document> findIterable = sessionCollection.find(query);
         MongoCursor<Document> cursor = findIterable.cursor();
         if (cursor.hasNext()){
@@ -107,8 +107,7 @@ public class Session {
             try {
                 return cursor.next().get("username").toString();
             } catch(Exception e) {
-                // TODO show database error
-                System.out.println("error getting session id");
+                WindowChatting.displayErrorDialog("Error connecting to ip");
                 return null;
             }
         } else return null;
