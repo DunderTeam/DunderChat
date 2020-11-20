@@ -2,11 +2,8 @@ package model.database;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.MongoException;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.internal.bulk.DeleteRequest;
 import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import view.gui.WindowChatting;

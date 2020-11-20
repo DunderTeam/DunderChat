@@ -39,13 +39,16 @@ public class SocketWorker extends Thread {
             Message msg = Message.decode(dataInput);
 
             //If the chat doesn't exist, add it
-            if (!ChatManager.chatExists(msg.getName(), clientSocket.getRemoteSocketAddress().toString())) {
-                ChatManager.addChat(msg.getName(), clientSocket.getRemoteSocketAddress().toString(), clientSocket.getPort());
+            if (!ChatManager.chatExists(msg.getName(), clientSocket.getInetAddress().toString().substring(1))) {
+                ChatManager.addChat(msg.getName(), clientSocket.getInetAddress().toString().substring(1), clientSocket.getPort());
             }
 
             ChatManager.addMessage(msg.getName(), clientSocket.getInetAddress().toString().substring(1), msg);
 
             debug(msg.getData());
+            debug(msg.getOrigin());
+            debug(clientSocket.getLocalAddress().toString());
+            debug(clientSocket.getInetAddress().toString());
             dataOutput.writeUTF(Status.encode(200)); // Received but empty
 
             dataOutput.flush();
@@ -68,7 +71,7 @@ public class SocketWorker extends Thread {
 
     private void debug(String x) {
         if(doDebug) {
-            System.out.printf("ServerWorker dbg: %s", x);
+            System.out.printf("\nServerWorker dbg: %s", x);
         }
     }
 }

@@ -1,13 +1,6 @@
-import com.dosse.upnp.UPnP;
 import com.mongodb.client.MongoCollection;
 import model.database.DB;
-import model.networking.client.Connection;
-import model.networking.client.ConnectionManager;
-import model.networking.client.message.SendMessagePOST;
-import model.networking.data.Message;
-import model.networking.server.PublicIP;
 import model.networking.server.Receiver;
-import model.networking.server.SocketListener;
 import org.bson.Document;
 import view.gui.WindowLogin;
 

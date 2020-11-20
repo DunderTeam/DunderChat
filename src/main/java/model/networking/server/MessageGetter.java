@@ -5,7 +5,6 @@ import model.networking.Request;
 import model.networking.data.Message;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class MessageGetter implements Runnable {
     private final int interval;

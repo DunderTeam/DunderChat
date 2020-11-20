@@ -5,8 +5,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
 import view.gui.WindowChatting;
-import view.gui.WindowLogin;
-import view.gui.WindowChatting;
 
 import javax.swing.*;
 import java.util.Date;

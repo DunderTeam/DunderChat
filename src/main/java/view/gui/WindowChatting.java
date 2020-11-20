@@ -4,11 +4,11 @@
 
 package view.gui;
 
-import java.beans.*;
 import controller.Controller;
 import model.chat.Chat;
 import model.chat.ChatManager;
 import model.networking.data.Message;
+import model.networking.server.PublicIP;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -17,11 +17,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
-import javax.swing.event.*;
-import controller.Controller;
-import model.networking.server.PublicIP;
+import java.util.Vector;
 
 /**
  * @author Adrian Emil Chambe-Eng

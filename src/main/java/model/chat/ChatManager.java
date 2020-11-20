@@ -5,7 +5,6 @@ import model.networking.data.Message;
 import view.gui.WindowChatting;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ChatManager {
@@ -17,8 +16,6 @@ public class ChatManager {
             getChatById(chatName, chatAddress).addMessageToList(msg);
             WindowChatting.NewMessageAdded(chatName, msg);
             System.out.println("Added message " + msg.getData() + " to chat: " + chatName);
-        } else if (!chatExists(chatName, chatAddress)) {
-
         } else {
             System.out.println("Couldn't add message to chat with name " + chatName + " and address " + chatAddress);
         }
@@ -52,7 +49,7 @@ public class ChatManager {
     public static boolean chatExists(String name, String address){
         for (Chat ch: chatList) {
             //If there already exists a chat with this name and address, return true
-            if (ch.getName() == name && ch.getAddress() == address){
+            if (ch.getName().equals(name) && ch.getAddress().equals(address)){
                 return true;
             }
         }

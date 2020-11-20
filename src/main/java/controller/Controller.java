@@ -1,7 +1,6 @@
 package controller;
 
 import com.mongodb.client.MongoCollection;
-import model.chat.Chat;
 import model.chat.ChatManager;
 import model.database.DB;
 import model.database.Session;
