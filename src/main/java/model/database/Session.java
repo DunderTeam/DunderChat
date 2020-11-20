@@ -78,7 +78,7 @@ public class Session {
     }
 
     // method to return the session id from the database as a string
-    public static String getSessionId(String username) {
+    public static String getSessionIP(String username) {
         // make query to find the user
         Document query = new Document("username", username);
         FindIterable<Document> findIterable = sessionCollection.find(query);
@@ -86,7 +86,7 @@ public class Session {
         if (cursor.hasNext()){
             // if it finds the correct user returns the session id as a string
             try {
-                return cursor.next().get("_id").toString();
+                return cursor.next().get("ip").toString();
             } catch(Exception e) {
                 // TODO show database error
                 System.out.println("error getting session id");
