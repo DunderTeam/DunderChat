@@ -12,7 +12,7 @@ public class ChatManager {
     static List<Chat> chatList = new ArrayList<Chat>(); // lists of Chats
 
     //Adds a message to a given chat (by name and address)
-    public static void addMessage(String chatName, String chatAddress, Message msg) {
+    public static synchronized void addMessage(String chatName, String chatAddress, Message msg) {
         if (chatExists(chatName, chatAddress)) {
             getChatById(chatName, chatAddress).addMessageToList(msg);
             WindowChatting.NewMessageAdded(chatName, msg);
@@ -25,10 +25,11 @@ public class ChatManager {
     }
 
     //Adds a new chat to the list, with given name, address and port
-    public static void addChat (String name, String address, int port) {
+    public static synchronized void addChat (String name, String address, int port) {
         if (!chatExists(name, address)){
             Chat temp = new Chat(name, address, port);
             chatList.add(temp); // Adds new chat
+            System.out.println(WindowChatting.isWindowOpen());
             if (WindowChatting.isWindowOpen()) {
                 WindowChatting.ChatUpdated(name, temp);
             }

@@ -32,7 +32,7 @@ public class Controller { // The controller of all functions
 
         ChatManager.addMessage(ChatName, destinationIp, msgLocal);
 
-        Connection temp = new Connection(localIp, 5555);
+        Connection temp = new Connection(destinationIp, 5555);
 
         switch (strategy){
             case("http"): currentStrategy = new SendMessagePOST(); break;
