@@ -79,8 +79,8 @@ public class Controller { // The controller of all functions
     }
 
     public static void LogOut(String Name) { // log out user
-
-        Session.endSession(Name); // Still active
+        Session.logout(Name); // Still active
+        ChatManager.logOut();
     }
 
     public static void RegisterUser(String Name, String Password, String Ip ){ // register new user for app

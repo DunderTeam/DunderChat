@@ -89,4 +89,9 @@ public class ChatManager {
             }
         }
     }
+
+    public static void logOut() {
+        chatList.removeAll(chatList);
+        WindowChatting.setLoggedOut("yep");
+    }
 }

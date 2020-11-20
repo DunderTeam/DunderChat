@@ -3,7 +3,9 @@ package model.database;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import controller.Controller;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import view.gui.WindowChatting;
 
 import javax.swing.*;
@@ -18,7 +20,7 @@ public class Session {
 
     }
 
-    public boolean sessionStillValid(int date2) {
+    public static boolean sessionStillValid(int date2) {
         Date date = new Date();
         Long x = date.getTime();
 
@@ -31,14 +33,33 @@ public class Session {
 
     // initiate a new session
     public static void sessionInit(String username, String IP) {
-        try {
-            setCollection();
+        // make query to find the user
+        setCollection();
+
+        Document query = new Document("username", username);
+        FindIterable<Document> findIterable = sessionCollection.find(query);
+        MongoCursor<Document> cursor = findIterable.cursor();
+        if (cursor.hasNext()){
+            // if session with user already exists
+            endSession(username);
+        } else {
             addSession(username, IP);
-            startSessionTimer(username);
-        } catch(Exception e) {
-            WindowChatting.displayErrorDialog("Database Error: sessionInit");
-            System.out.println("error initiating session");
         }
+    }
+
+    // gets the timestamp of the session
+    public static int getSessionTime(String username) {
+        // make query to find the user
+        Document query = new Document("username", username);
+        FindIterable<Document> findIterable = sessionCollection.find(query);
+        MongoCursor<Document> cursor = findIterable.cursor();
+        if (cursor.hasNext()){
+            // if it finds the correct user returns the session id as a string
+            String id = cursor.next().get("_id").toString();
+
+            return new ObjectId(id).getTimestamp();
+        }
+        return 0;
     }
 
     // set the mongoDB collection
@@ -130,8 +151,16 @@ public class Session {
         return loggedIn;
     }
 
-    public static void restart(String username, String ipAddress) {
+    public static void logout(String username){
         endSession(username);
-        sessionInit(username, ipAddress);
+    }
+
+    public static void restart(String username, String ipAddress) {
+        if(sessionStillValid(getSessionTime(username))){
+            endSession(username);
+            sessionInit(username, ipAddress);
+        } else {
+            Controller.LogOut(username);
+        }
     }
 }

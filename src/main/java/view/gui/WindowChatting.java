@@ -178,10 +178,21 @@ public class WindowChatting extends JFrame {
 
     //Logs out of the chat client and opens a new WindowLogin
     private void logOut(String Name) {
-        Controller.LogOut(Name); // Logout of database
+        Controller.LogOut(Name); // Logout of database and clear chatmanager
         System.out.println("Logging out...");
-        new WindowLogin().setVisible(true); // go to login screen
-        dispose();
+
+    }
+
+    public static void setLoggedOut(String loggedOutUser) {
+        loggedOut.setText(loggedOutUser);
+    }
+
+    private void loggedOutChanged(PropertyChangeEvent e) {
+        if (!loggedOut.getText().equals("")) {
+            new WindowLogin().setVisible(true); // go to login screen
+            dispose();
+            loggedOut.setText("");
+        }
     }
 
     //Changes the username of the currently logged in user
@@ -410,6 +421,9 @@ public class WindowChatting extends JFrame {
 
         errorMessage = new JLabel("");
         errorMessage.addPropertyChangeListener(this::errorMessageChanged);
+
+        loggedOut = new JLabel();
+        loggedOut.addPropertyChangeListener(this::loggedOutChanged);
 
         conversations = new Vector<>();
         chats = new ArrayList<>();
@@ -922,6 +936,7 @@ public class WindowChatting extends JFrame {
     private static JLabel userDeleted;
     private static JLabel newUser;
     private static JLabel newPwd;
+    private static JLabel loggedOut;
 
     private static JLabel NewMessageChat;
     private static Message NewMessageContent;
