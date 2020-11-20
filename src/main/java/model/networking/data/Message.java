@@ -27,13 +27,35 @@ public class Message {
         this.timestamp = timestamp;
     }
 
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
     private String data;
     private String name;
     private String timestamp;
+    private String destination;
+    private String origin;
 
     public static Message decode(String data) {
         Gson gson = new Gson();
         return gson.fromJson(data, Message.class);
+    }
+    public static Message[] decodeArray(String data) {
+        Gson gson = new Gson();
+        return gson.fromJson(data, Message[].class);
     }
 
     public static String encode(Message data) {

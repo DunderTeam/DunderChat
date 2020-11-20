@@ -1,5 +1,6 @@
 package model.networking.client;
 
+import model.networking.client.message.SendMessage;
 import model.networking.data.Message;
 
 import java.util.ArrayList;
@@ -25,17 +26,15 @@ public class ConnectionManager {
             so we wont do anything about that. Each message thread will however
             have a short lifespan.
          */
-        for(Connection conn : receivers)
+        for(Connection receiver : receivers)
         {
             // Loops through each connection and sends a message
-            Thread send = new Thread(new SendMessage(conn.getIp(), conn.getPort(), msg));
-            send.start(); // Start transaction
+            new SendMessage(receiver, msg);
         }
     }
 
     // Sends message to single receiver
     public void sendMessage(Connection receiver, Message msg) {
-        Thread send = new Thread(new SendMessage(receiver.getIp(), receiver.getPort(), msg));
-        send.start(); // Start transaction
+        new SendMessage(receiver, msg);
     }
 }

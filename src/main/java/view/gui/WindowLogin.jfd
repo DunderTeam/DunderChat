@@ -1,0 +1,125 @@
+JFDML JFormDesigner: "7.0.2.6.321" Java: "11.0.8" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :p:25:p, par l:::p {comp InputUsr::l:::x, comp labelPwd::l:::x, comp AppName::::200:x, comp labelUsr::l::200:x, comp InputPwd::l::200:x, seq l {par t:::p {comp BtnQuit::l::97:x, comp BtnLogin::l::97:x}, space :::p, comp BtnRegister::::97:x}}, space ::23:x}}"
+			"$verticalGroup": "par l {seq l {space :p:25:p, comp AppName:::p::p, space :::p, comp labelUsr:::p::p, space :::p, comp InputUsr:::p::p, space :::p, comp labelPwd:::p::p, space :::p, comp InputPwd:::p::p, space :::p, par b {comp BtnLogin::b:p::p, comp BtnRegister::b:p::p}, space :::p, comp BtnQuit:::p::p, space ::23:x}}"
+		} ) {
+			name: "this"
+			"defaultCloseOperation": 3
+			"title": "ChatApp"
+			"resizable": false
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "AppName"
+				"text": "ChatApp"
+				"font": new java.awt.Font( ".AppleSystemUIFont", 0, 20 )
+				"horizontalAlignment": 0
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "InputUsr"
+			} )
+			add( new FormComponent( "javax.swing.JPasswordField" ) {
+				name: "InputPwd"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "InputPwdActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnLogin"
+				"text": "login"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnLoginMouseClicked", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnQuit"
+				"text": "quit"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnQuitMouseClicked", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelUsr"
+				"text": "Username"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelPwd"
+				"text": "Password"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "BtnRegister"
+				"text": "register"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnRegisterMouseClicked", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 5, 10 )
+			"size": new java.awt.Dimension( 250, 285 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {par l {seq l {space :p:24:p, comp LabelRegister:::p::p}, seq l {space :p:42:p, par l:::p {comp dialogRegisterLabelUsr:::::x, comp txtFieldRegisterUsr::l::107:x, comp dialogRegisterLabelPwd::::107:x, comp pwdFieldRegisterPwd::t:::x, comp btnRegisterNewUser::l::107:x, comp dialogRegisterBtnBack::::107:x}}}, space ::24:x}}"
+			"$verticalGroup": "par l {seq l {space :p:24:p, comp LabelRegister:::p::p, space :::p, comp dialogRegisterLabelUsr:::p::p, space :::p, comp txtFieldRegisterUsr:::p::p, space :::p, comp dialogRegisterLabelPwd:::p::p, space :::p, comp pwdFieldRegisterPwd:::p::p, space :::p, comp btnRegisterNewUser:::p::p, space :::p, comp dialogRegisterBtnBack:::p::p, space ::43:x}}"
+		} ) {
+			name: "DialogRegister"
+			"modal": true
+			"defaultCloseOperation": 2
+			"resizable": false
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "LabelRegister"
+				"text": "Register a new user"
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 4, false )
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "txtFieldRegisterUsr"
+				"toolTipText": "username"
+			} )
+			add( new FormComponent( "javax.swing.JPasswordField" ) {
+				name: "pwdFieldRegisterPwd"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "pwdFieldRegisterPwdActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "btnRegisterNewUser"
+				"text": "register"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "btnRegisterNewUserActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "dialogRegisterLabelUsr"
+				"text": "Username"
+				"horizontalAlignment": 0
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "dialogRegisterLabelPwd"
+				"text": "Password"
+				"horizontalAlignment": 0
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "dialogRegisterBtnBack"
+				"text": "back"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "dialogRegisterBtnBackActionPerformed", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 335, 110 )
+			"size": new java.awt.Dimension( 200, 300 )
+		} )
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :::p, comp dialogErrorLabel::::236:x, space :::p}, seq l {space :p:85:p, comp dialogErrorBtnConfirm:::p::p, space ::85:x}}"
+			"$verticalGroup": "par l {seq l {space :::p, comp dialogErrorLabel:::p::p, space :::p, comp dialogErrorBtnConfirm:::p::p, space ::8:x}}"
+		} ) {
+			name: "dialogError"
+			"modal": true
+			"defaultCloseOperation": 2
+			"$locationPolicy": 1
+			"alwaysOnTop": true
+			"title": "ERROR!"
+			"resizable": false
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "dialogErrorLabel"
+				"text": "Error text"
+				"horizontalAlignment": 0
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "dialogErrorBtnConfirm"
+				"text": "OK"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "dialogErrorBtnConfirmActionPerformed", true ) )
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 335, 5 )
+			"size": new java.awt.Dimension( 250, 90 )
+		} )
+	}
+}

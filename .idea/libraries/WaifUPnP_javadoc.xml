@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="WaifUPnP-javadoc">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/main/resources/WaifUPnP.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/src/main/resources/WaifUPnP-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/src/main/resources/WaifUPnP-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
