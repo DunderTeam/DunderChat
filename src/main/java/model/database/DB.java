@@ -4,6 +4,7 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
 import org.bson.Document;
 import view.gui.WindowChatting;
 import view.gui.WindowLogin;
@@ -179,12 +180,13 @@ public class DB {
         // find user with the given username and password
         Document query = new Document("username", username).append("password", encryptedPassword);
         // delete user from database
-        try {
-            //TODO fix error handling, currently deleteOne never throws an error
-            userCollection.deleteOne(query);
+        DeleteResult result = userCollection.deleteOne(query);
+        // check if user were deleted
+        System.out.println("Delecount: " + result.getDeletedCount());
+        if(result.getDeletedCount() == 1) {
             System.out.println(username + " has been deleted");
             WindowChatting.setUserDeleted("Yep");
-        } catch(Exception e) {
+        } else {
             WindowChatting.displayErrorDialog("Wrong password, could not delete user");
             System.out.println("error deleting user");
         }
