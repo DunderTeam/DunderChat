@@ -113,7 +113,7 @@ public class DB {
                 WindowLogin.displayErrorDialog("Login failed: Database error");
             }
         } else {
-            WindowLogin.displayErrorDialog("Login failed: Database error");
+            WindowLogin.displayErrorDialog("Login failed: Wrong password or user");
 
         }
     }

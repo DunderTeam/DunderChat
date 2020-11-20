@@ -3,6 +3,7 @@ package model.database;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import controller.Controller;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import view.gui.WindowChatting;
@@ -21,7 +22,7 @@ public class Session {
 
     }
 
-    public boolean sessionStillValid(int date2) {
+    public static boolean sessionStillValid(int date2) {
         Date date = new Date();
         Long x = date.getTime();
 
@@ -35,6 +36,8 @@ public class Session {
     // initiate a new session
     public static void sessionInit(String username, String IP) {
         // make query to find the user
+        setCollection();
+
         Document query = new Document("username", username);
         FindIterable<Document> findIterable = sessionCollection.find(query);
         MongoCursor<Document> cursor = findIterable.cursor();
@@ -42,7 +45,6 @@ public class Session {
             // if session with user already exists
             endSession(username);
         } else {
-            setCollection();
             addSession(username, IP);
         }
     }
@@ -152,7 +154,7 @@ public class Session {
     }
 
     public static void logout(String username){
-
+        endSession(username);
     }
 
     public static void restart(String username, String ipAddress) {
@@ -160,11 +162,7 @@ public class Session {
             endSession(username);
             sessionInit(username, ipAddress);
         } else {
-            logout(username);
+            Controller.LogOut(username);
         }
-    }
-
-    private static boolean sessionStillValid(int sessionTime) {
-        return true;
     }
 }
