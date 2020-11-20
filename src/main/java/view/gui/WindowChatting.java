@@ -83,10 +83,16 @@ public class WindowChatting extends JFrame {
             NewMessageAdded(NewMessageChat.getText());
             NewMessageChat.setText("");
         }
+
+        if (!(ListConversations == null)) {
+            ListConversations.updateUI();
+        }
     }
 
     private void NewMessageAdded(String chatName) {
-        if (ListConversations.getSelectedValue().equals(chatName)) {
+        if (ListConversations.getSelectedIndex() < 0){
+
+        } else if (ListConversations.getSelectedValue().equals(chatName)) {
             TxtAreaChat.append(NewMessageContent.getName() + ": " + NewMessageContent.getData()
             + "\n");
         }
@@ -120,7 +126,9 @@ public class WindowChatting extends JFrame {
     //Adds a new conversation to the list on the left
     public void addConversationToList(String name) {
         conversations.add(name);
-        ListConversations.updateUI();
+        if (!(ListConversations == null)) {
+            ListConversations.updateUI();
+        }
     }
 
     //Adds a message to local cache of chats
