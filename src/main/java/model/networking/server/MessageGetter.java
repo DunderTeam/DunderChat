@@ -22,7 +22,11 @@ public class MessageGetter implements Runnable {
                 String resp = Request.GET("https://messagebouncer.herokuapp.com/message");
                 Message []msgArray = Message.decodeArray(resp);
                 if (msgArray != null) {
+                    int count = 0;
                     for (Message message : msgArray) {
+                        System.out.printf("\n%d", count++);
+                        System.out.println("\n" + message.getData() + message.getDestination() + message.getName() + message.getOrigin());
+
                         if (!ChatManager.chatExists(message.getName(), message.getOrigin())) {
                             ChatManager.addChat(message.getName(), message.getOrigin(), 5555); // todo: message via get request does not use ports
                         }
