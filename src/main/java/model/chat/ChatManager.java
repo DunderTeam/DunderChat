@@ -5,6 +5,7 @@ import model.networking.data.Message;
 import view.gui.WindowChatting;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ChatManager {
