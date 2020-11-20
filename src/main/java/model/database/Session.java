@@ -4,6 +4,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import view.gui.WindowChatting;
 
 import javax.swing.*;
@@ -19,14 +20,32 @@ public class Session {
 
     // initiate a new session
     public static void sessionInit(String username, String IP) {
-        try {
+        // make query to find the user
+        Document query = new Document("username", username);
+        FindIterable<Document> findIterable = sessionCollection.find(query);
+        MongoCursor<Document> cursor = findIterable.cursor();
+        if (cursor.hasNext()){
+            // if session with user already exists
+            endSession(username);
+        } else {
             setCollection();
             addSession(username, IP);
-            startSessionTimer(username);
-        } catch(Exception e) {
-            // TODO show error initiating session
-            System.out.println("error initiating session");
         }
+    }
+
+    // gets the timestamp of the session
+    public static int getSessionTime(String username) {
+        // make query to find the user
+        Document query = new Document("username", username);
+        FindIterable<Document> findIterable = sessionCollection.find(query);
+        MongoCursor<Document> cursor = findIterable.cursor();
+        if (cursor.hasNext()){
+            // if it finds the correct user returns the session id as a string
+            String id = cursor.next().get("_id").toString();
+
+            return new ObjectId(id).getTimestamp();
+        }
+        return 0;
     }
 
     // set the mongoDB collection
@@ -118,8 +137,20 @@ public class Session {
         return loggedIn;
     }
 
+    public static void logout(String username){
+
+    }
+
     public static void restart(String username, String ipAddress) {
-        endSession(username);
-        sessionInit(username, ipAddress);
+        if(sessionStillValid(getSessionTime(username))){
+            endSession(username);
+            sessionInit(username, ipAddress);
+        } else {
+            logout(username);
+        }
+    }
+
+    private static boolean sessionStillValid(int sessionTime) {
+        return true;
     }
 }
