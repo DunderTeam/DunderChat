@@ -6,6 +6,7 @@ import model.database.DB;
 import model.database.Session;
 import model.networking.data.Message;
 import org.bson.Document;
+import view.gui.WindowChatting;
 
 public class Controller { // The controller of all functions
 
@@ -22,10 +23,21 @@ public class Controller { // The controller of all functions
         UpdateSession(Name,Ip); // Still active
     }
 
-    public static void CreateNewChat(String ChatName, String UserName, String Ip, int Port ){ // connectNEwChat
-        ChatManager.addChat(ChatName, Ip, Port);
+    public static void CreateNewChat(String ChatName, String UserName, String localIp, int Port ){ // connectNEwChat
+        String chatIp = Session.getSessionIP(ChatName);
 
-        UpdateSession(UserName,Ip); // Still active
+        if (chatIp == null) {
+            WindowChatting.displayErrorDialog("User does not have an active session");
+        } else {
+
+            ChatManager.addChat(ChatName, chatIp, Port);
+
+            UpdateSession(UserName, localIp); // Still active
+        }
+    }
+
+    public static void CreateNewChatByIP(String ChatAddress, String UserName, String LocalIp, int Port){
+
     }
 
     public static void Login(String Name, String Password , String Ip){ // login user

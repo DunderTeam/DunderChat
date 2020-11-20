@@ -29,7 +29,9 @@ public class ChatManager {
         if (!chatExists(name, address)){
             Chat temp = new Chat(name, address, port);
             chatList.add(temp); // Adds new chat
-            WindowChatting.ChatUpdated(name, temp);
+            if (WindowChatting.isWindowOpen()) {
+                WindowChatting.ChatUpdated(name, temp);
+            }
         }
     }
 

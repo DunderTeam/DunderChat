@@ -38,15 +38,18 @@ public class WindowChatting extends JFrame {
     private void connectNewChat() { // call controller to setup new chat
         // Gets the text in the user/ip TxtField
         String ChatName = TxtFieldAddress.getText();
-        String UserName = "";
-        String Ip = PublicIP.get().getIp();
+        String UserName = loggedInUser;
+        String localIp = PublicIP.get().getIp();
         int Port = 5555;
+
+        String pattern = "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
 
         if (ChatName.equals("")) {
             displayErrorDialog("User/address field required!");
+        } else if (ChatName.matches(pattern)) {
+            Controller.CreateNewChatByIP(ChatName, UserName, localIp, Port);
         } else {
-            //ChatManager.addChat(user, Ip, 5555);
-            Controller.CreateNewChat(ChatName, UserName, Ip, Port); // create new chat
+            Controller.CreateNewChat(ChatName, UserName, localIp, Port); // create new chat
         }
 
     }
@@ -236,6 +239,10 @@ public class WindowChatting extends JFrame {
         }
     }
 
+    public static boolean isWindowOpen() {
+        return isWindowOpen;
+    }
+
     //================ Action/Event Listeners ================
 
     //======== Menu Bar ========
@@ -364,6 +371,7 @@ public class WindowChatting extends JFrame {
     }
 
     private void initComponents() {
+        isWindowOpen = true;
 
         NewChat = new JLabel();
         NewChat.addPropertyChangeListener(this::NewChatChanged);
@@ -891,6 +899,8 @@ public class WindowChatting extends JFrame {
     private static JLabel userDeleted;
     private static JLabel newUser;
     private static JLabel newPwd;
+
+    private static boolean isWindowOpen = false;
 
     private static JLabel errorMessage;
 
