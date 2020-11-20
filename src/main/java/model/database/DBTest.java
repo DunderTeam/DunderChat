@@ -61,6 +61,8 @@ public class DBTest {
 
             System.out.println(Session.getSessionIP(username));
 
+            Session.getSessionTime(username);
+
         } else {
             System.out.println("Not logged in");
         }
