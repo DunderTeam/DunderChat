@@ -3,6 +3,7 @@ import com.mongodb.client.MongoCollection;
 import model.database.DB;
 import model.networking.client.Connection;
 import model.networking.client.ConnectionManager;
+import model.networking.client.message.SendMessagePOST;
 import model.networking.data.Message;
 import model.networking.server.PublicIP;
 import model.networking.server.Receiver;
@@ -64,16 +65,14 @@ public class Main {
 
 
         // Send a message via our manager to a specific client
-        manager.sendMessage(manager.connections.get(0), msg); // Sends message to own device. e.g localhost
-        manager.sendMessage(manager.connections.get(1), msg1); // Sends message to own device. e.g localhost
-        manager.sendMessage(manager.connections.get(2), msg2); // Sends message to own device. e.g localhost
+        manager.sendMessage(manager.connections.get(0), msg, new SendMessagePOST()); // Sends message to own device. e.g localhost
+        manager.sendMessage(manager.connections.get(1), msg1, new SendMessagePOST()); // Sends message to own device. e.g localhost
+        manager.sendMessage(manager.connections.get(2), msg2, new SendMessagePOST()); // Sends message to own device. e.g localhost
 
         // Start view (gui)
         java.awt.EventQueue.invokeLater(() -> new WindowLogin().setVisible(true));
 
          /* Test Environment */
-
-        manager.sendMessage(manager.connections.get(0), msg);
 
         //DBTest.testDB(userCollection);
 
