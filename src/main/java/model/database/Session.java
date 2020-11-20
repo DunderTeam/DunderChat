@@ -9,6 +9,7 @@ import view.gui.WindowLogin;
 import view.gui.WindowChatting;
 
 import javax.swing.*;
+import java.util.Date;
 
 public class Session {
 
@@ -17,6 +18,17 @@ public class Session {
 
     public Session() {
 
+    }
+
+    public boolean sessionStillValid(int date2) {
+        Date date = new Date();
+        Long x = date.getTime();
+
+        if (x.intValue() < (date2 + 600000)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // initiate a new session
