@@ -15,6 +15,7 @@ public class ChatManager {
     public static void addMessage(String chatName, String chatAddress, Message msg) {
         if (chatExists(chatName, chatAddress)) {
             getChatById(chatName, chatAddress).addMessageToList(msg);
+            WindowChatting.NewMessageAdded(chatName, msg);
             System.out.println("Added message " + msg.getData() + " to chat: " + chatName);
         } else if (!chatExists(chatName, chatAddress)) {
 
