@@ -1,6 +1,6 @@
 package model.networking.client;
 
-import model.networking.client.message.SendMessage;
+import model.networking.client.message.MessageStrategy;
 import model.networking.data.Message;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class ConnectionManager {
     }
 
     // Sends message to multiple receivers
-    public void sendMessage(List<Connection> receivers, Message msg) {
+    public void sendMessage(List<Connection> receivers, Message msg, MessageStrategy strategy) {
         /*
             Sending a message results in a new process/thread being created,
             there could be an issue with too many threads being opened in a short
@@ -28,13 +28,16 @@ public class ConnectionManager {
          */
         for(Connection receiver : receivers)
         {
-            // Loops through each connection and sends a message
-            new SendMessage(receiver, msg);
+            msg.setDestination(receiver.ip);
+
+            strategy.send(msg);
         }
     }
 
     // Sends message to single receiver
-    public void sendMessage(Connection receiver, Message msg) {
-        new SendMessage(receiver, msg);
+    public void sendMessage(Connection receiver, Message msg, MessageStrategy strategy) {
+        msg.setDestination(receiver.ip);
+
+        strategy.send(msg);
     }
 }
