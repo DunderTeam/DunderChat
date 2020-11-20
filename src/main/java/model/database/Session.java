@@ -4,6 +4,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
+import view.gui.WindowChatting;
 
 import javax.swing.*;
 
@@ -89,7 +90,7 @@ public class Session {
                 return cursor.next().get("ip").toString();
             } catch(Exception e) {
                 // TODO show database error
-                System.out.println("error getting session id");
+                WindowChatting.displayErrorDialog("Error connecting to user");
                 return null;
             }
         } else return null;

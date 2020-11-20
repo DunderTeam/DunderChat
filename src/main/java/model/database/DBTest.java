@@ -7,7 +7,7 @@ public class DBTest {
 
     public static void testDB(MongoCollection<Document> userCollection) {
         // variables used for testing input to database before buttons are added/simulating registering new users
-        String username = "bruker2";
+        String username = "bruker2222";
         String ip = "123";
         String password = "Abcd1234";
         String newPassword = "aBcd1234";
@@ -58,6 +58,8 @@ public class DBTest {
 
             // testing getSession id
             //System.out.println(Session.getSessionId(username));
+
+            System.out.println(Session.getSessionIP(username));
 
         } else {
             System.out.println("Not logged in");
