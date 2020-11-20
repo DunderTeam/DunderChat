@@ -4,7 +4,7 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq {space :::p, par l:::p {seq {par t:::p {comp ListConversations::l:::x, comp BtnNew::l:::x, comp WindowTitle:::::x}, space :::p, comp ScrollPaneChatArea::::0:x}, seq {comp labelChatMethod:::p::p, space :::p, comp comboBoxChatMethod:::p::p, space :::p, comp TxtFieldMsg:::p:310:p, space :::p, comp BtnSend:::p:56:p}}, space :::x}}"
+			"$horizontalGroup": "par l {seq {space :::p, par l:::p {seq {par t:::p {comp ListConversations::l:::x, comp BtnNew::l:::x, comp WindowTitle:::::x}, space :::p, comp ScrollPaneChatArea::::0:x}, seq {comp labelChatMethod:::p::p, space :::p, comp comboBoxChatMethod:::p:74:p, space :::p, comp TxtFieldMsg:::p:337:p, space :::p, comp BtnSend:::p:56:p}}, space ::18:x}}"
 			"$verticalGroup": "par l {seq l {space :::p, par l {seq {comp WindowTitle:::p:30:p, space :::p, comp ListConversations:::p:324:p, space :::x, comp BtnNew:::p::p}, comp ScrollPaneChatArea:::::x}, space :::p, par l:::p {par b {comp BtnSend::b:p::p, comp TxtFieldMsg::b:::p}, par b {comp labelChatMethod::b:p::p, comp comboBoxChatMethod::b:p::p}}, space :::p}}"
 		} ) {
 			name: "this"
@@ -61,8 +61,8 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "comboBoxChatMethod"
 				"model": new javax.swing.DefaultComboBoxModel {
-					selectedItem: "get request"
-					addElement( "get request" )
+					selectedItem: "http"
+					addElement( "http" )
 					addElement( "socket" )
 				}
 			} )

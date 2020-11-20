@@ -37,9 +37,6 @@ public class Main {
         server.start();
         /* Server */
 
-        /* Start Application */
-        ConnectionManager manager = new ConnectionManager(); // Consider making Singleton
-
         /* Application */
 
         /* Test Environment for running code snippets  */
