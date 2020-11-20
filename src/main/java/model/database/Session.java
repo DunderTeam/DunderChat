@@ -4,6 +4,8 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import org.bson.Document;
+import view.gui.WindowChatting;
+import view.gui.WindowLogin;
 
 import javax.swing.*;
 
@@ -23,7 +25,7 @@ public class Session {
             addSession(username, IP);
             startSessionTimer(username);
         } catch(Exception e) {
-            // TODO show error initiating session
+            WindowChatting.displayErrorDialog("Database Error: sessionInit");
             System.out.println("error initiating session");
         }
     }
@@ -33,7 +35,7 @@ public class Session {
         try {
             sessionCollection = DB.getSessionCollection();
         } catch(Exception e) {
-            // TODO show error getting the session collection
+            WindowChatting.displayErrorDialog("Database Error: setCollection");
             System.out.println("error getting the session collection");
         }
     }
@@ -46,7 +48,7 @@ public class Session {
             loggedIn = true;
             System.out.println("Session initiated");
         } catch(Exception e) {
-            // TODO show database error
+            WindowChatting.displayErrorDialog("Database Error: addSession");
             System.out.println("error adding session to database");
         }
     }
@@ -72,7 +74,7 @@ public class Session {
             sessionCollection.deleteOne(query);
             loggedIn = false;
         } catch(Exception e) {
-            // TODO show database error
+            WindowChatting.displayErrorDialog("Database Error: endSession");
             System.out.println("error deleting session from database");
         }
     }
@@ -88,7 +90,7 @@ public class Session {
             try {
                 return cursor.next().get("_id").toString();
             } catch(Exception e) {
-                // TODO show database error
+                WindowChatting.displayErrorDialog("Database Error: getSessionId");
                 System.out.println("error getting session id");
                 return null;
             }
@@ -106,7 +108,7 @@ public class Session {
             try {
                 return cursor.next().get("username").toString();
             } catch(Exception e) {
-                // TODO show database error
+                WindowChatting.displayErrorDialog("Database Error: getSessionUser");
                 System.out.println("error getting session id");
                 return null;
             }

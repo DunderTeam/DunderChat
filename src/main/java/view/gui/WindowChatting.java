@@ -224,7 +224,7 @@ public class WindowChatting extends JFrame {
 
     //Calls the controller to shut down the application gracefully
     private void shutDown() {
-        Controller.Shutdown();
+        Controller.Shutdown(loggedInUser);
     }
 
     private void errorMessageChanged(PropertyChangeEvent e) {
