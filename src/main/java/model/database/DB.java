@@ -5,6 +5,7 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
+import view.gui.WindowChatting;
 import view.gui.WindowLogin;
 
 public class DB {
@@ -39,8 +40,8 @@ public class DB {
     public static MongoCollection<Document> getUserCollection() {
         try {
             MongoClient mongoClient = connect();
-            MongoCollection<Document> c = mongoClient.getDatabase("App").getCollection("users");
-            return c;
+            assert mongoClient != null;
+            return mongoClient.getDatabase("App").getCollection("users");
         } catch (Exception e) {
             // TODO show database error on screen
             System.out.println("error getting collection");
@@ -52,8 +53,8 @@ public class DB {
     public static MongoCollection<Document> getSessionCollection() {
         try {
             MongoClient mongoClient = connect();
-            MongoCollection<Document> c = mongoClient.getDatabase("App").getCollection("sessions");
-            return c;
+            assert mongoClient != null;
+            return mongoClient.getDatabase("App").getCollection("sessions");
         } catch (Exception e) {
             // TODO show database error on screen
             System.out.println("error getting collection");
@@ -71,15 +72,22 @@ public class DB {
         MongoCursor<Document> cursor = findIterable.cursor();
         if (cursor.hasNext()){
             // if username is taken
+            WindowLogin.displayErrorDialog("Name `" + name + "` is already taken");
+            return false;
+        } else if(!checkPassword(password)) {
+            // if password is invalid
+            // TODO show invalid password
+            System.out.println("Password not valid");
             return false;
         } else {
             // add user to the user collection
             try {
                 Document doc = new Document("username", name).append("ip", ip).append("password", encryptedPassword);
                 userCollection.insertOne(doc);
+                WindowLogin.setNewRegisteredUser(name);
                 return true;
             } catch (Exception e) {
-                // TODO show database error on screen
+                WindowLogin.displayErrorDialog("Failed to register: Database error");
                 System.out.println("error adding user to database");
                 return false;
             }
@@ -106,12 +114,12 @@ public class DB {
             } catch(Exception e) {
                 // TODO show login error on screen
                 System.out.println("login failed");
-                WindowLogin.setLoginFail("Fail");
+                WindowLogin.displayErrorDialog("Login failed: Database error");
             }
         } else {
             // TODO show login error on screen
             System.out.println("login failed");
-            WindowLogin.setLoginFail("Fail");
+            WindowLogin.displayErrorDialog("Login failed: Database error");
 
         }
     }
@@ -172,10 +180,12 @@ public class DB {
         Document query = new Document("username", username).append("password", encryptedPassword);
         // delete user from database
         try {
+            //TODO fix error handling, currently deleteOne never throws an error
             userCollection.deleteOne(query);
             System.out.println(username + " has been deleted");
+            WindowChatting.setUserDeleted("Yep");
         } catch(Exception e) {
-            // TODO show database error on screen
+            WindowChatting.displayErrorDialog("Wrong password, could not delete user");
             System.out.println("error deleting user");
         }
     }
@@ -185,15 +195,21 @@ public class DB {
         // encrypt the password using simple hash
         String encryptedPassword = Encryption.encryptPassword(password);
         String encryptedNewPassword = Encryption.encryptPassword(newPassword);
-        // find user with the given username and password
-        Document query = new Document("username", username).append("password", encryptedPassword);
-        // change password
-        try {
-            userCollection.findOneAndUpdate(query, Updates.set("password", encryptedNewPassword));
-            System.out.println("Changed password for " + username);
-        } catch(Exception e) {
-            // TODO show error changing password
-            System.out.println("error changing password");
+        // checks if the password is strong enough and is not the same as the old one
+        if(!checkPassword(newPassword) || newPassword.equals(password)){
+            // TODO show invalid password
+            System.out.println("New password not valid");
+        }else{
+            // find user with the given username and password
+            Document query = new Document("username", username).append("password", encryptedPassword);
+            // change password
+            try {
+                userCollection.findOneAndUpdate(query, Updates.set("password", encryptedNewPassword));
+                System.out.println("Changed password for " + username);
+            } catch(Exception e) {
+                // TODO show error changing password
+                System.out.println("error changing password");
+            }
         }
     }
 
@@ -211,5 +227,20 @@ public class DB {
             System.out.println("error changing username");
         }
     }
+
+    // checking if password is strong enough
+    private static boolean checkPassword(String password) {
+        /*
+         * needs at least one digit
+         * needs at least one lower case letter
+         * needs at least one upper case letter
+         * no whitespace allowed
+         * needs at least 8 characters
+         */
+        String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}";
+
+        return password.matches(pattern);
+    }
+
 
 }

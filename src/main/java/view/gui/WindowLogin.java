@@ -49,10 +49,6 @@ public class WindowLogin extends JFrame {
         dispose();
     }
 
-    public static void setLoginFail(String status) {
-        loginFail.setText(status);
-    }
-
     //Calls controller to register a new user
     private void attemptRegisterNewUser() {
         String usr = txtFieldRegisterUsr.getText();
@@ -62,18 +58,17 @@ public class WindowLogin extends JFrame {
             displayErrorDialog("Username or password is blank!");
         } else {
             Controller.RegisterUser(usr, pwd, PublicIP.get().getIp());
-            //TODO call controller to register
-            System.out.println(usr + " | " + pwd);
-            txtFieldRegisterUsr.setText("");
-            pwdFieldRegisterPwd.setText("");
-            DialogRegister.dispose();
         }
     }
 
+    //Sets the name of the newly registered user
+    public static void setNewRegisteredUser(String user) {
+        newRegisteredUser.setText(user);
+    }
+
     //Displays an error dialog with the given text
-    private void displayErrorDialog(String error) {
-        dialogErrorLabel.setText(error);
-        dialogError.setVisible(true);
+    public static void displayErrorDialog(String error) {
+        errorMessage.setText(error);
     }
 
     private void loggedInUserNameChanged(PropertyChangeEvent e) {
@@ -81,22 +76,20 @@ public class WindowLogin extends JFrame {
         loginUser(loggedInUserName.getText());
     }
 
-    private void loginFailChanged(PropertyChangeEvent e) {
-        if (!loginFail.getText().equals("")) {
-            displayErrorDialog("Login failed: Database error");
-        }
-        loginFail.setText("");
-    }
-
-    private void registerFailChanged(PropertyChangeEvent e) {
-        if (!registerFail.getText().equals("")) {
-            displayErrorDialog("Failed to register: Database error");
-        }
-        registerFail.setText("");
-    }
-
     private void newRegisteredUserChanged(PropertyChangeEvent e) {
+        System.out.println("New user " + newRegisteredUser.getText() + " registered");
+        txtFieldRegisterUsr.setText("");
+        pwdFieldRegisterPwd.setText("");
+        DialogRegister.dispose();
+    }
 
+    private void errorMessageChanged(PropertyChangeEvent e) {
+        if (!errorMessage.getText().equals("")) {
+            displayErrorDialog(errorMessage.getText());
+            dialogErrorLabel.setText(errorMessage.getText());
+            dialogError.setVisible(true);
+            errorMessage.setText("");
+        }
     }
 
     //================ Action/Event Listeners ================
@@ -141,14 +134,11 @@ public class WindowLogin extends JFrame {
     }
 
     private void initComponents() {
+        errorMessage = new JLabel("");
+        errorMessage.addPropertyChangeListener(this::errorMessageChanged);
+
         loggedInUserName = new JLabel();
         loggedInUserName.addPropertyChangeListener(this::loggedInUserNameChanged);
-
-        loginFail = new JLabel();
-        loginFail.addPropertyChangeListener(this::loginFailChanged);
-
-        registerFail = new JLabel();
-        registerFail.addPropertyChangeListener(this::registerFailChanged);
 
         newRegisteredUser = new JLabel();
         newRegisteredUser.addPropertyChangeListener(this::newRegisteredUserChanged);
@@ -386,9 +376,8 @@ public class WindowLogin extends JFrame {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
+    private static JLabel errorMessage;
     private static JLabel loggedInUserName;
-    private static JLabel loginFail;
-    private static JLabel registerFail;
     private static JLabel newRegisteredUser;
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

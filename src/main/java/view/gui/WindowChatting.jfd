@@ -4,8 +4,8 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq {space :::p, par l:::p {seq {comp BtnNew:::p::p, space :::p, comp TxtFieldMsg::::0:x, space :::p, comp BtnSend:::p::p}, seq t {par t {comp WindowTitle:::p:166:p, comp ListConversations:::p:166:p}, space :::p, comp ScrollPaneChatArea::::279:x}}, space :::p}}"
-			"$verticalGroup": "par l {seq l {space :::p, par l {seq {comp WindowTitle:::p:30:p, space :::p, comp ListConversations::::360:x}, comp ScrollPaneChatArea::::396:x}, space :::p, par b {comp BtnNew::b:p::p, comp BtnSend::b:p::p, comp TxtFieldMsg::b:::p}, space :::p}}"
+			"$horizontalGroup": "par l {seq {space :::p, par l:::p {seq {par t:::p {comp ListConversations::l:::x, comp BtnNew::l:::x, comp WindowTitle:::::x}, space :::p, comp ScrollPaneChatArea::::0:x}, seq {comp labelChatMethod:::p::p, space :::p, comp comboBoxChatMethod:::p::p, space :::p, comp TxtFieldMsg:::p:310:p, space :::p, comp BtnSend:::p:56:p}}, space :::x}}"
+			"$verticalGroup": "par l {seq l {space :::p, par l {seq {comp WindowTitle:::p:30:p, space :::p, comp ListConversations:::p:324:p, space :::x, comp BtnNew:::p::p}, comp ScrollPaneChatArea:::::x}, space :::p, par l:::p {par b {comp BtnSend::b:p::p, comp TxtFieldMsg::b:::p}, par b {comp labelChatMethod::b:p::p, comp comboBoxChatMethod::b:p::p}}, space :::p}}"
 		} ) {
 			name: "this"
 			"title": "ChatApp"
@@ -55,8 +55,20 @@ new FormModel {
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "BtnNew"
-				"text": "new"
+				"text": "new conversation"
 				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "BtnNewMouseClicked", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "comboBoxChatMethod"
+				"model": new javax.swing.DefaultComboBoxModel {
+					selectedItem: "get request"
+					addElement( "get request" )
+					addElement( "socket" )
+				}
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelChatMethod"
+				"text": "Chat method:"
 			} )
 			menuBar: new FormContainer( "javax.swing.JMenuBar", new FormLayoutManager( class javax.swing.JMenuBar ) ) {
 				name: "MenuBar"
@@ -96,7 +108,7 @@ new FormModel {
 			}
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 10, 10 )
-			"size": new java.awt.Dimension( 465, 490 )
+			"size": new java.awt.Dimension( 590, 490 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 			"$horizontalGroup": "par l {seq {space :p:46:p, par l {comp TxtFieldAddress::::106:x, comp BtnConnect:::::x}, space :p:46:p}, seq l {space :::p, comp Label::::186:x, space :::p}}"
@@ -121,7 +133,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"size": new java.awt.Dimension( 200, 155 )
-			"location": new java.awt.Point( 485, 10 )
+			"location": new java.awt.Point( 270, 510 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
 			"$horizontalGroup": "par l {seq l {space :p:38:p, par l:::p {comp LabelNewUsr:::::x, comp TxtFieldNewUsr::l:::x, comp BtnConfirmNewUsr::l:::x}, space ::37:x}}"
@@ -143,7 +155,7 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "BtnConfirmNewUsrActionPerformed", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 220, 510 )
+			"location": new java.awt.Point( 610, 10 )
 			"size": new java.awt.Dimension( 200, 160 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -173,7 +185,7 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "PwdFieldChangePwdNewActionPerformed", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 10, 510 )
+			"location": new java.awt.Point( 610, 180 )
 			"size": new java.awt.Dimension( 200, 210 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -199,11 +211,11 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"size": new java.awt.Dimension( 250, 90 )
-			"location": new java.awt.Point( 485, 175 )
+			"location": new java.awt.Point( 10, 510 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :::p, par l {comp dialogDeleteUsrLabel2::::186:x, comp dialogDeleteUsrLabel1::::186:x}, space :::p}, seq l {space :p:20:p, comp btnDeleteUsrYes:::p:77:p, space :::p, comp btnDeleteUsrNo:::p:77:p, space ::18:x}}"
-			"$verticalGroup": "par l {seq l {space :::p, comp dialogDeleteUsrLabel1:::p::p, space :::p, comp dialogDeleteUsrLabel2:::p::p, space s:::p, par b {comp btnDeleteUsrYes::b:p::p, comp btnDeleteUsrNo::b:p::p}, space ::19:x}}"
+			"$horizontalGroup": "par l {seq l {space :::p, par l {comp dialogDeleteUsrLabel2::::186:x, comp dialogDeleteUsrLabel1::::186:x}, space :::p}, seq t {space ::7:x, par t:::p {comp dialogDeleteUsrLabel3:::::x, par l:t {seq {comp btnDeleteUsrYes:::p:77:p, space :::p, comp btnDeleteUsrNo:::p:77:p}, comp pwdFieldDeleteUsr:::p:160:p}}, space :p:17:p}}"
+			"$verticalGroup": "par l {seq l {space :::p, comp dialogDeleteUsrLabel1:::p::p, space :::p, comp dialogDeleteUsrLabel2:::p::p, space :::p, comp dialogDeleteUsrLabel3:::p::p, space :::p, comp pwdFieldDeleteUsr:::p::p, space :::p, par b {comp btnDeleteUsrYes::b:p::p, comp btnDeleteUsrNo::b:p::p}, space ::18:x}}"
 		} ) {
 			name: "dialogDeleteUsr"
 			"title": "Warning!"
@@ -230,9 +242,18 @@ new FormModel {
 				"text": "NO"
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "btnDeleteUsrNoActionPerformed", true ) )
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "dialogDeleteUsrLabel3"
+				"text": "Enter your password to delete"
+				"horizontalAlignment": 0
+			} )
+			add( new FormComponent( "javax.swing.JPasswordField" ) {
+				name: "pwdFieldDeleteUsr"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "pwdFieldDeleteUsrActionPerformed", true ) )
+			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 485, 275 )
-			"size": new java.awt.Dimension( 200, 135 )
+			"location": new java.awt.Point( 610, 400 )
+			"size": new java.awt.Dimension( 200, 180 )
 		} )
 	}
 }
