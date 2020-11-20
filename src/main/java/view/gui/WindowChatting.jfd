@@ -136,14 +136,15 @@ new FormModel {
 			"location": new java.awt.Point( 270, 510 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:38:p, par l:::p {comp LabelNewUsr:::::x, comp TxtFieldNewUsr::l:::x, comp BtnConfirmNewUsr::l:::x}, space ::37:x}}"
-			"$verticalGroup": "par l {seq l {space :p:25:p, comp LabelNewUsr:::p::p, space :::p, comp TxtFieldNewUsr:::p::p, space :::p, comp BtnConfirmNewUsr:::p::p, space ::23:x}}"
+			"$horizontalGroup": "par l {seq {par l {seq t {space :::p, comp labelnewUsrConfirmPwd::::186:x}, seq {par l {seq {space :::p, comp LabelNewUsr:::p:185:p}, seq l {space :p:40:p, comp TxtFieldNewUsr:::p:118:p}}, space :0:1:x}}, space :::p}, seq l {space :p:40:p, par l {seq {space :6:6:p, comp BtnConfirmNewUsr:::p:106:p}, comp pwdFieldNewUser:::p:118:p}, space ::40:x}}"
+			"$verticalGroup": "par l {seq l {space :p:25:p, comp LabelNewUsr:::p::p, space :::p, comp TxtFieldNewUsr:::p::p, space :::p, comp labelnewUsrConfirmPwd:::p::p, space :::p, comp pwdFieldNewUser:::p::p, space :::p, comp BtnConfirmNewUsr:::p::p, space ::50:x}}"
 		} ) {
 			name: "changeUsrDialog"
 			"resizable": false
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "LabelNewUsr"
 				"text": "Enter New Username"
+				"horizontalAlignment": 0
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "TxtFieldNewUsr"
@@ -154,12 +155,20 @@ new FormModel {
 				"text": "confirm"
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "BtnConfirmNewUsrActionPerformed", true ) )
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "labelnewUsrConfirmPwd"
+				"text": "Enter password to confirm"
+				"horizontalAlignment": 0
+			} )
+			add( new FormComponent( "javax.swing.JPasswordField" ) {
+				name: "pwdFieldNewUser"
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 610, 10 )
-			"size": new java.awt.Dimension( 200, 160 )
+			"size": new java.awt.Dimension( 200, 245 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :p:40:p, par l {comp BtnConfirmChangePwd:::::x, comp PwdFieldChangePwdNew::t:::x, seq {par l {par l:::p {comp LabelChangePwdOld:::::x, comp PwdFieldChangePwdOld::l:::x}, comp LalebChangePwdNew::l:p::p}, space :0:0:x}}, space :p:46:p}}"
+			"$horizontalGroup": "par l {seq {par l {seq {space :::p, par l {comp LabelChangePwdOld::l:::x, comp LalebChangePwdNew::l::186:x}}, seq l {space :p:40:p, par l {comp PwdFieldChangePwdNew:::p:118:p, comp PwdFieldChangePwdOld:::p:118:p, seq {space :6:6:p, comp BtnConfirmChangePwd:::p:106:p}}, space :0:34:x}}, space :::p}}"
 			"$verticalGroup": "par l {seq l {space :p:25:p, comp LabelChangePwdOld:::p::p, space :::p, comp PwdFieldChangePwdOld:::p::p, space :::p, comp LalebChangePwdNew:::p::p, space :::p, comp PwdFieldChangePwdNew:::p::p, space :::p, comp BtnConfirmChangePwd:::p::p, space ::15:x}}"
 		} ) {
 			name: "changePasswordDialog"
@@ -167,6 +176,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "LabelChangePwdOld"
 				"text": "Enter old password"
+				"horizontalAlignment": 0
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "BtnConfirmChangePwd"
@@ -179,13 +189,14 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "LalebChangePwdNew"
 				"text": "Enter new pasword"
+				"horizontalAlignment": 0
 			} )
 			add( new FormComponent( "javax.swing.JPasswordField" ) {
 				name: "PwdFieldChangePwdNew"
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "PwdFieldChangePwdNewActionPerformed", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 610, 180 )
+			"location": new java.awt.Point( 610, 290 )
 			"size": new java.awt.Dimension( 200, 210 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -214,7 +225,7 @@ new FormModel {
 			"location": new java.awt.Point( 10, 510 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :::p, par l {comp dialogDeleteUsrLabel2::::186:x, comp dialogDeleteUsrLabel1::::186:x}, space :::p}, seq t {space ::7:x, par t:::p {comp dialogDeleteUsrLabel3:::::x, par l:t {seq {comp btnDeleteUsrYes:::p:77:p, space :::p, comp btnDeleteUsrNo:::p:77:p}, comp pwdFieldDeleteUsr:::p:160:p}}, space :p:17:p}}"
+			"$horizontalGroup": "par l {seq l {space :::p, par l {comp dialogDeleteUsrLabel2::::186:x, comp dialogDeleteUsrLabel1::::186:x}, space :::p}, seq t {space ::21:x, par l {seq {comp btnDeleteUsrYes:::p:77:p, space :::p, comp btnDeleteUsrNo:::p:77:p}, comp pwdFieldDeleteUsr:::p:160:p}, space :p:17:p}, seq {comp dialogDeleteUsrLabel3::::192:x, space :::p}}"
 			"$verticalGroup": "par l {seq l {space :::p, comp dialogDeleteUsrLabel1:::p::p, space :::p, comp dialogDeleteUsrLabel2:::p::p, space :::p, comp dialogDeleteUsrLabel3:::p::p, space :::p, comp pwdFieldDeleteUsr:::p::p, space :::p, par b {comp btnDeleteUsrYes::b:p::p, comp btnDeleteUsrNo::b:p::p}, space ::18:x}}"
 		} ) {
 			name: "dialogDeleteUsr"
@@ -252,7 +263,7 @@ new FormModel {
 				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "pwdFieldDeleteUsrActionPerformed", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 610, 400 )
+			"location": new java.awt.Point( 480, 510 )
 			"size": new java.awt.Dimension( 200, 180 )
 		} )
 	}
