@@ -11,8 +11,10 @@ public class SendMessagePOST  implements MessageStrategy {
     public void send(Message msg) {
         try {
             Date date = new Date();
-            msg.setTimestamp(date.getTime());
-
+            // Todo: implement GSON serializer and deserializer for date.getTime();
+            /*msg.setTimestamp(date.getTime());
+            date.getTime();
+            */
             Gson gson = new Gson();
             String data = gson.toJson(msg);
 

@@ -11,10 +11,6 @@ public class Message {
         return name;
     }
 
-    public Long getTimestamp() {
-        return timestamp;
-    }
-
     public void setData(String data) {
         this.data = data;
     }
@@ -23,7 +19,11 @@ public class Message {
         this.name = name;
     }
 
-    public void setTimestamp(Long timestamp) {
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -45,7 +45,7 @@ public class Message {
 
     private String data;
     private String name;
-    private Long timestamp;
+    private String timestamp;
     private String destination;
     private String origin;
 

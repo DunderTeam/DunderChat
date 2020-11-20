@@ -17,16 +17,15 @@ public class SendMessageSocket extends Thread implements MessageStrategy{
     private Message message;
 
     public SendMessageSocket(Connection receiver) {
-        // Todo: Refactor code from SendMessage and implement here
-
         this.connection = receiver;
     }
 
     public void send(Message msg) {
         this.message = msg;
-
+        // Todo: implement GSON serializer and deserializer for date.getTime();
+        /*
         Date date = new Date();
-        msg.setTimestamp(date.getTime());
+        msg.setTimestamp(date.getTime());*/
 
         this.start();
     }
