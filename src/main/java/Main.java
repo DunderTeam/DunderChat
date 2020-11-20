@@ -4,6 +4,7 @@ import model.database.DB;
 import model.networking.client.Connection;
 import model.networking.client.ConnectionManager;
 import model.networking.data.Message;
+import model.networking.server.PublicIP;
 import model.networking.server.Receiver;
 import model.networking.server.SocketListener;
 import org.bson.Document;
@@ -43,9 +44,9 @@ public class Main {
         /* Test Environment for running code snippets  */
         // Add a new connection to our manager
 
-        manager.addConnection(new Connection(UPnP.getLocalIP(), 5555)); // Public
-        manager.addConnection(new Connection(UPnP.getLocalIP(), 5555)); // External
-        manager.addConnection(new Connection(UPnP.getLocalIP(), 5555));
+        manager.addConnection(new Connection(PublicIP.get().ip, 5555)); // Public
+        manager.addConnection(new Connection(PublicIP.get().ip, 5555)); // External
+        manager.addConnection(new Connection(PublicIP.get().ip, 5555));
 
         Message msg = new Message();
         Message msg1 = new Message();
