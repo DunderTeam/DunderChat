@@ -11,7 +11,7 @@ public class Message {
         return name;
     }
 
-    public String getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
@@ -23,7 +23,7 @@ public class Message {
         this.name = name;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -45,7 +45,7 @@ public class Message {
 
     private String data;
     private String name;
-    private String timestamp;
+    private Long timestamp;
     private String destination;
     private String origin;
 

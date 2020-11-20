@@ -8,6 +8,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.time.Instant;
+import java.util.Date;
 
 public class SendMessageSocket extends Thread implements MessageStrategy{
     private final Connection connection;
@@ -22,6 +24,10 @@ public class SendMessageSocket extends Thread implements MessageStrategy{
 
     public void send(Message msg) {
         this.message = msg;
+
+        Date date = new Date();
+        msg.setTimestamp(date.getTime());
+
         this.start();
     }
 
